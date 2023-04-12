@@ -1481,12 +1481,12 @@ class ConsultasEstadisticas extends Conexion
 
 
     //ESTADISTICAS AGENTE-----------------------------------------------------------
-    public function totalEstadoTareaAgente($dni)
+    public function totalEstadoTareaAgente($legajo)
     {
         try {
             $link = parent::conexionBD();
             $sql = "SELECT count(*) from tareas t, estadotarea e, usuario u  
-                    where t.estadoTarea_id = e.id and t.usuario_dni = u.dni and u.dni = '$dni'";
+                    where t.estadoTarea_id = e.id and t.usuario_legajo = u.legajo and u.legajo = '$legajo'";
             $result = mysqli_query($link, $sql);
             while ($row = mysqli_fetch_row($result)) {
                 $estadoTareasTotal = $row[0];
@@ -1497,12 +1497,12 @@ class ConsultasEstadisticas extends Conexion
         return $estadoTareasTotal;
     }
 
-    public function listarEstadoTareaAgente($dni)
+    public function listarEstadoTareaAgente($legajo)
     {
         try {
             $link = parent::conexionBD();
             $sql = "SELECT count(*), e.nombre from tareas t, estadotarea e, usuario u  
-                    where t.estadoTarea_id = e.id and t.usuario_dni = u.dni and u.dni = '$dni' group by e.nombre";
+                    where t.estadoTarea_id = e.id and t.usuario_legajo = u.legajo and u.legajo = '$legajo' group by e.nombre";
             $result = mysqli_query($link, $sql);
             $estadoTareas = [];
             $i = 0;
@@ -1516,12 +1516,12 @@ class ConsultasEstadisticas extends Conexion
         return $estadoTareas;
     }
 
-    public function totalMotivosAgente($dni)
+    public function totalMotivosAgente($legajo)
     {
         try {
             $link = parent::conexionBD();
             $sql = "SELECT count(*) from tareas t, estadotarea e, usuario u  
-                    where t.estadoTarea_id = e.id and t.usuario_dni = u.dni and u.dni = '$dni'";
+                    where t.estadoTarea_id = e.id and t.usuario_legajo = u.legajo and u.legajo = '$legajo'";
             $result = mysqli_query($link, $sql);
             while ($row = mysqli_fetch_row($result)) {
                 $estadoTareasTotal = $row[0];
@@ -1532,12 +1532,12 @@ class ConsultasEstadisticas extends Conexion
         return $estadoTareasTotal;
     }
 
-    public function listarMotivosAgente($dni)
+    public function listarMotivosAgente($legajo)
     {
         try {
             $link = parent::conexionBD();
             $sql = "SELECT count(*), m.motivos from tareas t, motivos m, usuario u
-                    where t.id_motivos = m.id and t.usuario_dni = u.dni and u.dni = '$dni' group by m.motivos";
+                    where t.id_motivos = m.id and t.usuario_legajo = u.legajo and u.legajo = '$legajo' group by m.motivos";
             $result = mysqli_query($link, $sql);
             $motivosTareas = [];
             $i = 0;
@@ -1553,7 +1553,7 @@ class ConsultasEstadisticas extends Conexion
 }
 
 /* select count(*), e.nombre from tareas t, estadotarea e, usuario u  
-where t.estadoTarea_id = e.id and t.usuario_dni = u.dni and u.dni = 2000000 group by e.nombre 
+where t.estadoTarea_id = e.id and t.usuario_legajo = u.legajo and u.legajo = 2000000 group by e.nombre 
 
 select count(*), m.motivos from tareas t, motivos m, usuario u
-where t.id_motivos = m.id and t.usuario_dni = u.dni and u.dni = 2000000 group by m.motivos  */
+where t.id_motivos = m.id and t.usuario_legajo = u.legajo and u.legajo = 2000000 group by m.motivos  */

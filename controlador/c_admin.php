@@ -107,18 +107,18 @@ class ControladorAdmin
         require('estadisticas.php');
     }
 
-    public function verEstadisticasAgenteContr($dni)
+    public function verEstadisticasAgenteContr($legajo)
     {
         echo ('<title>Estadísticas - Gestión de tareas</title>');
         require('../modelo/m_estadisticas.php');
         require('../modelo/m_consultas.php');
         $estadistica = new ConsultasEstadisticas();
         $co = new Consultas();
-        $listAgente = $co->listarUserActual($dni);
-        $areaAgente = $co->listarNombreAreaUsuario($dni);
-        $totalEstadoTareas = $estadistica->totalEstadoTareaAgente($dni);
-        $listEstadosTareas = $estadistica->listarEstadoTareaAgente($dni);
-        $listMotivosTareas = $estadistica->listarMotivosAgente($dni);
+        $listAgente = $co->listarUserActual($legajo);
+        $areaAgente = $co->listarNombreAreaUsuario($legajo);
+        $totalEstadoTareas = $estadistica->totalEstadoTareaAgente($legajo);
+        $listEstadosTareas = $estadistica->listarEstadoTareaAgente($legajo);
+        $listMotivosTareas = $estadistica->listarMotivosAgente($legajo);
         require('libreriaEstilos.php');
         require('headerNav.php');
         require('estadisticasAgente.php');
@@ -172,10 +172,10 @@ class ControladorAdmin
             header("location:javascript:history.go(-1)");
         }
 
-        $listMotivos = $co->listarMotivosProblemasUsuario($_SESSION['dni']);
+        $listMotivos = $co->listarMotivosProblemasUsuario($_SESSION['legajo']);
         $listDirecciones = $co->listarDirecciones();
         $listAgentes = $co->listarAgentes();
-        $areaUsuario = $co->listarNombreAreaUsuario($_SESSION['dni']);
+        $areaUsuario = $co->listarNombreAreaUsuario($_SESSION['legajo']);
         require('libreriaEstilos.php');
         require('headerNav.php');
         require('listaTareas.php');
@@ -222,7 +222,7 @@ class ControladorAdmin
             }
         }
 
-        $listMotivos = $co->listarMotivosProblemasUsuario($_SESSION['dni']);
+        $listMotivos = $co->listarMotivosProblemasUsuario($_SESSION['legajo']);
         $listDirecciones = $co->listarDirecciones();
         $listAgentes = $co->listarAgentes();
         $listAreas = $co->listarAreas();
@@ -266,15 +266,15 @@ class ControladorAdmin
         require('listaMotivos.php');
     }
 
-    public function listarTareaAgenteContr($dni)
+    public function listarTareaAgenteContr($legajo)
     {
         echo ('<title>Tareas de Agente - Gestión de tareas</title>');
         require('../modelo/m_consultas.php');
         $co = new Consultas();
-        $listTareaAgente = $co->listarTareaAgente($dni);
+        $listTareaAgente = $co->listarTareaAgente($legajo);
         $listEstados = $co->listarEstadoTarea();
-        $agente = $co->listarUserActual($dni);
-        $areaUsuario = $co->listarNombreAreaUsuario($dni);
+        $agente = $co->listarUserActual($legajo);
+        $areaUsuario = $co->listarNombreAreaUsuario($legajo);
         require('libreriaEstilos.php');
         require('headerNav.php');
         require('listarTareaAgente.php');

@@ -95,7 +95,7 @@ if (!(time() - $_SESSION['time'] >= 3600)) {
                 <table class="table table-bordered" id="tablaDinamicaLoad">
                     <thead>
                         <tr>
-                            <th scope="col">DNI</th>
+                            <th scope="col">legajo</th>
                             <th scope="col">Nombre</th>
                             <th scope="col">Apellido</th>
                             <th scope="col">Correo</th>
@@ -133,7 +133,7 @@ if (!(time() - $_SESSION['time'] >= 3600)) {
 
                                                 <p class="fs-6">Completar lo siguente.</p>
 
-                                                <input type="hidden" name="dni" value="<?php echo $list[0]; ?>">
+                                                <input type="hidden" name="legajo" value="<?php echo $list[0]; ?>">
 
                                                 <div class="form-floating mb-3">
                                                     <select class="form-select" name="selectRol" id="floatingSelect" aria-label="Floating label select example" required>

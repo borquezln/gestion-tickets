@@ -6,7 +6,7 @@ $co = new Consultas();
 $area = $_POST['selectArea'];
 $selectMotivos = $_POST['selectMotivos'];
 $descripcion = $_POST['descripcion'];
-$ip = $_POST['ip'];
+$nota_electronica = $_POST['nota_electronica'];
 $nombreApellido = $_POST['nombreApellidoAfectado'];
 $celular = $_POST['cel'];
 $direccion = $_POST['direccion'];
@@ -17,24 +17,24 @@ $usuarioCreado = $_POST['nombreApellido'];
 
 /*echo 'selectMotivos: ' . $selectMotivos . '<br>' .
 'descripcion: ' . $descripcion . '<br>' .
-'ip: ' . $ip . '<br>' .
+'nota_electronica: ' . $nota_electronica . '<br>' .
 'nombreApellido: ' . $nombreApellido . '<br>' .
 'celular: ' . $celular . '<br>' .
 'area: ' . $areaUsuario . '<br>' .
 'rol: ' . $rol . '<br>';*/
 
 if ($rol == 2) {
-    if ($co->agregarTarea($selectMotivos, $descripcion, $ip, $nombreApellido, $celular, $direccion, $area, $usuarioCreado)) {
+    if ($co->agregarTarea($selectMotivos, $descripcion, $nota_electronica, $nombreApellido, $celular, $direccion, $area, $usuarioCreado)) {
         $_SESSION['tareaOK'] = true;
         header('location: ' . $_SERVER['HTTP_REFERER']);
     }
 } else if ($rol == 3) {
-    if ($co->agregarTarea($selectMotivos, $descripcion, $ip, $nombreApellido, $celular, $direccion, $area, $usuarioCreado)) {
+    if ($co->agregarTarea($selectMotivos, $descripcion, $nota_electronica, $nombreApellido, $celular, $direccion, $area, $usuarioCreado)) {
         $_SESSION['tareaOK'] = true;
         header('location: ../vistaAgente/index.php?accion=listarTareasAdmin&lista=actual');
     }
 } else {
-    if ($co->agregarTarea($selectMotivos, $descripcion, $ip, $nombreApellido, $celular, $direccion, $area, $usuarioCreado)) {
+    if ($co->agregarTarea($selectMotivos, $descripcion, $nota_electronica, $nombreApellido, $celular, $direccion, $area, $usuarioCreado)) {
         $_SESSION['tareaOK'] = true;
         header('location: ' . $_SERVER['HTTP_REFERER']);
     }

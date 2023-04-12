@@ -10,7 +10,7 @@ $html =
         <tr>
         <th scope="col">#</th>
         <th scope="col">Motivo</th>
-        <th scope="col">Solución</th>
+        <th scope="col">Materiales</th>
         <th scope="col">Estado</th>
         <th scope="col">Fecha Problema</th>
         <th scope="col">Fecha Solución</th>
@@ -26,8 +26,8 @@ switch ($valorRadio) {
     case 'misPendientes':
         $sql = "SELECT t.nroArreglo, t.motivo, t.solucion, et.nombre, t.fechaProblema, t.fechaSolucion, t.nombreAfectado, a.nombre, CONCAT(u.nombre, ' ', u.apellido) AS nombre_apellido 
                 FROM tareas AS t, estadotarea AS et, areas AS a, usuario AS u 
-                WHERE t.estadoTarea_id = et.id AND t.area_codigo = a.codigo AND t.usuario_dni = u.dni 
-                AND t.usuario_dni in (SELECT dni FROM usuario WHERE usuario = '$user') 
+                WHERE t.estadoTarea_id = et.id AND t.area_codigo = a.codigo AND t.usuario_legajo = u.legajo 
+                AND t.usuario_legajo in (SELECT legajo FROM usuario WHERE usuario = '$user') 
                 AND t.estadoTarea_id IN (SELECT id from estadotarea WHERE nombre = 'Pendiente') 
                 ORDER BY t.fechaProblema DESC";
         $result = mysqli_query($link, $sql);
@@ -81,8 +81,8 @@ switch ($valorRadio) {
     case 'enProgreso':
         $sql = "SELECT t.nroArreglo, t.motivo, t.solucion, et.nombre, t.fechaProblema, t.fechaSolucion, t.nombreAfectado, a.nombre, CONCAT(u.nombre, ' ', u.apellido) AS nombre_apellido 
                 FROM tareas AS t, estadotarea AS et, areas AS a, usuario AS u 
-                WHERE t.estadoTarea_id = et.id AND t.area_codigo = a.codigo AND t.usuario_dni = u.dni 
-                AND t.usuario_dni in (SELECT dni FROM usuario WHERE usuario = '$user') 
+                WHERE t.estadoTarea_id = et.id AND t.area_codigo = a.codigo AND t.usuario_legajo = u.legajo 
+                AND t.usuario_legajo in (SELECT legajo FROM usuario WHERE usuario = '$user') 
                 AND t.estadoTarea_id IN (SELECT id from estadotarea WHERE nombre = 'En Progreso') 
                 ORDER BY t.fechaProblema DESC";
         $result = mysqli_query($link, $sql);
@@ -135,8 +135,8 @@ switch ($valorRadio) {
     case 'Completas':
         $sql = "SELECT t.nroArreglo, t.motivo, t.solucion, et.nombre, t.fechaProblema, t.fechaSolucion, t.nombreAfectado, a.nombre, CONCAT(u.nombre, ' ', u.apellido) AS nombre_apellido 
                 FROM tareas AS t, estadotarea AS et, areas AS a, usuario AS u 
-                WHERE t.estadoTarea_id = et.id AND t.area_codigo = a.codigo AND t.usuario_dni = u.dni 
-                AND t.usuario_dni in (SELECT dni FROM usuario WHERE usuario = '$user') 
+                WHERE t.estadoTarea_id = et.id AND t.area_codigo = a.codigo AND t.usuario_legajo = u.legajo 
+                AND t.usuario_legajo in (SELECT legajo FROM usuario WHERE usuario = '$user') 
                 AND t.estadoTarea_id IN (SELECT id from estadotarea WHERE nombre = 'Completo') 
                 ORDER BY t.fechaProblema DESC";
         $result = mysqli_query($link, $sql);

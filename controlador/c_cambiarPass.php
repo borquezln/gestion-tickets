@@ -3,10 +3,10 @@
 require('../modelo/m_consultas.php');
 $co = new Consultas();
 
-$dni = $_POST['dni'];
+$legajo = $_POST['legajo'];
 $pass = $_POST['pass'];
 
-if ($co->blanquearPass($dni, $pass)) {
+if ($co->blanquearPass($legajo, $pass)) {
     session_start();
     $_SESSION['passBlanqueada'] = true;
     header('location: ../vistaAgente/index.php?accion=blanqueoPass');

@@ -2,14 +2,14 @@
 require('../modelo/m_consultas.php');
 $co = new Consultas();
 
-$dni = $_POST['selectUsuario'];
+$legajo = $_POST['selectUsuario'];
 $idRol = $_POST['selectRol'];
 
-if ($co->asignarRolUsuario($idRol, $dni)) {
+if ($co->asignarRolUsuario($idRol, $legajo)) {
     session_start();
     $_SESSION['asignadoOk'] = true;
     if ($idRol < 5) {
-        if ($co->quitarTareaAdmin($dni)) {
+        if ($co->quitarTareaAdmin($legajo)) {
             header('location: ../vistaAgente/index.php?accion=cambioRoles');
         }
     }

@@ -5,10 +5,10 @@ $co = new Consultas();
 
 $selectMotivos = $_POST['selectMotivos'];
 $descripcion = $_POST['descripcion'];
-if (isset($_POST['ip'])) {
-    $ip = $_POST['ip'];
+if (isset($_POST['nota_electronica'])) {
+    $nota_electronica = $_POST['nota_electronica'];
 } else {
-    $ip = '';
+    $nota_electronica = '';
 }
 
 $nombreApellido = $_POST['nombreApellidoAfectado'];
@@ -20,13 +20,13 @@ $usuarioCreado = $_POST['nombreApellido'];
 
 /*echo 'SelectMotivos: ' . $selectMotivos . '<br>' .
 'descripcion: ' . $descripcion . '<br>' .
-'ip: ' . $ip . '<br>' .
+'nota_electronica: ' . $nota_electronica . '<br>' .
 'nombreApellido: ' . $nombreApellido . '<br>' .
 'cel: ' . $cel . '<br>' .
 'direccion: ' . $direccion . '<br>' .
 'selectArea: ' . $selectArea . '<br>';*/
 
-if ($co->agregarTareaEncargado($selectMotivos, $descripcion, $ip, $nombreApellido, $cel, $direccion, $selectArea, $usuarioCreado)) {
+if ($co->agregarTareaEncargado($selectMotivos, $descripcion, $nota_electronica, $nombreApellido, $cel, $direccion, $selectArea, $usuarioCreado)) {
     $_SESSION['tareaOK'] = true;
     header('location: ../vista/index.php?accion=listarTareas&listado=actual');
 } else {

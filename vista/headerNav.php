@@ -202,8 +202,8 @@ session_start();
                     ?>
 
                         <div class="form-floating mb-3 input">
-                            <input type="number" name="dni" class="form-control" value="<?php echo $row[0]; ?>" id="floatingInput" placeholder="Dni" readonly>
-                            <label for="floatingInput">Dni</label>
+                            <input type="number" name="legajo" class="form-control" value="<?php echo $row[0]; ?>" id="floatingInput" placeholder="legajo" readonly>
+                            <label for="floatingInput">legajo</label>
                         </div>
                         <div class="form-floating mb-3 input">
                             <input type="text" name="nombre" class="form-control" value="<?php echo $row[1]; ?>" id="floatingInput" placeholder="Nombre">

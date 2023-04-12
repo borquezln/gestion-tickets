@@ -103,14 +103,14 @@ if (!(time() - $_SESSION['time'] >= 3600)) {
 
                                 <?php
                                 foreach ($listUsuarios as $usuarios) {
-                                    if ($usuarios[5] != 'Admin' && $_SESSION['rol'] == 4 && $usuarios[0] != $_SESSION['dni']) {
+                                    if ($usuarios[5] != 'Admin' && $_SESSION['rol'] == 4 && $usuarios[0] != $_SESSION['legajo']) {
                                 ?>
                                         <option value="<?php echo $usuarios[0]; ?>">
                                             <?php echo $usuarios[1] . ' ' . $usuarios[2] . ' - ' . $usuarios[3] . ' - ' . $usuarios[4] . ' - ' . $usuarios[5]; ?>
                                         </option>
                                     <?php
                                     }
-                                    if ($_SESSION['rol'] == 3 && $usuarios[0] != $_SESSION['dni']) {
+                                    if ($_SESSION['rol'] == 3 && $usuarios[0] != $_SESSION['legajo']) {
                                     ?>
                                         <option value="<?php echo $usuarios[0]; ?>">
                                             <?php echo $usuarios[1] . ' ' . $usuarios[2] . ' - ' . $usuarios[3] . ' - ' . $usuarios[4] . ' - ' . $usuarios[5]; ?>

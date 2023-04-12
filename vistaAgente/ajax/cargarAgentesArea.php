@@ -4,8 +4,8 @@ $link = conexion();
 
 $codigoArea = $_POST['codigoArea'];
 
-$sql = "SELECT u.dni, concat(u.nombre, ' ', u.apellido) from usuario u, areas a, usuario_area ua  
-        where u.dni = ua.usuario_dni2 and ua.codigo_area2 = a.codigo and a.codigo = '$codigoArea'";
+$sql = "SELECT u.legajo, concat(u.nombre, ' ', u.apellido) from usuario u, areas a, usuario_area ua  
+        where u.legajo = ua.usuario_legajo2 and ua.codigo_area2 = a.codigo and a.codigo = '$codigoArea'";
 
 $result = mysqli_query($link, $sql);
 

@@ -4,10 +4,10 @@ require('../modelo/m_consultas.php');
 $co = new Consultas();
 
 $nroArreglo = $_GET['id'];
-$dni = $_GET['selectAgentes'];
+$legajo = $_GET['selectAgentes'];
 
 if ($_SESSION['rol'] == 2) {
-    if ($co->tomarTareaAgente($dni, $nroArreglo)) {
+    if ($co->tomarTareaAgente($legajo, $nroArreglo)) {
         if ($_SESSION['cantAreas'] == 1) {
             $_SESSION['tareaAsignada'] = true;
             header('Location: ' . $_SERVER['HTTP_REFERER']);
@@ -17,7 +17,7 @@ if ($_SESSION['rol'] == 2) {
         }
     }
 } else {
-    if ($co->tomarTareaAgente($dni, $nroArreglo)) {
+    if ($co->tomarTareaAgente($legajo, $nroArreglo)) {
         session_start();
         $_SESSION['tareaAsignada'] = true;
         header('Location: ' . $_SERVER['HTTP_REFERER']);

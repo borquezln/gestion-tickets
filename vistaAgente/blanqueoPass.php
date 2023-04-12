@@ -73,7 +73,7 @@ if (!(time() - $_SESSION['time'] >= 3600)) {
 
                     <form action="../controlador/c_cambiarPass.php" method="post">
                         <div class="form-floating mb-3">
-                            <select class="form-select" name="dni" id="floatingSelect" aria-label="example" required>
+                            <select class="form-select" name="legajo" id="floatingSelect" aria-label="example" required>
                                 <option value="" selected>Seleccione...</option>
 
                                 <?php

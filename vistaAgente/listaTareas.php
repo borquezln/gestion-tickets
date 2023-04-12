@@ -136,20 +136,20 @@ if (!(time() - $_SESSION['time'] >= 3600)) {
                     })
                 }
 
-                function mostrarIP(valor) {
+                function mostrarNE(valor) {
                     if (valor.checked) {
-                        $('#ipSeccion').show(200);
-                        $('input[name=ip]').prop('required', true);
+                        $('#neSeccion').show(200);
+                        $('input[name=ne]').prop('required', true);
                     } else {
-                        $('#ipSeccion').hide(200);
-                        $('input[name=ip]').prop('required', false);
-                        $('input[name=ip]').val('');
+                        $('#neSeccion').hide(200);
+                        $('input[name=ne]').prop('required', false);
+                        $('input[name=ne]').val('');
                     }
                 }
 
                 function validarInputNumerico(valor) {
-                    const ip = /^[0-9.]+$/;
-                    if (!ip.test(valor.value)) {
+                    const num = /^[0-9.]+$/;
+                    if (!num.test(valor.value)) {
                         valor.value = valor.value.substring(0, valor.value.length - 1);
                     }
                 }
@@ -364,15 +364,15 @@ if (!(time() - $_SESSION['time'] >= 3600)) {
                                             </div>
 
                                             <div class="form-check mb-3">
-                                                <input class="form-check-input" type="checkbox" value="" id="flexCheckChecked" onclick="mostrarIP(this);">
+                                                <input class="form-check-input" type="checkbox" value="" id="flexCheckChecked" onclick="mostrarNE(this);">
                                                 <label class="form-check-label" for="flexCheckChecked">
-                                                    Con IP
+                                                    Con Nota Electrónica
                                                 </label>
                                             </div>
 
-                                            <div class="form-floating mb-3" id="ipSeccion" style="display: none;">
-                                                <input type="text" name="ip" oninput="validarInputNumerico(this);" class="form-control" id="floatingInput" placeholder="Nombre del Afectado">
-                                                <label for="floatingInput">IP</label>
+                                            <div class="form-floating mb-3" id="neSeccion" style="display: none;">
+                                                <input type="text" name="ne" class="form-control" id="floatingInput" placeholder="Nombre del Afectado">
+                                                <label for="floatingInput">Nota Electrónica</label>
                                             </div>
 
                                             <div class="form-floating mb-3">
@@ -432,10 +432,10 @@ if (!(time() - $_SESSION['time'] >= 3600)) {
                                         <th scope="col">Descripción</th>
 
                                         <?php
-                                        //IP
+                                        //Nota Electrónica
                                         if ($_SESSION['areaUsuario'] == 1 || $_SESSION['areaUsuario'] == 2 || $_SESSION['areaUsuario'] == 3 || $_SESSION['areaUsuario'] == 7) {
                                         ?>
-                                            <th scope="col">IP</th>
+                                            <th scope="col">Nota Electrónica</th>
                                         <?php
                                         } else {
                                         ?>
@@ -464,7 +464,7 @@ if (!(time() - $_SESSION['time'] >= 3600)) {
                                             <td><?php echo $completas[2]; ?></td>
                                             <td><?php echo $completas[3]; ?></td>
                                             <?php
-                                            //IP
+                                            // Nota Electrónica
                                             if ($_SESSION['areaUsuario'] == 1 || $_SESSION['areaUsuario'] == 2 || $_SESSION['areaUsuario'] == 3 || $_SESSION['areaUsuario'] == 7) {
                                             ?>
                                                 <td><?php echo $completas[4]; ?></td>
@@ -512,13 +512,13 @@ if (!(time() - $_SESSION['time'] >= 3600)) {
                                                         if ($completas[9] != 'Cancelado' && $completas[15] == 0) {
                                                         ?>
                                                             <li>
-                                                                <a class="dropdown-item" href="../controlador/c_tomarTarea.php?id=<?php echo $completas[0]; ?>&selectAgentes=<?php echo $_SESSION['dni']; ?>">
+                                                                <a class="dropdown-item" href="../controlador/c_tomarTarea.php?id=<?php echo $completas[0]; ?>&selectAgentes=<?php echo $_SESSION['legajo']; ?>">
                                                                     Asignarme la tarea
                                                                 </a>
                                                             </li>
                                                         <?php
                                                         }
-                                                        if ($completas[15] != 0 && $completas[9] != 'Completo' && $completas[15] == $_SESSION['dni']) {
+                                                        if ($completas[15] != 0 && $completas[9] != 'Completo' && $completas[15] == $_SESSION['legajo']) {
                                                         ?>
                                                             <li>
                                                                 <a class="dropdown-item" href="../controlador/c_quitarTareaAsignado.php?id=<?php echo $completas[0]; ?>">
@@ -527,7 +527,7 @@ if (!(time() - $_SESSION['time'] >= 3600)) {
                                                             </li>
                                                         <?php
                                                         }
-                                                        if ($completas[9] == 'En Progreso' && $completas[15] == $_SESSION['dni']) {
+                                                        if ($completas[9] == 'En Progreso' && $completas[15] == $_SESSION['legajo']) {
                                                         ?>
                                                             <li>
                                                                 <a type="button" class="dropdown-item" data-bs-toggle="modal" data-bs-target="#modalTareaCompletada<?php echo $completas[0]; ?>">
@@ -537,7 +537,7 @@ if (!(time() - $_SESSION['time'] >= 3600)) {
 
                                                         <?php
                                                         }
-                                                        if ($completas[9] != 'Cancelado' && $completas[9] != 'Completo' && $completas[15] == $_SESSION['dni'] || $completas[9] == 'Pendiente') {
+                                                        if ($completas[9] != 'Cancelado' && $completas[9] != 'Completo' && $completas[15] == $_SESSION['legajo'] || $completas[9] == 'Pendiente') {
                                                         ?>
                                                             <li>
                                                                 <a type="button" class="dropdown-item" data-bs-toggle="modal" data-bs-target="#modalCancelarTarea<?php echo $completas[0]; ?>">
@@ -590,10 +590,10 @@ if (!(time() - $_SESSION['time'] >= 3600)) {
                                     <th scope="col">Descripción</th>
 
                                     <?php
-                                    //IP
+                                    // Nota Electrónica
                                     if ($_SESSION['areaUsuario'] == 1 || $_SESSION['areaUsuario'] == 2 || $_SESSION['areaUsuario'] == 3 || $_SESSION['areaUsuario'] == 7) {
                                     ?>
-                                        <th scope="col">IP</th>
+                                        <th scope="col">Nota Electrónica</th>
                                     <?php
                                     } else {
                                     ?>
@@ -622,7 +622,7 @@ if (!(time() - $_SESSION['time'] >= 3600)) {
                                         <td><?php echo $listTarea[3]; ?></td>
 
                                         <?php
-                                        //IP
+                                        // Nota Electrónica
                                         if ($_SESSION['areaUsuario'] == 1 || $_SESSION['areaUsuario'] == 2 || $_SESSION['areaUsuario'] == 3 || $_SESSION['areaUsuario'] == 7) {
                                         ?>
                                             <td><?php echo $listTarea[4]; ?></td>
@@ -675,13 +675,13 @@ if (!(time() - $_SESSION['time'] >= 3600)) {
                                                     if ($listTarea[9] != 'Cancelado' && $listTarea[15] == 0) {
                                                     ?>
                                                         <li>
-                                                            <a class="dropdown-item" href="../controlador/c_tomarTarea.php?id=<?php echo $listTarea[0]; ?>&selectAgentes=<?php echo $_SESSION['dni']; ?>">
+                                                            <a class="dropdown-item" href="../controlador/c_tomarTarea.php?id=<?php echo $listTarea[0]; ?>&selectAgentes=<?php echo $_SESSION['legajo']; ?>">
                                                                 Asignarme la tarea
                                                             </a>
                                                         </li>
                                                     <?php
                                                     }
-                                                    if ($listTarea[15] != 0 && $listTarea[9] != 'Completo' && $listTarea[15] == $_SESSION['dni']) {
+                                                    if ($listTarea[15] != 0 && $listTarea[9] != 'Completo' && $listTarea[15] == $_SESSION['legajo']) {
                                                     ?>
                                                         <li>
                                                             <a class="dropdown-item" href="../controlador/c_quitarTareaAsignado.php?id=<?php echo $listTarea[0]; ?>">
@@ -690,7 +690,7 @@ if (!(time() - $_SESSION['time'] >= 3600)) {
                                                         </li>
                                                     <?php
                                                     }
-                                                    if ($listTarea[9] == 'En Progreso' && $listTarea[15] == $_SESSION['dni']) {
+                                                    if ($listTarea[9] == 'En Progreso' && $listTarea[15] == $_SESSION['legajo']) {
                                                     ?>
                                                         <li>
                                                             <a type="button" class="dropdown-item" data-bs-toggle="modal" data-bs-target="#modalTareaCompletada<?php echo $listTarea[0]; ?>">
@@ -700,7 +700,7 @@ if (!(time() - $_SESSION['time'] >= 3600)) {
 
                                                     <?php
                                                     }
-                                                    if ($listTarea[9] != 'Cancelado' && $listTarea[9] != 'Completo' && $listTarea[15] == $_SESSION['dni'] || $listTarea[9] == 'Pendiente') {
+                                                    if ($listTarea[9] != 'Cancelado' && $listTarea[9] != 'Completo' && $listTarea[15] == $_SESSION['legajo'] || $listTarea[9] == 'Pendiente') {
                                                     ?>
                                                         <li>
                                                             <a type="button" class="dropdown-item" data-bs-toggle="modal" data-bs-target="#modalCancelarTarea<?php echo $listTarea[0]; ?>">
@@ -762,15 +762,15 @@ if (!(time() - $_SESSION['time'] >= 3600)) {
 
                                                     <?php
                                                     if ($listTarea[4] == '' || $listTarea[4] == null) {
-                                                        $ip = 'No proporcionado';
+                                                        $ne = 'No proporcionado';
                                                     } else {
-                                                        $ip = $listTarea[4];
+                                                        $ne = $listTarea[4];
                                                     }
                                                     ?>
 
                                                     <div class="form-floating mb-3">
-                                                        <input type="text" name="ip" value="<?php echo $ip; ?>" class="form-control" id="floatingInput" placeholder="..." disabled>
-                                                        <label for="floatingInput">IP</label>
+                                                        <input type="text" name="ne" value="<?php echo $ne; ?>" class="form-control" id="floatingInput" placeholder="..." disabled>
+                                                        <label for="floatingInput">Nota Electrónica</label>
                                                     </div>
 
                                                     <?php
@@ -812,7 +812,7 @@ if (!(time() - $_SESSION['time'] >= 3600)) {
                                                         <div class="form-floating mb-3">
                                                             <textarea class="form-control" name="solucion" placeholder="Leave a comment here" id="floatingTextarea" style="height: 100px" disabled><?php echo $listTarea[7]; ?>    
                                                             </textarea>
-                                                            <label for="floatingTextarea">Solución del incoveniente</label>
+                                                            <label for="floatingTextarea">Materiales utilizados</label>
                                                         </div>
                                                     <?php
                                                     }
@@ -941,7 +941,7 @@ if (!(time() - $_SESSION['time'] >= 3600)) {
 
                                                         <div class="form-floating mb-3">
                                                             <textarea class="form-control" onchange="buscarComillaSimple(this)" oninput="validarComillas(this);" name="solucion" placeholder="Leave a comment" id="floatingTextarea" style="height: 100px" required></textarea>
-                                                            <label for="floatingTextarea">Solución</label>
+                                                            <label for="floatingTextarea">Materiales utilizados</label>
                                                         </div>
 
                                                     </div>
@@ -1042,8 +1042,8 @@ if (!(time() - $_SESSION['time'] >= 3600)) {
                                                         </div>
 
                                                         <div class="form-floating mb-3">
-                                                            <input type="text" name="ip" oninput="validarInputNumerico(this);" value="<?php echo $listTarea[4]; ?>" class="form-control" id="floatingInput" placeholder="ip">
-                                                            <label for="floatingInput">IP</label>
+                                                            <input type="text" name="ne" value="<?php echo $listTarea[4]; ?>" class="form-control" id="floatingInput" placeholder="ne">
+                                                            <label for="floatingInput">Nota Electrónica</label>
                                                         </div>
 
                                                         <div class="form-floating mb-3">
@@ -1079,7 +1079,7 @@ if (!(time() - $_SESSION['time'] >= 3600)) {
                                                             <hr>
                                                             <div class="form-floating mb-3">
                                                                 <textarea class="form-control" name="solucion" placeholder="Leave a comment" id="floatingTextarea" style="height: 100px" required><?php echo $listTarea[7]; ?></textarea>
-                                                                <label for="floatingTextarea">Solución</label>
+                                                                <label for="floatingTextarea">Materiales utilizados</label>
                                                             </div>
                                                         <?php
                                                         }

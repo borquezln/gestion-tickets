@@ -66,7 +66,7 @@ if (!(time() - $_SESSION['time'] >= 3600)) {
                         position: 'bottom-end',
                         icon: 'error',
                         title: 'Error!',
-                        text: 'No se ha podido añadir el usuario. Posiblemente el dni del usuario ya exista en el Sistema. Intente nuevamente'
+                        text: 'No se ha podido añadir el usuario. Posiblemente el legajo del usuario ya exista en el Sistema. Intente nuevamente'
                     })
                 </script>
             <?php
@@ -83,7 +83,7 @@ if (!(time() - $_SESSION['time'] >= 3600)) {
                     <table class="table table-responsive table-bordered table-hover" id="tablaDinamicaLoad">
                         <thead>
                             <tr>
-                                <th scope="col">DNI</th>
+                                <th scope="col">legajo</th>
                                 <th scope="col">Nombre</th>
                                 <th scope="col">Apellido</th>
                                 <th scope="col">Correo</th>

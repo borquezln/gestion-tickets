@@ -2,7 +2,7 @@
 require('../modelo/m_consultas.php');
 $co = new Consultas();
 
-$dni = $_POST['dni'];
+$legajo = $_POST['legajo'];
 $nombre = $_POST['nombre'];
 $apellido = $_POST['apellido'];
 $correo = $_POST['correo'];
@@ -11,7 +11,7 @@ $pass = $_POST['pass'];
 $userAnterior = $_POST['userAnterior'];
 $rol = $_POST['rol'];
 
-if ($co->editarDatosUsuario($dni, $nombre, $apellido, $correo, $user, $pass, $userAnterior)) {
+if ($co->editarDatosUsuario($legajo, $nombre, $apellido, $correo, $user, $pass, $userAnterior)) {
     session_start();
     if ($rol == 2 || $rol == 3 || $rol == 4) {
         $_SESSION['datosAct'] = true;

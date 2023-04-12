@@ -122,7 +122,7 @@ if (!(time() - $_SESSION['time'] >= 3600)) {
                 <table class="table table-responsive table-bordered table-hover" id="tablaDinamicaLoad">
                     <thead>
                         <tr>
-                            <th scope="col">DNI</th>
+                            <th scope="col">legajo</th>
                             <th scope="col">Nombre</th>
                             <th scope="col">Apellido</th>
                             <th scope="col">Correo</th>
@@ -161,7 +161,7 @@ if (!(time() - $_SESSION['time'] >= 3600)) {
                                                 </a>
                                             </li>
                                             <li>
-                                                <a type="button" class="dropdown-item" href="index.php?accion=verEstadisticasAgente&dni=<?php echo $list[0]; ?>">
+                                                <a type="button" class="dropdown-item" href="index.php?accion=verEstadisticasAgente&legajo=<?php echo $list[0]; ?>">
                                                     Ver estadísticas
                                                 </a>
                                             </li>
@@ -169,7 +169,7 @@ if (!(time() - $_SESSION['time'] >= 3600)) {
                                             <?php
                                             require_once('../modelo/m_consultas.php');
                                             $co = new Consultas();
-                                            $cantAreasAgente = $co->verificarTotalAreasAgenteDni($list[0]);
+                                            $cantAreasAgente = $co->verificarTotalAreasAgentelegajo($list[0]);
                                             if ($list[5] == 'Agente' && $cantAreasAgente == 1 || $cantAreasAgente == 2) {
                                             ?>
                                                 <li>
@@ -181,7 +181,7 @@ if (!(time() - $_SESSION['time'] >= 3600)) {
                                             } else if ($list[5] == 'Agente' && $cantAreasAgente == 2 || $cantAreasAgente == 3) {
                                             ?>
                                                 <li>
-                                                    <a type="button" class="dropdown-item" href="../controlador/c_eliminarAreaUsuario.php?dni=<?php echo $list[0]; ?>&selectArea=<?php echo $list[7]; ?>">
+                                                    <a type="button" class="dropdown-item" href="../controlador/c_eliminarAreaUsuario.php?legajo=<?php echo $list[0]; ?>&selectArea=<?php echo $list[7]; ?>">
                                                         Quitar el área actual al agente
                                                     </a>
                                                 </li>
@@ -206,7 +206,7 @@ if (!(time() - $_SESSION['time'] >= 3600)) {
 
                                                 <p class="fs-6">Para continuar, debe escribir el motivo de la baja</p>
 
-                                                <input type="hidden" name="dni" value="<?php echo $list[0]; ?>">
+                                                <input type="hidden" name="legajo" value="<?php echo $list[0]; ?>">
 
                                                 <div class="form-floating mb-3">
                                                     <textarea class="form-control" name="motivoBaja" placeholder="Leave a comment" id="floatingTextarea" style="height: 100px" required></textarea>
@@ -236,7 +236,7 @@ if (!(time() - $_SESSION['time'] >= 3600)) {
 
                                             <div class="modal-body">
 
-                                                <input type="hidden" name="dni" value="<?php echo $list[0]; ?>">
+                                                <input type="hidden" name="legajo" value="<?php echo $list[0]; ?>">
 
                                                 <div class="form-floating">
                                                     <select class="form-select" name="selectArea" id="floatingSelect" aria-label="Floating label select example">

@@ -42,26 +42,26 @@ class Consultas extends Conexion
         }
     }
 
-    public function listarDniUserActual($user)
+    public function listarlegajoUserActual($user)
     {
         try {
             $link = parent::conexionBD();
-            $sql = "select u.dni from usuario u where u.usuario = '$user'";
+            $sql = "select u.legajo from usuario u where u.usuario = '$user'";
             $result = mysqli_query($link, $sql);
             while ($row = mysqli_fetch_row($result)) {
-                $dni = $row[0];
+                $legajo = $row[0];
             }
         } catch (Exception $e) {
             $e->getMessage();
         }
-        return $dni;
+        return $legajo;
     }
 
-    public function listarUserActual($dni)
+    public function listarUserActual($legajo)
     {
         try {
             $link = parent::conexionBD();
-            $sql = "SELECT concat(u.nombre, ' ', u.apellido) from usuario u where u.dni = '$dni'";
+            $sql = "SELECT concat(u.nombre, ' ', u.apellido) from usuario u where u.legajo = '$legajo'";
             $result = mysqli_query($link, $sql);
             while ($row = mysqli_fetch_row($result)) {
                 $userActual = $row[0];
@@ -92,7 +92,7 @@ class Consultas extends Conexion
         try {
             $link = parent::conexionBD();
             $sql = "SELECT count(*) from areas a, usuario_area ua, usuario u 
-                    where a.codigo = ua.codigo_area2 and ua.usuario_dni2 = u.dni and u.usuario = '$usuario'";
+                    where a.codigo = ua.codigo_area2 and ua.usuario_legajo2 = u.legajo and u.usuario = '$usuario'";
             $result = mysqli_query($link, $sql);
             while ($row = mysqli_fetch_row($result)) {
                 $totalAreasAgente = $row[0];
@@ -103,13 +103,13 @@ class Consultas extends Conexion
         return $totalAreasAgente;
     }
 
-    //Con DNI
-    public function verificarTotalAreasAgenteDni($dni)
+    //Con legajo
+    public function verificarTotalAreasAgentelegajo($legajo)
     {
         try {
             $link = parent::conexionBD();
             $sql = "SELECT count(*) from areas a, usuario_area ua, usuario u 
-                    where a.codigo = ua.codigo_area2 and ua.usuario_dni2 = u.dni and u.dni = '$dni'";
+                    where a.codigo = ua.codigo_area2 and ua.usuario_legajo2 = u.legajo and u.legajo = '$legajo'";
             $result = mysqli_query($link, $sql);
             while ($row = mysqli_fetch_row($result)) {
                 $totalAreasAgente = $row[0];
@@ -124,8 +124,8 @@ class Consultas extends Conexion
     {
         try {
             $link = parent::conexionBD();
-            $sql = "SELECT a.codigo from areas a where a.codigo in (select ua.codigo_area2 from usuario_area ua where ua.usuario_dni2 
-                    in (select u.dni from usuario u where u.usuario = '$usuario'))";
+            $sql = "SELECT a.codigo from areas a where a.codigo in (select ua.codigo_area2 from usuario_area ua where ua.usuario_legajo2 
+                    in (select u.legajo from usuario u where u.usuario = '$usuario'))";
             $result = mysqli_query($link, $sql);
             while ($row = mysqli_fetch_row($result)) {
                 $areaUsuario = $row[0];
@@ -140,8 +140,8 @@ class Consultas extends Conexion
     {
         try {
             $link = parent::conexionBD();
-            $sql = "SELECT a.nombre from areas a where a.codigo in (select ua.codigo_area2 from usuario_area ua where ua.usuario_dni2 
-                    in (select u.dni from usuario u where u.usuario = '$usuario'))";
+            $sql = "SELECT a.nombre from areas a where a.codigo in (select ua.codigo_area2 from usuario_area ua where ua.usuario_legajo2 
+                    in (select u.legajo from usuario u where u.usuario = '$usuario'))";
             $result = mysqli_query($link, $sql);
             while ($row = mysqli_fetch_row($result)) {
                 $areaUsuario = $row[0];
@@ -188,15 +188,15 @@ class Consultas extends Conexion
         return $datosPersonales;
     }
 
-    public function editarDatosUsuario($dni, $nombre, $apellido, $correo, $user, $pass, $userAnterior)
+    public function editarDatosUsuario($legajo, $nombre, $apellido, $correo, $user, $pass, $userAnterior)
     {
         try {
             if ($pass == null || $pass == '') {
-                $sql = "UPDATE usuario SET dni = '$dni', nombre = '$nombre', apellido = '$apellido', correo = '$correo', usuario = '$user'
+                $sql = "UPDATE usuario SET legajo = '$legajo', nombre = '$nombre', apellido = '$apellido', correo = '$correo', usuario = '$user'
                         WHERE usuario = '$userAnterior'";
             } else {
                 $passFuerte = password_hash($pass, PASSWORD_DEFAULT);
-                $sql = "UPDATE usuario SET dni = '$dni', nombre = '$nombre', apellido = '$apellido', correo = '$correo', usuario = '$user', contraseña = '$passFuerte' 
+                $sql = "UPDATE usuario SET legajo = '$legajo', nombre = '$nombre', apellido = '$apellido', correo = '$correo', usuario = '$user', contraseña = '$passFuerte' 
                         WHERE usuario = '$userAnterior'";
             }
             $link = parent::conexionBD();
@@ -217,32 +217,32 @@ class Consultas extends Conexion
             $link = parent::conexionBD();
 
             if ($estado == 'actual') {
-                $sql = "SELECT t.nroArreglo, t.id_motivos, m.motivos, t.descripcion, t.ip, t.nombreApellidoAfectado, t.celular, t.solucion, t.estadoTarea_id, e.nombre, t.motivoCancelacion,
+                $sql = "SELECT t.nroArreglo, t.id_motivos, m.motivos, t.descripcion, t.nota_electronica, t.nombreApellidoAfectado, t.celular, t.solucion, t.estadoTarea_id, e.nombre, t.motivoCancelacion,
                         t.fechaProblema, t.fechaSolucion, t.direccion_codigo, d.nombre, a.codigo, a.nombre, concat(u.nombre, ' ', u.apellido), t.usuarioCreado   
                         from tareas t, motivos m, estadotarea e, direcciones d, areas a, usuario u 
                         where t.id_motivos = m.id and t.estadoTarea_id = e.id and t.direccion_codigo = d.codigo
                         and t.codigoArea3 = a.codigo
-                        and t.usuario_dni = u.dni
+                        and t.usuario_legajo = u.legajo
                         and t.estadoTarea_id != 3 and t.estadoTarea_id != 4 and t.estadoTarea_id != 5";
             } else if ($estado == 'completadas') {
-                $sql = "SELECT t.nroArreglo, t.id_motivos, m.motivos, t.descripcion, t.ip, t.nombreApellidoAfectado, t.celular, t.solucion, t.estadoTarea_id, e.nombre, t.motivoCancelacion,
+                $sql = "SELECT t.nroArreglo, t.id_motivos, m.motivos, t.descripcion, t.nota_electronica, t.nombreApellidoAfectado, t.celular, t.solucion, t.estadoTarea_id, e.nombre, t.motivoCancelacion,
                         t.fechaProblema, t.fechaSolucion, t.direccion_codigo, d.nombre, a.codigo, a.nombre, concat(u.nombre, ' ', u.apellido), t.usuarioCreado   
                         from tareas t, motivos m, estadotarea e, direcciones d, areas a, usuario u 
                         where t.id_motivos = m.id and t.estadoTarea_id = e.id and t.direccion_codigo = d.codigo
                         and t.codigoArea3 = a.codigo
-                        and t.usuario_dni = u.dni
+                        and t.usuario_legajo = u.legajo
                         and t.estadoTarea_id != 1 and t.estadoTarea_id != 2 and t.estadoTarea_id != 4 and t.estadoTarea_id != 5";
             } else if ($estado == 'canceladas') {
-                $sql = "SELECT t.nroArreglo, t.id_motivos, m.motivos, t.descripcion, t.ip, t.nombreApellidoAfectado, t.celular, t.solucion, t.estadoTarea_id, e.nombre, t.motivoCancelacion,
+                $sql = "SELECT t.nroArreglo, t.id_motivos, m.motivos, t.descripcion, t.nota_electronica, t.nombreApellidoAfectado, t.celular, t.solucion, t.estadoTarea_id, e.nombre, t.motivoCancelacion,
                         t.fechaProblema, t.fechaSolucion, t.direccion_codigo, d.nombre, a.codigo, a.nombre, concat(u.nombre, ' ', u.apellido), t.usuarioCreado   
                         from tareas t, motivos m, estadotarea e, direcciones d, areas a, usuario u 
                         where t.id_motivos = m.id and t.estadoTarea_id = e.id and t.direccion_codigo = d.codigo
                         and t.codigoArea3 = a.codigo
-                        and t.usuario_dni = u.dni
+                        and t.usuario_legajo = u.legajo
                         and t.estadoTarea_id = 4";
             }
 
-            /*$sql = "SELECT t.nroArreglo, t.id_motivos, m.motivos, t.descripcion, t.ip, t.nombreApellidoAfectado, t.celular, t.solucion, t.estadoTarea_id, e.nombre, t.motivoCancelacion,
+            /*$sql = "SELECT t.nroArreglo, t.id_motivos, m.motivos, t.descripcion, t.nota_electronica, t.nombreApellidoAfectado, t.celular, t.solucion, t.estadoTarea_id, e.nombre, t.motivoCancelacion,
                     t.fechaProblema, t.fechaSolucion, t.direccion_codigo, d.nombre, a.codigo, a.nombre 
                     from tareas t, motivos m, estadotarea e, direcciones d, areas a 
                     where t.id_motivos = m.id and t.estadoTarea_id = e.id and t.direccion_codigo = d.codigo
@@ -265,12 +265,12 @@ class Consultas extends Conexion
     {
         try {
             $link = parent::conexionBD();
-            $sql = "SELECT t.nroArreglo, t.id_motivos, m.motivos, t.descripcion, t.ip, t.nombreApellidoAfectado, t.celular, t.solucion, t.estadoTarea_id, e.nombre, t.motivoCancelacion,
+            $sql = "SELECT t.nroArreglo, t.id_motivos, m.motivos, t.descripcion, t.nota_electronica, t.nombreApellidoAfectado, t.celular, t.solucion, t.estadoTarea_id, e.nombre, t.motivoCancelacion,
                     t.fechaProblema, t.fechaSolucion, t.direccion_codigo, d.nombre, a.codigo, a.nombre, concat(u.nombre, ' ', u.apellido), t.usuarioCreado   
                     from tareas t, motivos m, estadotarea e, direcciones d, areas a, usuario u 
                     where t.id_motivos = m.id and t.estadoTarea_id = e.id and t.direccion_codigo = d.codigo
                     and t.codigoArea3 = a.codigo
-                    and t.usuario_dni = u.dni
+                    and t.usuario_legajo = u.legajo
                     and t.estadoTarea_id = 3 and date(t.fechaSolucion) = curdate()";
 
             $result = mysqli_query($link, $sql);
@@ -323,14 +323,14 @@ class Consultas extends Conexion
         return $listMotivos;
     }
 
-    public function listarMotivosProblemasUsuario($dni)
+    public function listarMotivosProblemasUsuario($legajo)
     {
         try {
             $link = parent::conexionBD();
             $sql = "SELECT m.id, m.motivos from motivos m where m.codigoArea in 
                     (select a.codigo from areas a where a.codigo in 
-                    (select ua.codigo_area2 from usuario_area ua where ua.usuario_dni2 in 
-                    (select u.dni from usuario u where u.dni = '$dni')))";
+                    (select ua.codigo_area2 from usuario_area ua where ua.usuario_legajo2 in 
+                    (select u.legajo from usuario u where u.legajo = '$legajo')))";
             $result = mysqli_query($link, $sql);
             $listMotivos = [];
             $i = 0;
@@ -345,12 +345,12 @@ class Consultas extends Conexion
     }
 
 
-    public function agregarTareaEncargado($selectMotivos, $descripcion, $ip, $nombreApellido, $cel, $direccion, $selectArea, $usuarioCreado)
+    public function agregarTareaEncargado($selectMotivos, $descripcion, $nota_electronica, $nombreApellido, $cel, $direccion, $selectArea, $usuarioCreado)
     {
         try {
             $link = parent::conexionBD();
-            $sql = "INSERT into tareas(id_motivos, descripcion, ip, nombreApellidoAfectado, celular, estadoTarea_id, fechaProblema, direccion_codigo, usuario_dni, codigoArea3, fechaCreada, usuarioCreado)
-                    values('$selectMotivos', '$descripcion', '$ip', '$nombreApellido', '$cel', '1', NOW(), '$direccion', '0', '$selectArea', curdate(), '$usuarioCreado')";
+            $sql = "INSERT into tareas(id_motivos, descripcion, nota_electronica, nombreApellidoAfectado, celular, estadoTarea_id, fechaProblema, direccion_codigo, usuario_legajo, codigoArea3, fechaCreada, usuarioCreado)
+                    values('$selectMotivos', '$descripcion', '$nota_electronica', '$nombreApellido', '$cel', '1', NOW(), '$direccion', '0', '$selectArea', curdate(), '$usuarioCreado')";
             $result = mysqli_query($link, $sql);
 
 
@@ -364,20 +364,20 @@ class Consultas extends Conexion
         }
     }
 
-    public function editarTareaEncargado($selectMotivo, $descripcion, $ip, $nombreApellido, $cel, $codDireccion, $motivoCancelacion, $solucion, $selectArea, $nroArreglo)
+    public function editarTareaEncargado($selectMotivo, $descripcion, $nota_electronica, $nombreApellido, $cel, $codDireccion, $motivoCancelacion, $solucion, $selectArea, $nroArreglo)
     {
         try {
 
             if ($motivoCancelacion != '' && $solucion == '') {
-                $sql = "UPDATE tareas set id_motivos = '$selectMotivo', descripcion = '$descripcion', ip = '$ip', 
+                $sql = "UPDATE tareas set id_motivos = '$selectMotivo', descripcion = '$descripcion', nota_electronica = '$nota_electronica', 
                         nombreApellidoAfectado = '$nombreApellido', celular = '$cel', estadoTarea_id = '4', 
                         direccion_codigo = '$codDireccion', motivoCancelacion = '$motivoCancelacion', codigoArea3 = '$selectArea' where nroArreglo = '$nroArreglo'";
             } else if ($solucion != '' && $motivoCancelacion == '') {
-                $sql = "UPDATE tareas set id_motivos = '$selectMotivo', descripcion = '$descripcion', ip = '$ip', 
+                $sql = "UPDATE tareas set id_motivos = '$selectMotivo', descripcion = '$descripcion', nota_electronica = '$nota_electronica', 
                         nombreApellidoAfectado = '$nombreApellido', celular = '$cel', estadoTarea_id = '3', solucion = '$solucion',
                         direccion_codigo = '$codDireccion', codigoArea3 = '$selectArea' where nroArreglo = '$nroArreglo'";
             } else {
-                $sql = "UPDATE tareas set id_motivos = '$selectMotivo', descripcion = '$descripcion', ip = '$ip',
+                $sql = "UPDATE tareas set id_motivos = '$selectMotivo', descripcion = '$descripcion', nota_electronica = '$nota_electronica',
                         nombreApellidoAfectado = '$nombreApellido', celular = '$cel',
                         direccion_codigo = '$codDireccion', codigoArea3 = '$selectArea' where nroArreglo = '$nroArreglo'";
             }
@@ -414,18 +414,18 @@ class Consultas extends Conexion
         return $listEstado;
     }
 
-    public function editarTareaAgente($selectMotivo, $descripcion, $ip, $nombreApellido, $celular, $codDireccion, $motivoCancelacion, $solucion, $selectArea, $nroArreglo)
+    public function editarTareaAgente($selectMotivo, $descripcion, $nota_electronica, $nombreApellido, $celular, $codDireccion, $motivoCancelacion, $solucion, $selectArea, $nroArreglo)
     {
         try {
 
             if ($motivoCancelacion != '' && $solucion == '') {
-                $sql = "UPDATE tareas set id_motivos = '$selectMotivo', nombreApellidoAfectado = '$nombreApellido', celular = '$celular', descripcion = '$descripcion', ip = '$ip', 
+                $sql = "UPDATE tareas set id_motivos = '$selectMotivo', nombreApellidoAfectado = '$nombreApellido', celular = '$celular', descripcion = '$descripcion', nota_electronica = '$nota_electronica', 
                         estadoTarea_id = '4', direccion_codigo = '$codDireccion', motivoCancelacion = '$motivoCancelacion', codigoArea3 = '$selectArea' where nroArreglo = '$nroArreglo'";
             } else if ($solucion != '' && $motivoCancelacion == '') {
-                $sql = "UPDATE tareas set id_motivos = '$selectMotivo', nombreApellidoAfectado = '$nombreApellido', celular = '$celular', descripcion = '$descripcion', ip = '$ip', 
+                $sql = "UPDATE tareas set id_motivos = '$selectMotivo', nombreApellidoAfectado = '$nombreApellido', celular = '$celular', descripcion = '$descripcion', nota_electronica = '$nota_electronica', 
                         estadoTarea_id = '3', solucion = '$solucion', direccion_codigo = '$codDireccion', codigoArea3 = '$selectArea' where nroArreglo = '$nroArreglo'";
             } else {
-                $sql = "UPDATE tareas set id_motivos = '$selectMotivo', nombreApellidoAfectado = '$nombreApellido', celular = '$celular', descripcion = '$descripcion', ip = '$ip', 
+                $sql = "UPDATE tareas set id_motivos = '$selectMotivo', nombreApellidoAfectado = '$nombreApellido', celular = '$celular', descripcion = '$descripcion', nota_electronica = '$nota_electronica', 
                         direccion_codigo = '$codDireccion', codigoArea3 = '$selectArea' where nroArreglo = '$nroArreglo'";
             }
 
@@ -459,12 +459,12 @@ class Consultas extends Conexion
 
 
     //AGENTE
-    public function agregarAgente($dni, $nombre, $apellido, $correo, $user, $pass)
+    public function agregarAgente($legajo, $nombre, $apellido, $correo, $user, $pass)
     {
         try {
             $passFuerte = password_hash($pass, PASSWORD_DEFAULT);
             $link = parent::conexionBD();
-            $sql = "INSERT INTO usuario VALUES ('$dni', '$nombre', '$apellido', '$correo', '$user', '$passFuerte', '1')";
+            $sql = "INSERT INTO usuario VALUES ('$legajo', '$nombre', '$apellido', '$correo', '$user', '$passFuerte', '1')";
             $result = mysqli_query($link, $sql);
             if ($result == true) {
                 return true;
@@ -482,7 +482,7 @@ class Consultas extends Conexion
     {
         try {
             $link = parent::conexionBD();
-            $sql = "SELECT u.dni, concat(u.nombre, ' ', u.apellido) as nombre_apellido
+            $sql = "SELECT u.legajo, concat(u.nombre, ' ', u.apellido) as nombre_apellido
                     from usuario u, tipousuario t where u.idRol2 = 2 and u.idRol2 = t.idrol order by t.nombre";
             $result = mysqli_query($link, $sql);
             $listEmpleados = [];
@@ -548,14 +548,14 @@ class Consultas extends Conexion
         }
     }
 
-    public function listarTareaAgente($dni)
+    public function listarTareaAgente($legajo)
     {
         try {
             $link = parent::conexionBD();
-            $sql = "SELECT t.nroArreglo, m.motivos, t.descripcion, t.ip, t.nombreApellidoAfectado, t.celular, t.solucion, e.nombre, t.motivoCancelacion, 
+            $sql = "SELECT t.nroArreglo, m.motivos, t.descripcion, t.nota_electronica, t.nombreApellidoAfectado, t.celular, t.solucion, e.nombre, t.motivoCancelacion, 
                     t.fechaProblema, t.fechaSolucion, d.nombre, concat(u.nombre, ' ', u.apellido) as nombreApellido, t.motivoEliminacion
                     from tareas t, motivos m, estadotarea e, direcciones d, usuario u 
-                    where t.id_motivos = m.id and t.estadoTarea_id = e.id and t.direccion_codigo = d.codigo and t.usuario_dni = u.dni and u.dni = '$dni' and t.estadoTarea_id < 5";
+                    where t.id_motivos = m.id and t.estadoTarea_id = e.id and t.direccion_codigo = d.codigo and t.usuario_legajo = u.legajo and u.legajo = '$legajo' and t.estadoTarea_id < 5";
             $result = mysqli_query($link, $sql);
             $listTareaAgente = [];
             $i = 0;
@@ -570,12 +570,12 @@ class Consultas extends Conexion
     }
 
     //Verificar nombre del área donde se desempeña el agente
-    public function listarNombreAreaUsuario($dni)
+    public function listarNombreAreaUsuario($legajo)
     {
         try {
             $link = parent::conexionBD();
-            $sql = "SELECT a.codigo, a.nombre from areas a where a.codigo in (select ua.codigo_area2 from usuario_area ua where ua.usuario_dni2 in 
-                    (select u.dni from usuario u where u.dni = '$dni'))";
+            $sql = "SELECT a.codigo, a.nombre from areas a where a.codigo in (select ua.codigo_area2 from usuario_area ua where ua.usuario_legajo2 in 
+                    (select u.legajo from usuario u where u.legajo = '$legajo'))";
             $result = mysqli_query($link, $sql);
             $areaActual = [];
             $i = 0;
@@ -615,24 +615,24 @@ class Consultas extends Conexion
             $link = parent::conexionBD();
 
             if ($estado == 'actual') {
-                $sql = "SELECT t.nroArreglo, m.id, m.motivos, t.descripcion, t.ip, t.nombreApellidoAfectado, t.celular, t.solucion, e.id, e.nombre, t.motivoCancelacion, 
-                        t.fechaProblema, t.fechaSolucion, d.codigo, d.nombre, u.dni, concat(u.nombre, ' ', u.apellido) as nombre_apellido, a.codigo, a.nombre, t.usuarioCreado
+                $sql = "SELECT t.nroArreglo, m.id, m.motivos, t.descripcion, t.nota_electronica, t.nombreApellidoAfectado, t.celular, t.solucion, e.id, e.nombre, t.motivoCancelacion, 
+                        t.fechaProblema, t.fechaSolucion, d.codigo, d.nombre, u.legajo, concat(u.nombre, ' ', u.apellido) as nombre_apellido, a.codigo, a.nombre, t.usuarioCreado
                         from tareas t, motivos m, estadotarea e, direcciones d, usuario u, areas a 
-                        where t.id_motivos = m.id and t.estadoTarea_id = e.id and t.direccion_codigo = d.codigo and t.usuario_dni = u.dni 
+                        where t.id_motivos = m.id and t.estadoTarea_id = e.id and t.direccion_codigo = d.codigo and t.usuario_legajo = u.legajo 
                         and t.codigoArea3 = a.codigo and t.estadoTarea_id != 3 and t.estadoTarea_id != 4 and t.estadoTarea_id != 5 and t.codigoArea3 
                         in (select a2.codigo from areas a2 where a.codigo = '$areaUsuario' or a.codigo = '$areaUsuario2' or a.codigo = '$areaUsuario3')";
             } else if ($estado == 'completas') {
-                $sql = "SELECT t.nroArreglo, m.id, m.motivos, t.descripcion, t.ip, t.nombreApellidoAfectado, t.celular, t.solucion, e.id, e.nombre, t.motivoCancelacion, 
-                        t.fechaProblema, t.fechaSolucion, d.codigo, d.nombre, u.dni, concat(u.nombre, ' ', u.apellido) as nombre_apellido, a.codigo, a.nombre, t.usuarioCreado
+                $sql = "SELECT t.nroArreglo, m.id, m.motivos, t.descripcion, t.nota_electronica, t.nombreApellidoAfectado, t.celular, t.solucion, e.id, e.nombre, t.motivoCancelacion, 
+                        t.fechaProblema, t.fechaSolucion, d.codigo, d.nombre, u.legajo, concat(u.nombre, ' ', u.apellido) as nombre_apellido, a.codigo, a.nombre, t.usuarioCreado
                         from tareas t, motivos m, estadotarea e, direcciones d, usuario u, areas a 
-                        where t.id_motivos = m.id and t.estadoTarea_id = e.id and t.direccion_codigo = d.codigo and t.usuario_dni = u.dni 
+                        where t.id_motivos = m.id and t.estadoTarea_id = e.id and t.direccion_codigo = d.codigo and t.usuario_legajo = u.legajo 
                         and t.codigoArea3 = a.codigo and t.estadoTarea_id = 3 and t.codigoArea3 
                         in (select a2.codigo from areas a2 where a.codigo = '$areaUsuario' or a.codigo = '$areaUsuario2' or a.codigo = '$areaUsuario3')";
             } else if ($estado == 'canceladas') {
-                $sql = "SELECT t.nroArreglo, m.id, m.motivos, t.descripcion, t.ip, t.nombreApellidoAfectado, t.celular, t.solucion, e.id, e.nombre, t.motivoCancelacion, 
-                        t.fechaProblema, t.fechaSolucion, d.codigo, d.nombre, u.dni, concat(u.nombre, ' ', u.apellido) as nombre_apellido, a.codigo, a.nombre, t.usuarioCreado
+                $sql = "SELECT t.nroArreglo, m.id, m.motivos, t.descripcion, t.nota_electronica, t.nombreApellidoAfectado, t.celular, t.solucion, e.id, e.nombre, t.motivoCancelacion, 
+                        t.fechaProblema, t.fechaSolucion, d.codigo, d.nombre, u.legajo, concat(u.nombre, ' ', u.apellido) as nombre_apellido, a.codigo, a.nombre, t.usuarioCreado
                         from tareas t, motivos m, estadotarea e, direcciones d, usuario u, areas a 
-                        where t.id_motivos = m.id and t.estadoTarea_id = e.id and t.direccion_codigo = d.codigo and t.usuario_dni = u.dni 
+                        where t.id_motivos = m.id and t.estadoTarea_id = e.id and t.direccion_codigo = d.codigo and t.usuario_legajo = u.legajo 
                         and t.codigoArea3 = a.codigo and t.estadoTarea_id = 4 and t.codigoArea3 
                         in (select a2.codigo from areas a2 where a.codigo = '$areaUsuario' or a.codigo = '$areaUsuario2' or a.codigo = '$areaUsuario3')";
             }
@@ -654,10 +654,10 @@ class Consultas extends Conexion
     {
         try {
             $link = parent::conexionBD();
-            $sql = "SELECT t.nroArreglo, m.id, m.motivos, t.descripcion, t.ip, t.nombreApellidoAfectado, t.celular, t.solucion, e.id, e.nombre, t.motivoCancelacion, 
-                    t.fechaProblema, t.fechaSolucion, d.codigo, d.nombre, u.dni, concat(u.nombre, ' ', u.apellido) as nombre_apellido, a.codigo, a.nombre, t.usuarioCreado
+            $sql = "SELECT t.nroArreglo, m.id, m.motivos, t.descripcion, t.nota_electronica, t.nombreApellidoAfectado, t.celular, t.solucion, e.id, e.nombre, t.motivoCancelacion, 
+                    t.fechaProblema, t.fechaSolucion, d.codigo, d.nombre, u.legajo, concat(u.nombre, ' ', u.apellido) as nombre_apellido, a.codigo, a.nombre, t.usuarioCreado
                     from tareas t, motivos m, estadotarea e, direcciones d, usuario u, areas a 
-                    where t.id_motivos = m.id and t.estadoTarea_id = e.id and t.direccion_codigo = d.codigo and t.usuario_dni = u.dni 
+                    where t.id_motivos = m.id and t.estadoTarea_id = e.id and t.direccion_codigo = d.codigo and t.usuario_legajo = u.legajo 
                     and t.codigoArea3 = a.codigo and t.estadoTarea_id != 5 and t.codigoArea3 
                     in (select a2.codigo from areas a2 where a.codigo = '$areaUsuario' or a.codigo = '$areaUsuario2' or a.codigo = '$areaUsuario3') 
                     and date(t.fechaSolucion) = curdate()";
@@ -683,22 +683,22 @@ class Consultas extends Conexion
         try {
             $link = parent::conexionBD();
             if ($estado == 'actual') {
-                $sql = "SELECT t.nroArreglo, m.id, m.motivos, t.descripcion, t.ip, t.nombreApellidoAfectado, t.celular, t.solucion, e.id, e.nombre, t.motivoCancelacion, 
-                        t.fechaProblema, t.fechaSolucion, d.codigo, d.nombre, u.dni, concat(u.nombre, ' ', u.apellido) as nombre_apellido, a.codigo, a.nombre, t.usuarioCreado
+                $sql = "SELECT t.nroArreglo, m.id, m.motivos, t.descripcion, t.nota_electronica, t.nombreApellidoAfectado, t.celular, t.solucion, e.id, e.nombre, t.motivoCancelacion, 
+                        t.fechaProblema, t.fechaSolucion, d.codigo, d.nombre, u.legajo, concat(u.nombre, ' ', u.apellido) as nombre_apellido, a.codigo, a.nombre, t.usuarioCreado
                         from tareas t, motivos m, estadotarea e, direcciones d, usuario u, areas a 
-                        where t.id_motivos = m.id and t.estadoTarea_id = e.id and t.direccion_codigo = d.codigo and t.usuario_dni = u.dni 
+                        where t.id_motivos = m.id and t.estadoTarea_id = e.id and t.direccion_codigo = d.codigo and t.usuario_legajo = u.legajo 
                         and t.codigoArea3 = a.codigo and t.estadoTarea_id != 5 and t.estadoTarea_id != 4 and t.estadoTarea_id != 3";
             } else if ($estado == 'completas') {
-                $sql = "SELECT t.nroArreglo, m.id, m.motivos, t.descripcion, t.ip, t.nombreApellidoAfectado, t.celular, t.solucion, e.id, e.nombre, t.motivoCancelacion, 
-                        t.fechaProblema, t.fechaSolucion, d.codigo, d.nombre, u.dni, concat(u.nombre, ' ', u.apellido) as nombre_apellido, a.codigo, a.nombre, t.usuarioCreado
+                $sql = "SELECT t.nroArreglo, m.id, m.motivos, t.descripcion, t.nota_electronica, t.nombreApellidoAfectado, t.celular, t.solucion, e.id, e.nombre, t.motivoCancelacion, 
+                        t.fechaProblema, t.fechaSolucion, d.codigo, d.nombre, u.legajo, concat(u.nombre, ' ', u.apellido) as nombre_apellido, a.codigo, a.nombre, t.usuarioCreado
                         from tareas t, motivos m, estadotarea e, direcciones d, usuario u, areas a 
-                        where t.id_motivos = m.id and t.estadoTarea_id = e.id and t.direccion_codigo = d.codigo and t.usuario_dni = u.dni 
+                        where t.id_motivos = m.id and t.estadoTarea_id = e.id and t.direccion_codigo = d.codigo and t.usuario_legajo = u.legajo 
                         and t.codigoArea3 = a.codigo and t.estadoTarea_id != 5 and t.estadoTarea_id != 1 and t.estadoTarea_id != 2 and t.estadoTarea_id != 4";
             } else if ($estado == 'canceladas') {
-                $sql = "SELECT t.nroArreglo, m.id, m.motivos, t.descripcion, t.ip, t.nombreApellidoAfectado, t.celular, t.solucion, e.id, e.nombre, t.motivoCancelacion, 
-                        t.fechaProblema, t.fechaSolucion, d.codigo, d.nombre, u.dni, concat(u.nombre, ' ', u.apellido) as nombre_apellido, a.codigo, a.nombre, t.usuarioCreado
+                $sql = "SELECT t.nroArreglo, m.id, m.motivos, t.descripcion, t.nota_electronica, t.nombreApellidoAfectado, t.celular, t.solucion, e.id, e.nombre, t.motivoCancelacion, 
+                        t.fechaProblema, t.fechaSolucion, d.codigo, d.nombre, u.legajo, concat(u.nombre, ' ', u.apellido) as nombre_apellido, a.codigo, a.nombre, t.usuarioCreado
                         from tareas t, motivos m, estadotarea e, direcciones d, usuario u, areas a 
-                        where t.id_motivos = m.id and t.estadoTarea_id = e.id and t.direccion_codigo = d.codigo and t.usuario_dni = u.dni 
+                        where t.id_motivos = m.id and t.estadoTarea_id = e.id and t.direccion_codigo = d.codigo and t.usuario_legajo = u.legajo 
                         and t.codigoArea3 = a.codigo and t.estadoTarea_id != 5 and t.estadoTarea_id != 1 and t.estadoTarea_id != 2 and t.estadoTarea_id != 3";
             }
 
@@ -719,10 +719,10 @@ class Consultas extends Conexion
     {
         try {
             $link = parent::conexionBD();
-            $sql = "SELECT t.nroArreglo, m.id, m.motivos, t.descripcion, t.ip, t.nombreApellidoAfectado, t.celular, t.solucion, e.id, e.nombre, t.motivoCancelacion, 
-                    t.fechaProblema, t.fechaSolucion, d.codigo, d.nombre, u.dni, concat(u.nombre, ' ', u.apellido) as nombre_apellido, a.codigo, a.nombre, t.usuarioCreado
+            $sql = "SELECT t.nroArreglo, m.id, m.motivos, t.descripcion, t.nota_electronica, t.nombreApellidoAfectado, t.celular, t.solucion, e.id, e.nombre, t.motivoCancelacion, 
+                    t.fechaProblema, t.fechaSolucion, d.codigo, d.nombre, u.legajo, concat(u.nombre, ' ', u.apellido) as nombre_apellido, a.codigo, a.nombre, t.usuarioCreado
                     from tareas t, motivos m, estadotarea e, direcciones d, usuario u, areas a 
-                    where t.id_motivos = m.id and t.estadoTarea_id = e.id and t.direccion_codigo = d.codigo and t.usuario_dni = u.dni 
+                    where t.id_motivos = m.id and t.estadoTarea_id = e.id and t.direccion_codigo = d.codigo and t.usuario_legajo = u.legajo 
                     and t.codigoArea3 = a.codigo and t.estadoTarea_id = 3 and date(t.fechaSolucion) = curdate()";
             $result = mysqli_query($link, $sql);
             $listTareasCompletas = [];
@@ -745,10 +745,10 @@ class Consultas extends Conexion
     {
         try {
             $link = parent::conexionBD();
-            $sql = "SELECT t.nroArreglo, m.motivos, t.descripcion, t.ip, t.nombreApellidoAfectado, t.celular, t.solucion, e.nombre, t.motivoCancelacion, 
+            $sql = "SELECT t.nroArreglo, m.motivos, t.descripcion, t.nota_electronica, t.nombreApellidoAfectado, t.celular, t.solucion, e.nombre, t.motivoCancelacion, 
                     t.fechaProblema, t.fechaSolucion, d.nombre, concat(u.nombre, ' ', u.apellido) as nombreApellido, t.motivoEliminacion, t.fechaEliminado
                     from tareas t, motivos m, estadotarea e, direcciones d, usuario u 
-                    where t.id_motivos = m.id and t.estadoTarea_id = e.id and t.direccion_codigo = d.codigo and t.usuario_dni = u.dni and t.estadoTarea_id = 5";
+                    where t.id_motivos = m.id and t.estadoTarea_id = e.id and t.direccion_codigo = d.codigo and t.usuario_legajo = u.legajo and t.estadoTarea_id = 5";
             $result = mysqli_query($link, $sql);
             $listTareasEliminadas = [];
             $i = 0;
@@ -765,11 +765,11 @@ class Consultas extends Conexion
 
 
     //TOMAR TAREA
-    public function tomarTareaAgente($dni, $nroArreglo)
+    public function tomarTareaAgente($legajo, $nroArreglo)
     {
         try {
             $link = parent::conexionBD();
-            $sql = "UPDATE tareas set usuario_dni = '$dni', estadoTarea_id = '2' where nroArreglo = '$nroArreglo'";
+            $sql = "UPDATE tareas set usuario_legajo = '$legajo', estadoTarea_id = '2' where nroArreglo = '$nroArreglo'";
             $result = mysqli_query($link, $sql);
             if ($result == true) {
                 return true;
@@ -787,7 +787,7 @@ class Consultas extends Conexion
     {
         try {
             $link = parent::conexionBD();
-            $sql = "UPDATE tareas set usuario_dni = '0', estadoTarea_id = '1' where nroArreglo = '$nroArreglo'";
+            $sql = "UPDATE tareas set usuario_legajo = '0', estadoTarea_id = '1' where nroArreglo = '$nroArreglo'";
             $result = mysqli_query($link, $sql);
             if ($result == true) {
                 return true;
@@ -835,12 +835,12 @@ class Consultas extends Conexion
     }
 
     //AGREGAR NUEVA TAREA
-    public function agregarTarea($selectMotivos, $descripcion, $ip, $nombreApellido, $celular, $direccion, $areaUsuario, $usuarioCreado)
+    public function agregarTarea($selectMotivos, $descripcion, $nota_electronica, $nombreApellido, $celular, $direccion, $areaUsuario, $usuarioCreado)
     {
         try {
             $link = parent::conexionBD();
-            $sql = "INSERT into tareas(id_motivos, descripcion, ip, nombreApellidoAfectado, celular, estadoTarea_id, fechaProblema, direccion_codigo, usuario_dni, codigoArea3, fechaCreada, usuarioCreado)
-                    values('$selectMotivos', '$descripcion', '$ip', '$nombreApellido', '$celular', '1', NOW(), '$direccion', '0', '$areaUsuario', curdate(), '$usuarioCreado')";
+            $sql = "INSERT into tareas(id_motivos, descripcion, nota_electronica, nombreApellidoAfectado, celular, estadoTarea_id, fechaProblema, direccion_codigo, usuario_legajo, codigoArea3, fechaCreada, usuarioCreado)
+                    values('$selectMotivos', '$descripcion', '$nota_electronica', '$nombreApellido', '$celular', '1', NOW(), '$direccion', '0', '$areaUsuario', curdate(), '$usuarioCreado')";
             $result = mysqli_query($link, $sql);
 
 
@@ -859,9 +859,9 @@ class Consultas extends Conexion
     {
         try {
             $link = parent::conexionBD();
-            $sql = "SELECT u.dni, u.nombre, u.apellido, u.correo, u.usuario, t.nombre, a.nombre, a.codigo 
+            $sql = "SELECT u.legajo, u.nombre, u.apellido, u.correo, u.usuario, t.nombre, a.nombre, a.codigo 
                     from usuario u, tipousuario t, areas a, usuario_area ua 
-                    where u.idRol2 = t.idrol and t.idrol != 1 and t.idrol != 3 and u.dni = ua.usuario_dni2 and ua.codigo_area2 = a.codigo";
+                    where u.idRol2 = t.idrol and t.idrol != 1 and t.idrol != 3 and u.legajo = ua.usuario_legajo2 and ua.codigo_area2 = a.codigo";
             $result = mysqli_query($link, $sql);
             $listEncAgentes = [];
             $i = 0;
@@ -876,11 +876,11 @@ class Consultas extends Conexion
     }
 
 
-    public function editarAgente($dni, $nombre, $apellido, $correo, $user, $dniAnterior)
+    public function editarAgente($legajo, $nombre, $apellido, $correo, $user, $legajoAnterior)
     {
         try {
             $link = parent::conexionBD();
-            $sql = "UPDATE usuario SET dni = '$dni', nombre = '$nombre', apellido = '$apellido', correo = '$correo', usuario = '$user' WHERE dni = '$dniAnterior'";
+            $sql = "UPDATE usuario SET legajo = '$legajo', nombre = '$nombre', apellido = '$apellido', correo = '$correo', usuario = '$user' WHERE legajo = '$legajoAnterior'";
             $result = mysqli_query($link, $sql);
             if ($result == true) {
                 return true;
@@ -892,11 +892,11 @@ class Consultas extends Conexion
         }
     }
 
-    public function bajaAgente($dni, $motivoBaja)
+    public function bajaAgente($legajo, $motivoBaja)
     {
         try {
             $link = parent::conexionBD();
-            $sql = "UPDATE usuario set idRol2 = null, motivoBaja = '$motivoBaja' where dni = '$dni'";
+            $sql = "UPDATE usuario set idRol2 = null, motivoBaja = '$motivoBaja' where legajo = '$legajo'";
             $result = mysqli_query($link, $sql);
             if ($result == true) {
                 return true;
@@ -999,7 +999,7 @@ class Consultas extends Conexion
     {
         try {
             $link = parent::conexionBD();
-            $sql = "SELECT u.dni, u.nombre, u.apellido, u.correo, u.usuario, tu.nombre 
+            $sql = "SELECT u.legajo, u.nombre, u.apellido, u.correo, u.usuario, tu.nombre 
                     FROM usuario AS u, tipousuario AS tu
                     WHERE u.idRol2 = tu.idRol order by tu.nombre";
             $result = mysqli_query($link, $sql);
@@ -1037,7 +1037,7 @@ class Consultas extends Conexion
     {
         try {
             $link = parent::conexionBD();
-            $sql = "SELECT u.dni, u.nombre, u.apellido, u.correo, u.motivoBaja from usuario u where u.idRol2 is null and u.dni != 0";
+            $sql = "SELECT u.legajo, u.nombre, u.apellido, u.correo, u.motivoBaja from usuario u where u.idRol2 is null and u.legajo != 0";
             $result = mysqli_query($link, $sql);
             $listBajas = [];
             $i = 0;
@@ -1055,7 +1055,7 @@ class Consultas extends Conexion
     {
         try {
             $link = parent::conexionBD();
-            $sql = "SELECT u.dni, u.nombre, u.apellido, u.correo, u.usuario, t.nombre, u.ultimoAcceso
+            $sql = "SELECT u.legajo, u.nombre, u.apellido, u.correo, u.usuario, t.nombre, u.ultimoAcceso
                     from usuario u, tipousuario t 
                     where u.idRol2 = t.idrol";
             $result = mysqli_query($link, $sql);
@@ -1071,11 +1071,11 @@ class Consultas extends Conexion
         return $listUsuarios;
     }
 
-    public function altaUsuario($idRol, $dni)
+    public function altaUsuario($idRol, $legajo)
     {
         try {
             $link = parent::conexionBD();
-            $sql = "UPDATE usuario set idRol2 = '$idRol', motivoBaja = null where dni = '$dni'";
+            $sql = "UPDATE usuario set idRol2 = '$idRol', motivoBaja = null where legajo = '$legajo'";
             $result = mysqli_query($link, $sql);
             if ($result == true) {
                 return true;
@@ -1087,14 +1087,14 @@ class Consultas extends Conexion
         }
     }
 
-    public function agregarUsuario($tipoUsuario, $dni, $nombre, $apellido, $correo, $user, $pass)
+    public function agregarUsuario($tipoUsuario, $legajo, $nombre, $apellido, $correo, $user, $pass)
     {
         try {
             $passFuerte = password_hash($pass, PASSWORD_DEFAULT);
             $link = parent::conexionBD();
 
-            $sql = "INSERT into usuario(dni, nombre, apellido, correo, usuario, contraseña, idRol2) 
-                    values ('$dni', '$nombre', '$apellido', '$correo', '$user', '$passFuerte', '$tipoUsuario')";
+            $sql = "INSERT into usuario(legajo, nombre, apellido, correo, usuario, contraseña, idRol2) 
+                    values ('$legajo', '$nombre', '$apellido', '$correo', '$user', '$passFuerte', '$tipoUsuario')";
 
             $result = mysqli_query($link, $sql);
             if ($result == true) {
@@ -1107,13 +1107,13 @@ class Consultas extends Conexion
         }
     }
 
-    public function agregarUsuarioAreas($dni, $codArea)
+    public function agregarUsuarioAreas($legajo, $codArea)
     {
         try {
 
             $link = parent::conexionBD();
 
-            $sql = "INSERT INTO usuario_area(usuario_dni2, codigo_area2) VALUES ('$dni', '$codArea')";
+            $sql = "INSERT INTO usuario_area(usuario_legajo2, codigo_area2) VALUES ('$legajo', '$codArea')";
 
             $result = mysqli_query($link, $sql);
 
@@ -1127,13 +1127,13 @@ class Consultas extends Conexion
         }
     }
 
-    public function eliminarAreaUsuario($dni, $codArea)
+    public function eliminarAreaUsuario($legajo, $codArea)
     {
         try {
 
             $link = parent::conexionBD();
 
-            $sql = "DELETE from usuario_area where usuario_dni2 = '$dni' and codigo_area2 = '$codArea'";
+            $sql = "DELETE from usuario_area where usuario_legajo2 = '$legajo' and codigo_area2 = '$codArea'";
 
             $result = mysqli_query($link, $sql);
 
@@ -1147,11 +1147,11 @@ class Consultas extends Conexion
         }
     }
 
-    public function asignarRolUsuario($idRol, $dni)
+    public function asignarRolUsuario($idRol, $legajo)
     {
         try {
             $link = parent::conexionBD();
-            $sql = "UPDATE usuario SET idRol2 = '$idRol' WHERE dni = '$dni'";
+            $sql = "UPDATE usuario SET idRol2 = '$idRol' WHERE legajo = '$legajo'";
             $result = mysqli_query($link, $sql);
             if ($result == true) {
                 return true;
@@ -1163,12 +1163,12 @@ class Consultas extends Conexion
         }
     }
 
-    public function quitarTareaAdmin($dni)
+    public function quitarTareaAdmin($legajo)
     {
         try {
             $link = parent::conexionBD();
 
-            $sql = "UPDATE tareas SET usuario_dni = '0' WHERE usuario_dni = '$dni' AND estadoTarea_id = 1 OR estadoTarea_id = 2";
+            $sql = "UPDATE tareas SET usuario_legajo = '0' WHERE usuario_legajo = '$legajo' AND estadoTarea_id = 1 OR estadoTarea_id = 2";
 
             $result = mysqli_query($link, $sql);
             if ($result == true) {
@@ -1182,13 +1182,13 @@ class Consultas extends Conexion
     }
 
 
-    public function blanquearPass($dni, $pass)
+    public function blanquearPass($legajo, $pass)
     {
         try {
             $passFuerte = password_hash($pass, PASSWORD_DEFAULT);
             $link = parent::conexionBD();
 
-            $sql = "UPDATE usuario set contraseña = '$passFuerte' where dni = '$dni'";
+            $sql = "UPDATE usuario set contraseña = '$passFuerte' where legajo = '$legajo'";
 
             $result = mysqli_query($link, $sql);
             if ($result == true) {
@@ -1211,7 +1211,7 @@ class Consultas extends Conexion
             $link = parent::conexionBD();
             $sql = "SELECT count(*) from tareas t 
                     where estadoTarea_id in (SELECT id from estadotarea e where nombre = 'Completo') 
-                    and usuario_dni in (SELECT dni from usuario u where usuario = '$user' OR correo = '$user')";
+                    and usuario_legajo in (SELECT legajo from usuario u where usuario = '$user' OR correo = '$user')";
             $result = mysqli_query($link, $sql);
             while ($row = mysqli_fetch_row($result)) {
                 $nroCompletas = $row[0];
@@ -1429,7 +1429,7 @@ class Consultas extends Conexion
     {
         try {
             $link = parent::conexionBD();
-            $sql = "SELECT count(*) from usuario u where u.dni != 0";
+            $sql = "SELECT count(*) from usuario u where u.legajo != 0";
             $result = mysqli_query($link, $sql);
             while ($row = mysqli_fetch_row($result)) {
                 $totalUsuarios = $row[0];

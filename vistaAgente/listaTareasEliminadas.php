@@ -151,15 +151,15 @@ if (!(time() - $_SESSION['time'] >= 3600)) {
 
                                                 <?php
                                                 if ($tarea[3] == '' || $tarea[3] == null) {
-                                                    $ip = 'No proporcionado';
+                                                    $ne = 'No proporcionado';
                                                 } else {
-                                                    $ip = $tarea[3];
+                                                    $ne = $tarea[3];
                                                 }
                                                 ?>
 
                                                 <div class="form-floating mb-3">
-                                                    <input type="text" name="ip" value="<?php echo $ip; ?>" class="form-control" id="floatingInput" placeholder="..." disabled>
-                                                    <label for="floatingInput">IP</label>
+                                                    <input type="text" name="ne" value="<?php echo $ne; ?>" class="form-control" id="floatingInput" placeholder="..." disabled>
+                                                    <label for="floatingInput">Nota Electrónica</label>
                                                 </div>
 
                                                 <?php
@@ -194,7 +194,7 @@ if (!(time() - $_SESSION['time'] >= 3600)) {
                                                     <div class="form-floating mb-3">
                                                         <textarea class="form-control" name="solucion" placeholder="Leave a comment here" id="floatingTextarea" style="height: 150px" disabled><?php echo $tarea[6]; ?>    
                                                             </textarea>
-                                                        <label for="floatingTextarea">Solución del incoveniente</label>
+                                                        <label for="floatingTextarea">Materiales utilizados</label>
                                                     </div>
                                                 <?php
                                                 }

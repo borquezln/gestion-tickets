@@ -15,10 +15,10 @@ switch ($accion) {
         break;
 
     case 'verEstadisticasAgente':
-        $dni = $_GET['dni'];
+        $legajo = $_GET['legajo'];
         require('../controlador/c_admin.php');
         $controller = new ControladorAdmin();
-        $controller->verEstadisticasAgenteContr($dni);
+        $controller->verEstadisticasAgenteContr($legajo);
         break;
 
     case 'listarTareas':
@@ -75,10 +75,10 @@ switch ($accion) {
         break;
 
     case 'listarTareaAgente':
-        $dni = $_GET['agente'];
+        $legajo = $_GET['agente'];
         require('../controlador/c_admin.php');
         $controller = new ControladorAdmin();
-        $controller->listarTareaAgenteContr($dni);
+        $controller->listarTareaAgenteContr($legajo);
         break;
     case 'listarDirecciones':
         require('../controlador/c_admin.php');

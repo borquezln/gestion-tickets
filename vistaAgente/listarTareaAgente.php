@@ -59,7 +59,7 @@ if (!(time() - $_SESSION['time'] >= 3600)) {
                         var fechaProblemaFin = $('#fechaProblemaFin').val();
                         var fechaSolucionInicio = $('#fechaSolucionInicio').val();
                         var fechaSolucionFin = $('#fechaSolucionFin').val();
-                        var dni = $('#dni').val();
+                        var legajo = $('#legajo').val();
                         //
                         var fechaProblemaEspecifico = $('#fechaProblemaEspecifico').val();
                         var fechaSolucionEspecifico = $('#fechaSolucionEspecifico').val();
@@ -68,7 +68,7 @@ if (!(time() - $_SESSION['time'] >= 3600)) {
                             url: 'ajax/buscarPorFecha.php',
                             data: 'opcionBusqueda=' + opcion + '&fechaProblemaInicio=' + fechaProblemaInicio + '&fechaProblemaFin=' + fechaProblemaFin +
                                 '&fechaSolucionInicio=' + fechaSolucionInicio + '&fechaSolucionFin=' + fechaSolucionFin + '&fechaProblemaEspecifico=' + fechaProblemaEspecifico +
-                                '&fechaSolucionEspecifico=' + fechaSolucionEspecifico + '&dni=' + dni,
+                                '&fechaSolucionEspecifico=' + fechaSolucionEspecifico + '&legajo=' + legajo,
                             success: function(r) {
                                 $('#tPrincipal').hide();
                                 $('#tResultado').show();
@@ -84,11 +84,11 @@ if (!(time() - $_SESSION['time'] >= 3600)) {
 
                     $('select[name=selectEstados]').change(function() {
                         var opcionEstadoTarea = $('#selectEstados').val();
-                        var dni = $('#dni').val();
+                        var legajo = $('#legajo').val();
                         $.ajax({
                             type: 'POST',
                             url: 'ajax/filtroEstado.php',
-                            data: 'opcionEstado=' + opcionEstadoTarea + '&dniAgente=' + dni,
+                            data: 'opcionEstado=' + opcionEstadoTarea + '&legajoAgente=' + legajo,
                             success: function(r) {
                                 $('#tPrincipal').hide();
                                 $('#tResultado').show();
@@ -176,7 +176,7 @@ if (!(time() - $_SESSION['time'] >= 3600)) {
 
                     <div class="form-floating mb-3" style="width: 400px;">
 
-                        <input type="hidden" id="dni" value="<?php echo $_GET['agente']; ?>">
+                        <input type="hidden" id="legajo" value="<?php echo $_GET['agente']; ?>">
 
                         <select class="form-select" onchange="filtrosBusqueda(this);" id="opcionBusqueda" aria-label="Floating label select example">
                             <option value="" selected>Seleccione...</option>
@@ -353,15 +353,15 @@ if (!(time() - $_SESSION['time'] >= 3600)) {
 
                                                     <?php
                                                     if ($tarea[3] == '' || $tarea[3] == null) {
-                                                        $ip = 'No proporcionado';
+                                                        $ne = 'No proporcionado';
                                                     } else {
-                                                        $ip = $tarea[3];
+                                                        $ne = $tarea[3];
                                                     }
                                                     ?>
 
                                                     <div class="form-floating mb-3">
-                                                        <input type="text" name="ip" value="<?php echo $ip; ?>" class="form-control" id="floatingInput" placeholder="..." disabled>
-                                                        <label for="floatingInput">IP</label>
+                                                        <input type="text" name="ne" value="<?php echo $ne; ?>" class="form-control" id="floatingInput" placeholder="..." disabled>
+                                                        <label for="floatingInput">Nota Electrónica</label>
                                                     </div>
 
                                                     <?php
@@ -396,7 +396,7 @@ if (!(time() - $_SESSION['time'] >= 3600)) {
                                                         <div class="form-floating mb-3">
                                                             <textarea class="form-control" name="solucion" placeholder="Leave a comment here" id="floatingTextarea" style="height: 150px" disabled><?php echo $tarea[6]; ?>    
                                                             </textarea>
-                                                            <label for="floatingTextarea">Solución del incoveniente</label>
+                                                            <label for="floatingTextarea">Materiales utilizados</label>
                                                         </div>
                                                     <?php
                                                     }

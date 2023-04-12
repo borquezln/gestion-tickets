@@ -12,7 +12,7 @@ if (isset($_POST['selectCantArea'])) {
 
 $selectAreas = $_POST['selectArea'];
 
-$dni = $_POST['dni'];
+$legajo = $_POST['legajo'];
 $nombre = $_POST['nombre'];
 $apellido = $_POST['apellido'];
 if (isset($_POST['correo'])) {
@@ -30,7 +30,7 @@ foreach ($selectArea as $area) {
 }
 
 /*echo 'tipoUsuario: ' . $tipoUsuario . '<br>' .
-    'dni: ' . $dni . '<br>' .
+    'legajo: ' . $legajo . '<br>' .
     'cantAreas: ' . $selectAreas . '<br>' .
     'nombre: ' . $nombre . '<br>' .
     'apellido: ' . $apellido . '<br>' .
@@ -38,10 +38,10 @@ foreach ($selectArea as $area) {
     'username: ' . $username . '<br>' .
     'pass: ' . $pass . '<br>';*/
 
-if ($co->agregarUsuario($tipoUsuario, $dni, $nombre, $apellido, $correo, $username, $pass)) {
+if ($co->agregarUsuario($tipoUsuario, $legajo, $nombre, $apellido, $correo, $username, $pass)) {
     if (isset($selectAreas)) {
         foreach ($selectAreas as $codArea) {
-            $co->agregarUsuarioAreas($dni, $codArea);
+            $co->agregarUsuarioAreas($legajo, $codArea);
         }
         session_start();
         $_SESSION['usuarioAgregado'] = true;

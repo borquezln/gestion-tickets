@@ -4,7 +4,7 @@ $co = new Consultas();
 
 $selectMotivos = $_POST['selectMotivos'];
 $descripcion = $_POST['descripcion'];
-$ip = $_POST['ip'];
+$nota_electronica = $_POST['nota_electronica'];
 $nombreApellido = $_POST['nombreApellidoAfectado'];
 $cel = $_POST['cel'];
 $codDireccion = $_POST['selectDireccion'];
@@ -33,13 +33,13 @@ if (isset($motivoCancelacion)) {
 
 /*echo 'selectMotivos: ' . $selectMotivos . '<br>' .
     'descripcion: ' . $descripcion . '<br>' .
-    'ip: ' . $ip . '<br>' .
+    'nota_electronica: ' . $nota_electronica . '<br>' .
     'selectArea: ' . $selectArea . '<br>' .
     'motivoCancelacion: ' . $motivoCancelacion . '<br>' .
-    'solucion: ' . $solucion . '<br>' .
+    'Materiales utilizados: ' . $solucion . '<br>' .
     'nroArreglo: ' . $nroArreglo . '<br>';
 */
-if ($co->editarTareaEncargado($selectMotivos, $descripcion, $ip, $nombreApellido, $cel, $codDireccion, $motivoCancelacion, $solucion, $codArea, $nroArreglo)) {
+if ($co->editarTareaEncargado($selectMotivos, $descripcion, $nota_electronica, $nombreApellido, $cel, $codDireccion, $motivoCancelacion, $solucion, $codArea, $nroArreglo)) {
     session_start();
     $_SESSION['tareaEditada'] = true;
     header('location: ../vista/index.php?accion=listarTareas&listado=actual');
