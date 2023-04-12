@@ -10,4 +10,3 @@ if($co->altaUsuario($idRol, $dni)){
     $_SESSION['altaOk'] = true;
     header('Location: ../vistaAgente/index.php?accion=listarAgentes');
 }
-?>

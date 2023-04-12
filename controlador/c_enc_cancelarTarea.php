@@ -10,4 +10,3 @@ if($co->cancelarTareaAgente($motivoCancelacion, $nroArreglo)){
     $_SESSION['tareaCancelada'] = true;
     header('location: ../vista/index.php?accion=listarTareas&listado=canceladas');
 }
-?>

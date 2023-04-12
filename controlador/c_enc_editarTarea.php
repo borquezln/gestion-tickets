@@ -39,7 +39,7 @@ if (isset($motivoCancelacion)) {
     'solucion: ' . $solucion . '<br>' .
     'nroArreglo: ' . $nroArreglo . '<br>';
 */
-if($co->editarTareaEncargado($selectMotivos, $descripcion, $ip, $nombreApellido, $cel, $codDireccion, $motivoCancelacion, $solucion, $codArea, $nroArreglo)){
+if ($co->editarTareaEncargado($selectMotivos, $descripcion, $ip, $nombreApellido, $cel, $codDireccion, $motivoCancelacion, $solucion, $codArea, $nroArreglo)) {
     session_start();
     $_SESSION['tareaEditada'] = true;
     header('location: ../vista/index.php?accion=listarTareas&listado=actual');

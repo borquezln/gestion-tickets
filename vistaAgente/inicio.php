@@ -12,7 +12,7 @@ if (!(time() - $_SESSION['time'] >= 3600)) {
             <meta charset="UTF-8">
             <meta http-equiv="refresh" content="3600">
             <meta name="viewport" content="width=device-width, initial-scale=1.0">
-            <title>Inicio - Gestión de tareas Sistemas</title>
+            <title>Inicio - Gestión de tareas</title>
             <?php require('libreriaEstilos.php'); ?>
 
             <style>
@@ -419,7 +419,7 @@ if (!(time() - $_SESSION['time'] >= 3600)) {
         ?>
 
             <script>
-                //Total Motivos Sistemas
+                //Total Motivos
                 const labels = [
                     <?php
                     foreach ($listMotivos as $motivo) {
@@ -431,7 +431,7 @@ if (!(time() - $_SESSION['time'] >= 3600)) {
                 const data = {
                     labels: labels,
                     datasets: [{
-                        label: 'Total de motivos de Sistemas',
+                        label: 'Total de motivos',
                         backgroundColor: [
                             'Aquamarine',
                             'LightBlue',

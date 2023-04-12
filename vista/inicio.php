@@ -14,7 +14,7 @@ if (!(time() - $_SESSION['time'] >= 3600)) {
             <meta http-equiv="refresh" content="3600">
             <meta http-equiv="X-UA-Compatible" content="IE=edge">
             <meta name="viewport" content="width=device-width, initial-scale=1.0">
-            <title>Inicio - Gestión de tareas Sistemas</title>
+            <title>Inicio - Gestión de tareas</title>
             <?php require('libreriaEstilos.php'); ?>
         </head>
 

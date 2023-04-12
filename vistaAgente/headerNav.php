@@ -256,7 +256,7 @@ if (isset($_SESSION['rol'])) {
                 <button id="iconToggle" type="button">
                     <span class="navbar-toggler-icon"></span>
                 </button>
-                <a class="navbar-brand" style="margin-left: 5px;">Gestión de tareas - Sistemas</a>
+                <a class="navbar-brand" style="margin-left: 5px;">Gestión de tareas</a>
             </div>
 
             <ul class="navbar-nav settingsUser">

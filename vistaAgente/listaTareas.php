@@ -68,7 +68,7 @@ if (!(time() - $_SESSION['time'] >= 3600)) {
                         dom: 'lBfrtip',
                         buttons: [{
                                 extend: 'excelHtml5',
-                                title: 'Listado de Tareas - Gestión Sistemas',
+                                title: 'Listado de Tareas - Gestión',
                                 messageTop: 'Reporte: ' + localdate,
                                 exportOptions: {
                                     columns: [0, 1, 2, 3, 4, 5, 6, 7, 8]
@@ -80,7 +80,7 @@ if (!(time() - $_SESSION['time'] >= 3600)) {
                                 pageSize: 'A4',
                                 download: 'open',
                                 messageTop: 'Reporte: ' + localdate,
-                                title: 'Listado de Tareas - Gestión Sistemas',
+                                title: 'Listado de Tareas - Gestión',
                                 exportOptions: {
                                     columns: [0, 1, 2, 3, 4, 5, 6, 7, 8]
                                 },
@@ -99,7 +99,7 @@ if (!(time() - $_SESSION['time'] >= 3600)) {
                         dom: 'lBfrtip',
                         buttons: [{
                                 extend: 'excelHtml5',
-                                title: 'Listado de Tareas - Gestión Sistemas',
+                                title: 'Listado de Tareas - Gestión',
                                 messageTop: 'Reporte: ' + localdate,
                                 exportOptions: {
                                     columns: [0, 1, 2, 3, 4, 5, 6, 7, 8]
@@ -111,7 +111,7 @@ if (!(time() - $_SESSION['time'] >= 3600)) {
                                 pageSize: 'A4',
                                 download: 'open',
                                 messageTop: 'Reporte: ' + localdate,
-                                title: 'Listado de Tareas - Gestión Sistemas',
+                                title: 'Listado de Tareas - Gestión',
                                 exportOptions: {
                                     columns: [0, 1, 2, 3, 4, 5, 6, 7, 8]
                                 },

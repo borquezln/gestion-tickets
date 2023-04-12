@@ -14,5 +14,3 @@ if($co->eliminarAreaUsuario($dni, $codArea)){
     $_SESSION['eliminadoOk'] = true;
     header('Location: ../vistaAgente/index.php?accion=listarAgentes');
 }
-
-?>

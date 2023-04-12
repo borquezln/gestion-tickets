@@ -45,7 +45,9 @@ if (!(time() - $_SESSION['time'] >= 3600)) {
                 $(document).ready(function() {
                     $('#tablaDinamicaLoad').DataTable({
                         aLengthMenu: [25, 50, 100, 200],
-                        aaSorting: [[ 0, "desc" ]],
+                        aaSorting: [
+                            [0, "desc"]
+                        ],
                         language: {
                             "url": "//cdn.datatables.net/plug-ins/1.11.5/i18n/es-ES.json"
                         }

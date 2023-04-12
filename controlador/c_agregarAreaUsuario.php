@@ -11,5 +11,3 @@ if($co->agregarUsuarioAreas($dni, $codArea)){
     $_SESSION['agregadoOk'] = true;
     header('Location: ../vistaAgente/index.php?accion=listarAgentes');
 }
-
-?>

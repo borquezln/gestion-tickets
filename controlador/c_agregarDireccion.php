@@ -10,6 +10,6 @@ if ($co->agregarDireccion($codigo, $direccion, $descripcion)) {
     session_start();
     $_SESSION['direccionOk'] = true;
     header('location: ../vistaAgente/index.php?accion=listarDirecciones');
-}else{
+} else {
     header('location: ../vistaAgente/index.php?accion=listarDirecciones');
 }

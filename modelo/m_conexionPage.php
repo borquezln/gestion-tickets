@@ -5,4 +5,3 @@ function conexion()
     $link->set_charset("utf8");
     return $link;
 }
-?>

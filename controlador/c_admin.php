@@ -109,7 +109,7 @@ class ControladorAdmin
 
     public function verEstadisticasAgenteContr($dni)
     {
-        echo ('<title>Estadísticas - Gestión de tareas Sistemas</title>');
+        echo ('<title>Estadísticas - Gestión de tareas</title>');
         require('../modelo/m_estadisticas.php');
         require('../modelo/m_consultas.php');
         $estadistica = new ConsultasEstadisticas();
@@ -126,7 +126,7 @@ class ControladorAdmin
 
     public function listarTareasEncargadoContr($listado)
     {
-        echo ('<title>Listado de Tareas - Gestión de tareas Sistemas</title>');
+        echo ('<title>Listado de Tareas - Gestión de tareas</title>');
         require('../modelo/m_consultas.php');
         $co = new Consultas();
         $listAreas = $co->listarAreas();
@@ -154,7 +154,7 @@ class ControladorAdmin
     public function listarTareasAgenteContr($listado)
     {
         //listado = estadoTarea
-        echo ('<title>Listado de Tareas - Gestión de tareas Sistemas</title>');
+        echo ('<title>Listado de Tareas - Gestión de tareas</title>');
         require('../modelo/m_consultas.php');
         $co = new Consultas();
 
@@ -168,7 +168,7 @@ class ControladorAdmin
         } else if ($listado == 'canceladas') {
             $estado = 'Canceladas';
             $listTareasAgentes = $co->listarTareasAgentes($_SESSION['areaUsuario'], $_SESSION['areaUsuario2'], $_SESSION['areaUsuario3'], $listado);
-        } else{
+        } else {
             header("location:javascript:history.go(-1)");
         }
 
@@ -233,7 +233,7 @@ class ControladorAdmin
 
     public function listarTareasEliminadasContr()
     {
-        echo ('<title>Listado de Tareas Eliminadas - Gestión de tareas Sistemas</title>');
+        echo ('<title>Listado de Tareas Eliminadas - Gestión de tareas</title>');
         require('../modelo/m_consultas.php');
         $co = new Consultas();
         $listTareasEliminadas = $co->listarTareasEliminadas();
@@ -244,7 +244,7 @@ class ControladorAdmin
 
     public function listarAgentesContr()
     {
-        echo ('<title>Listado de Agentes - Gestión de tareas Sistemas</title>');
+        echo ('<title>Listado de Agentes - Gestión de tareas</title>');
         require('../modelo/m_consultas.php');
         $co = new Consultas();
         $listEncAgentes = $co->listarEncargadosAgentes();
@@ -256,7 +256,7 @@ class ControladorAdmin
 
     public function listarMotivosReqContr()
     {
-        echo ('<title>Listado de Agentes - Gestión de tareas Sistemas</title>');
+        echo ('<title>Listado de Agentes - Gestión de tareas</title>');
         require('../modelo/m_consultas.php');
         $co = new Consultas();
         $listMotivosReq = $co->listarMotivosReq();
@@ -268,7 +268,7 @@ class ControladorAdmin
 
     public function listarTareaAgenteContr($dni)
     {
-        echo ('<title>Tareas de Agente - Gestión de tareas Sistemas</title>');
+        echo ('<title>Tareas de Agente - Gestión de tareas</title>');
         require('../modelo/m_consultas.php');
         $co = new Consultas();
         $listTareaAgente = $co->listarTareaAgente($dni);
@@ -282,7 +282,7 @@ class ControladorAdmin
 
     public function listarDireccionesContr()
     {
-        echo ('<title>Listado de Direcciones - Gestión de tareas Sistemas</title>');
+        echo ('<title>Listado de Direcciones - Gestión de tareas</title>');
         require('../modelo/m_consultas.php');
         $co = new Consultas();
         $listDirecciones = $co->listarDirecciones();
@@ -294,7 +294,7 @@ class ControladorAdmin
 
     public function listarUsuariosContr()
     {
-        echo ('<title>Lista de Usuarios - Gestión de tareas Sistemas</title>');
+        echo ('<title>Lista de Usuarios - Gestión de tareas</title>');
         require('../modelo/m_consultas.php');
         $co = new Consultas();
         $listUsuarios = $co->listarUsuarios();
@@ -307,7 +307,7 @@ class ControladorAdmin
 
     public function listarUsuariosBajaContr()
     {
-        echo ('<title>Lista de Usuarios de baja - Gestión de tareas Sistemas</title>');
+        echo ('<title>Lista de Usuarios de baja - Gestión de tareas</title>');
         require('../modelo/m_consultas.php');
         $co = new Consultas();
         $listBajas = $co->listarBajasUsuarios();
@@ -319,7 +319,7 @@ class ControladorAdmin
 
     public function listarUsuariosCargadosContr()
     {
-        echo ('<title>Lista de Usuarios cargados - Gestión de tareas Sistemas</title>');
+        echo ('<title>Lista de Usuarios cargados - Gestión de tareas</title>');
         require('../modelo/m_consultas.php');
         $co = new Consultas();
         $listUsuarios = $co->listarUsuariosCargados();
@@ -330,7 +330,7 @@ class ControladorAdmin
 
     public function pageBlanquearPassContr()
     {
-        echo ('<title>Blanquear Contraseña - Gestión de tareas Sistemas</title>');
+        echo ('<title>Blanquear Contraseña - Gestión de tareas</title>');
         require('../modelo/m_consultas.php');
         $co = new Consultas();
         $listUsuarios = $co->listarUsuarios();

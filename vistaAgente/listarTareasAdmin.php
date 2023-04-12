@@ -69,7 +69,7 @@ if (!(time() - $_SESSION['time'] >= 3600)) {
                         ],
                         buttons: [{
                                 extend: 'excelHtml5',
-                                title: 'Listado de Tareas - Gestión de tareas Sistemas',
+                                title: 'Listado de Tareas - Gestión de tareas',
                                 messageTop: 'Reporte: ' + localdate,
                                 exportOptions: {
                                     columns: [0, 1, 2, 3, 4, 5, 6, 7, 8]
@@ -81,7 +81,7 @@ if (!(time() - $_SESSION['time'] >= 3600)) {
                                 pageSize: 'A4',
                                 download: 'open',
                                 messageTop: 'Reporte: ' + localdate,
-                                title: 'Listado de Tareas - Gestión de tareas Sistemas',
+                                title: 'Listado de Tareas - Gestión de tareas',
                                 exportOptions: {
                                     columns: [0, 1, 2, 3, 4, 5, 6, 7, 8]
                                 },

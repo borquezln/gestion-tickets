@@ -15,5 +15,4 @@ switch ($accion) {
         $controller = new ControladorAdmin();
         $controller->listarDireccionesContr();
         break;
-
 }

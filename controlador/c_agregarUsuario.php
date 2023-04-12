@@ -46,7 +46,7 @@ if ($co->agregarUsuario($tipoUsuario, $dni, $nombre, $apellido, $correo, $userna
         session_start();
         $_SESSION['usuarioAgregado'] = true;
         header('Location: ../vistaAgente/index.php?accion=listarUsuarios');
-    }else{
+    } else {
         session_start();
         $_SESSION['usuarioAgregado'] = true;
         header('Location: ../vistaAgente/index.php?accion=listarUsuarios');

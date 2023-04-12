@@ -11,7 +11,7 @@ if ($co->editarDireccion($codigo, $direccion, $descripcion, $codigoAnterior)) {
     session_start();
     $_SESSION['direccionEditada'] = true;
     header('location: ../vistaAgente/index.php?accion=listarDirecciones');
-}else{
+} else {
     session_start();
     $_SESSION['direccionEditadaError'] = true;
     header('location: ../vistaAgente/index.php?accion=listarDirecciones');

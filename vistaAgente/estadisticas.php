@@ -12,7 +12,7 @@ if (!(time() - $_SESSION['time'] >= 3600)) {
             <meta http-equiv="refresh" content="3600">
             <meta http-equiv="X-UA-Compatible" content="IE=edge">
             <meta name="viewport" content="width=device-width, initial-scale=1.0">
-            <title>Estadísticas - Gestión Sistemas</title>
+            <title>Estadísticas - Gestión</title>
             <style>
                 section {
                     padding: 15px;
@@ -92,7 +92,7 @@ if (!(time() - $_SESSION['time'] >= 3600)) {
         </body>
 
         <script>
-            //Total Motivos Sistemas
+            //Total Motivos
             const labels = [
                 <?php
                 foreach ($totalPendientes as $pendiente) {
@@ -124,7 +124,7 @@ if (!(time() - $_SESSION['time'] >= 3600)) {
             const data = {
                 labels: labels,
                 datasets: [{
-                    label: 'Total de requerimientos de Sistemas',
+                    label: 'Total de requerimientos',
                     backgroundColor: [
                         'lightgray',
                         'LightSkyBlue',
@@ -170,7 +170,7 @@ if (!(time() - $_SESSION['time'] >= 3600)) {
                     plugins: {
                         title: {
                             display: true,
-                            text: 'Total de requerimientos de Sistemas: <?php echo $totalTareas; ?>'
+                            text: 'Total de requerimientos: <?php echo $totalTareas; ?>'
                         },
                         legend: {
                             display: true,
@@ -224,7 +224,7 @@ if (!(time() - $_SESSION['time'] >= 3600)) {
             const dataTotalxAreas = {
                 labels: labelsTotalxAreas,
                 datasets: [{
-                    label: 'Total de requerimientos de Sistemas',
+                    label: 'Total de requerimientos',
                     backgroundColor: [
                         'lightgray',
                         'aquamarine',
@@ -284,7 +284,7 @@ if (!(time() - $_SESSION['time'] >= 3600)) {
                     plugins: {
                         title: {
                             display: true,
-                            text: 'Total de requerimientos de Sistemas por Áreas'
+                            text: 'Total de requerimientos por Áreas'
                         },
                         legend: {
                             display: true,
@@ -307,7 +307,7 @@ if (!(time() - $_SESSION['time'] >= 3600)) {
             const dataMotivosRedes = {
                 labels: labelsMotivosRedes,
                 datasets: [{
-                    label: 'Total de requerimientos de Sistemas',
+                    label: 'Total de requerimientos',
                     backgroundColor: [
                         'Aquamarine',
                         'LightBlue',
