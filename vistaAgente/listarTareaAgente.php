@@ -247,7 +247,7 @@ if (!(time() - $_SESSION['time'] >= 3600)) {
                                 }
                                 ?>
                             </select>
-                            <label for="floatingSelect">Seleccione el motivo del incoveniente</label>
+                            <label for="floatingSelect">Seleccione el estado del incoveniente</label>
                         </div>
                     </div>
                 </div>
@@ -260,7 +260,6 @@ if (!(time() - $_SESSION['time'] >= 3600)) {
                             <thead>
                                 <tr>
                                     <th scope="col">#</th>
-                                    <th scope="col">Motivo</th>
                                     <th scope="col">Descripción</th>
                                     <th scope="col">Afectado/a</th>
                                     <th scope="col">Estado</th>
@@ -340,11 +339,6 @@ if (!(time() - $_SESSION['time'] >= 3600)) {
                                                     <p class="fs-6">Tarea N° <?php echo $tarea[0]; ?></p>
 
                                                     <input type="hidden" name="nroArreglo" value="<?php echo $tarea[0]; ?>">
-
-                                                    <div class="form-floating mb-3">
-                                                        <input type="text" name="motivo" value="<?php echo $tarea[1]; ?>" class="form-control" id="floatingInput" placeholder="..." disabled>
-                                                        <label for="floatingInput">Motivo del incoveniente</label>
-                                                    </div>
 
                                                     <div class="form-floating mb-3">
                                                         <textarea class="form-control" name="descripcion" placeholder="Leave a comment here" id="floatingTextarea" style="height: 100px" disabled><?php echo $tarea[2]; ?></textarea>

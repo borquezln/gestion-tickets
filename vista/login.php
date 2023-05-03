@@ -90,8 +90,7 @@
             <?php
             error_reporting(0);
             session_start();
-            $error = $_SESSION['errLogin'];
-            if ($error == true) {
+            if (isset($_SESSION['errLogin'])) {
             ?>
                 <div class="alert alert-danger" role="alert">
                     Datos Erróneos. Ingrese nuevamente
@@ -100,7 +99,7 @@
                 unset($_SESSION['errLogin']);
             }
 
-            if ($_SESSION['session_caducada']) {
+            if (isset($_SESSION['session_caducada'])) {
             ?>
 
                 <div class="alert alert-warning" role="alert">

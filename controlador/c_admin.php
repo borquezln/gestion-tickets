@@ -23,14 +23,6 @@ class ControladorAdmin
             $totalFDigital = $co->contarTotalFDigitalActual();
             $totalPDigital = $co->contarTotalPDigitalActual();
             $totalCctv = $co->contarTotalCCTVActual();
-
-            $totalMotivosRedes = $co->totalMotivosRedesActual();
-            $totalMotivosInfr = $co->totalMotivosInfraestructuraActual();
-            $totalMotivosSTecnico = $co->totalMotivosSTecnicoActual();
-            $totalMotivosRequerimientos = $co->totalMotivosRequerimientosActual();
-            $totalMotivosFDigital = $co->totalMotivosFDigitalActual();
-            $totalMotivosPDigital = $co->totalMotivosPDigitalActual();
-            $totalMotivosCCTV = $co->totalMotivosCCTVActual();
         } else if ($time == 'month') {
             $totalTareas = $co->contarTareasxFechas($fechaInicio, $fechaFin);
             $totalPendientes = $co->contarTotalPendientesxFechas($fechaInicio, $fechaFin);
@@ -46,14 +38,6 @@ class ControladorAdmin
             $totalFDigital = $co->contarTotalFDigitalxFechas($fechaInicio, $fechaFin);
             $totalPDigital = $co->contarTotalPDigitalxFechas($fechaInicio, $fechaFin);
             $totalCctv = $co->contarTotalCCTVxFechas($fechaInicio, $fechaFin);
-
-            $totalMotivosRedes = $co->totalMotivosRedesxFechas($fechaInicio, $fechaFin);
-            $totalMotivosInfr = $co->totalMotivosInfraestructuraxFechas($fechaInicio, $fechaFin);
-            $totalMotivosSTecnico = $co->totalMotivosSTecnicoxFechas($fechaInicio, $fechaFin);
-            $totalMotivosRequerimientos = $co->totalMotivosRequerimientosxFechas($fechaInicio, $fechaFin);
-            $totalMotivosFDigital = $co->totalMotivosFDigitalxFechas($fechaInicio, $fechaFin);
-            $totalMotivosPDigital = $co->totalMotivosPDigitalxFechas($fechaInicio, $fechaFin);
-            $totalMotivosCCTV = $co->totalMotivosCCTVxFechas($fechaInicio, $fechaFin);
         } else if ($time == 'year') {
             $totalTareas = $co->contarTareasxAnio();
             $totalPendientes = $co->contarTotalPendientesxAnio();
@@ -69,14 +53,6 @@ class ControladorAdmin
             $totalFDigital = $co->contarTotalFDigitalxAnio();
             $totalPDigital = $co->contarTotalPDigitalxAnio();
             $totalCctv = $co->contarTotalCCTVxAnio();
-
-            $totalMotivosRedes = $co->totalMotivosRedesxAnio();
-            $totalMotivosInfr = $co->totalMotivosInfraestructuraxAnio();
-            $totalMotivosSTecnico = $co->totalMotivosSTecnicoxAnio();
-            $totalMotivosRequerimientos = $co->totalMotivosRequerimientosxAnio();
-            $totalMotivosFDigital = $co->totalMotivosFDigitalxAnio();
-            $totalMotivosPDigital = $co->totalMotivosPDigitalxAnio();
-            $totalMotivosCCTV = $co->totalMotivosCCTVxAnio();
         } else if ($time == 'all') {
             $totalTareas = $co->contarTareasTotal();
             $totalPendientes = $co->contarTotalPendientesTotal();
@@ -92,14 +68,6 @@ class ControladorAdmin
             $totalFDigital = $co->contarTotalFDigitalTotal();
             $totalPDigital = $co->contarTotalPDigitalTotal();
             $totalCctv = $co->contarTotalCCTVTotal();
-
-            $totalMotivosRedes = $co->totalMotivosRedesTotal();
-            $totalMotivosInfr = $co->totalMotivosInfraestructuraTotal();
-            $totalMotivosSTecnico = $co->totalMotivosSTecnicoTotal();
-            $totalMotivosRequerimientos = $co->totalMotivosRequerimientosTotal();
-            $totalMotivosFDigital = $co->totalMotivosFDigitalTotal();
-            $totalMotivosPDigital = $co->totalMotivosPDigitalTotal();
-            $totalMotivosCCTV = $co->totalMotivosCCTVTotal();
         }
 
         require('libreriaEstilos.php');
@@ -118,7 +86,6 @@ class ControladorAdmin
         $areaAgente = $co->listarNombreAreaUsuario($legajo);
         $totalEstadoTareas = $estadistica->totalEstadoTareaAgente($legajo);
         $listEstadosTareas = $estadistica->listarEstadoTareaAgente($legajo);
-        $listMotivosTareas = $estadistica->listarMotivosAgente($legajo);
         require('libreriaEstilos.php');
         require('headerNav.php');
         require('estadisticasAgente.php');
@@ -130,7 +97,6 @@ class ControladorAdmin
         require('../modelo/m_consultas.php');
         $co = new Consultas();
         $listAreas = $co->listarAreas();
-        $listMotivos = $co->listarMotivosProblemas($listado);
         $listTareasEncargados = $co->listarTareasEncargados($listado);
 
         if ($listado == 'completadas') {
@@ -151,78 +117,27 @@ class ControladorAdmin
         require('listaTareas.php');
     }
 
-    public function listarTareasAgenteContr($listado)
-    {
-        //listado = estadoTarea
-        echo ('<title>Listado de Tareas - Gestión de tareas</title>');
-        require('../modelo/m_consultas.php');
-        $co = new Consultas();
-
-        if ($listado == 'actual') {
-            $estado = 'Pendiente y en Progreso';
-            $listTareasAgentes = $co->listarTareasAgentes($_SESSION['areaUsuario'], $_SESSION['areaUsuario2'], $_SESSION['areaUsuario3'], $listado);
-        } else if ($listado == 'completas') {
-            $estado = 'Completadas';
-            $tareasCompletasActual = $co->listarTareasAgentesCompletosActual($_SESSION['areaUsuario'], $_SESSION['areaUsuario2'], $_SESSION['areaUsuario3']);
-            $listTareasAgentes = $co->listarTareasAgentes($_SESSION['areaUsuario'], $_SESSION['areaUsuario2'], $_SESSION['areaUsuario3'], $listado);
-        } else if ($listado == 'canceladas') {
-            $estado = 'Canceladas';
-            $listTareasAgentes = $co->listarTareasAgentes($_SESSION['areaUsuario'], $_SESSION['areaUsuario2'], $_SESSION['areaUsuario3'], $listado);
-        } else {
-            header("location:javascript:history.go(-1)");
-        }
-
-        $listMotivos = $co->listarMotivosProblemasUsuario($_SESSION['legajo']);
-        $listDirecciones = $co->listarDirecciones();
-        $listAgentes = $co->listarAgentes();
-        $areaUsuario = $co->listarNombreAreaUsuario($_SESSION['legajo']);
-        require('libreriaEstilos.php');
-        require('headerNav.php');
-        require('listaTareas.php');
-    }
-
-    public function listarTareasAdminContr($lista, $areaSupervisor)
+    public function listarTareasAdminContr($lista)
     {
         echo ('<title>Listado de Tareas - Gestión Requerimientos</title>');
         require('../modelo/m_consultas.php');
         $co = new Consultas();
         $listDatosAgentes = $co->listarAgentes();
-        //Comprobar si esta en un Área el usuario, sino es Admin
-        if (isset($_SESSION['areaUsuario'])) {
-            if ($_SESSION['areaUsuario'] == $areaSupervisor) {
-                if ($lista == 'actual') {
-                    $listTareasAgentes = $co->listarTareasAgentes($areaSupervisor, '', '', $lista);
-                    $estado = "Pendientes y en Progreso";
-                } else if ($lista == 'completas') {
-                    $estado = "Completadas";
-                    $listTareasAgentes = $co->listarTareasAgentes($areaSupervisor, '', '', $lista);
-                    $listTareasCompletasActual = $co->listarTareasAgentesCompletosActual($areaSupervisor, '', '');
-                } else if ($lista == 'canceladas') {
-                    $listTareasAgentes = $co->listarTareasAgentes($areaSupervisor, '', '', $lista);
-                    $estado = "Canceladas";
-                } else {
-                    header("location:javascript:history.go(-1)");
-                }
-            } else {
-                header("location:javascript:history.go(-1)");
-            }
+
+        if ($lista == 'actual') {
+            $estado = "Pendientes y en Progreso";
+            $listTareasAgentes = $co->listarTareasAdmin($lista);
+        } else if ($lista == 'completas') {
+            $estado = "Completadas";
+            $listTareasAgentes = $co->listarTareasAdmin($lista);
+            $listTareasCompletasActual = $co->listarTareasCompletasActual();
+        } else if ($lista == 'canceladas') {
+            $estado = "Canceladas";
+            $listTareasAgentes = $co->listarTareasAdmin($lista);
         } else {
-            if ($lista == 'actual') {
-                $estado = "Pendientes y en Progreso";
-                $listTareasAgentes = $co->listarTareasAdmin($lista);
-            } else if ($lista == 'completas') {
-                $estado = "Completadas";
-                $listTareasAgentes = $co->listarTareasAdmin($lista);
-                $listTareasCompletasActual = $co->listarTareasCompletasActual();
-            } else if ($lista == 'canceladas') {
-                $estado = "Canceladas";
-                $listTareasAgentes = $co->listarTareasAdmin($lista);
-            } else {
-                header("location:javascript:history.go(-1)");
-            }
+            header("location:javascript:history.go(-1)");
         }
 
-        $listMotivos = $co->listarMotivosProblemasUsuario($_SESSION['legajo']);
         $listDirecciones = $co->listarDirecciones();
         $listAgentes = $co->listarAgentes();
         $listAreas = $co->listarAreas();
@@ -254,16 +169,15 @@ class ControladorAdmin
         require('listaAgentes.php');
     }
 
-    public function listarMotivosReqContr()
+    public function listarAreasContr()
     {
         echo ('<title>Listado de Agentes - Gestión de tareas</title>');
         require('../modelo/m_consultas.php');
         $co = new Consultas();
-        $listMotivosReq = $co->listarMotivosReq();
         $listAreas = $co->listarAreas();
         require('libreriaEstilos.php');
         require('headerNav.php');
-        require('listaMotivos.php');
+        require('listaAreas.php');
     }
 
     public function listarTareaAgenteContr($legajo)

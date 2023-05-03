@@ -1,0 +1,37 @@
+<!-- Modal Tarea Terminada -->
+<div class="modal fade" id="modalTareaCompletada<?php echo $listTarea[0]; ?>" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="staticBackdropLabel">Terminar tarea</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+
+            <form action="../controlador/c_terminarTarea.php" method="post" style="display: none;">
+
+                <div class="modal-body">
+
+                    <p class="fs-6">Para terminar la tarea debe completar lo siguiente</p>
+
+                    <input type="hidden" name="id" value="<?php echo $listTarea[0]; ?>">
+
+                    <div class="form-floating mb-3">
+                        <textarea class="form-control" onchange="buscarComillaSimple(this)" oninput="validarComillas(this);" name="solucion" placeholder="Leave a comment" id="floatingTextarea" style="height: 100px" required></textarea>
+                        <label for="floatingTextarea">Materiales utilizados</label>
+                    </div>
+
+                    <div class="form-floating mb-3">
+                        <input class="form-control" id="floatingInputfile" type="file" name="comprobante">
+                        <label for="floatingInputfile">Comprobante</label>
+                    </div>
+
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
+                    <button type="submit" class="btn btn-success">Terminar tarea</button>
+                </div>
+
+            </form>
+        </div>
+    </div>
+</div>

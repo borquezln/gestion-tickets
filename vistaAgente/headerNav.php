@@ -296,7 +296,7 @@ if (isset($_SESSION['rol'])) {
 
                             <div class="form-floating mb-3 input">
                                 <input type="number" name="legajo" class="form-control" value="<?php echo $row[0]; ?>" id="floatingInput" placeholder="legajo" readonly>
-                                <label for="floatingInput">legajo</label>
+                                <label for="floatingInput">Legajo</label>
                             </div>
                             <div class="form-floating mb-3 input">
                                 <input type="text" name="nombre" class="form-control" value="<?php echo $row[1]; ?>" id="floatingInput" placeholder="Nombre">
@@ -573,8 +573,8 @@ if (isset($_SESSION['rol'])) {
                         </li>
                     </ul>
 
-                    <a class="nav-link" aria-current="page" href="index.php?accion=listarMotivosReq">
-                        <i class="bi bi-list-nested"></i>Motivos de tareas
+                    <a class="nav-link" aria-current="page" href="index.php?accion=listarAreas">
+                        <i class="bi bi-list-nested"></i>Listado de áreas
                     </a>
                 <?php
                 }
@@ -653,7 +653,6 @@ if (isset($_SESSION['rol'])) {
                         require_once('../modelo/m_consultas.php');
                         $co = new Consultas();
                         $listRoles = $co->listarRoles();
-                        $listAreas = $co->listarAreas();
                         ?>
 
                         <div class="form-floating mb-3">
@@ -670,61 +669,9 @@ if (isset($_SESSION['rol'])) {
                             <label for="floatingSelect">Elegir tipo de Usuario</label>
                         </div>
 
-                        <div class="form-floating mb-3 selectCantArea" style="display: none;">
-                            <select class="form-select" onchange="mostrarCantSelectAreas(this);" name="selectCantArea" id="floatingSelect" aria-label="Floating label select example" required>
-                                <option value="" selected>Seleccione...</option>
-                                <option value="1">1</option>
-                                <option value="2">2</option>
-                                <option value="3">3</option>
-                            </select>
-                            <label for="floatingSelect">Elegir la cantidad de área/s donde se desempeñará</label>
-                        </div>
-
-                        <div class="form-floating mb-3 selectArea" style="display: none;">
-                            <select class="form-select" name="selectArea[]" id="floatingSelect" aria-label="Floating label select example" required>
-                                <option value="" selected>Seleccione...</option>
-                                <?php
-                                foreach ($listAreas as $area) {
-                                ?>
-                                    <option value="<?php echo $area[0]; ?>"><?php echo $area[1]; ?></option>
-                                <?php
-                                }
-                                ?>
-                            </select>
-                            <label for="floatingSelect">Elegir el Área donde se desempeña</label>
-                        </div>
-
-                        <div class="form-floating mb-3 selectArea2" style="display: none;">
-                            <select class="form-select" name="selectArea[]" id="floatingSelect" aria-label="Floating label select example" required>
-                                <option value="" selected>Seleccione...</option>
-                                <?php
-                                foreach ($listAreas as $area) {
-                                ?>
-                                    <option value="<?php echo $area[0]; ?>"><?php echo $area[1]; ?></option>
-                                <?php
-                                }
-                                ?>
-                            </select>
-                            <label for="floatingSelect">Elegir el Área donde se desempeña</label>
-                        </div>
-
-                        <div class="form-floating mb-3 selectArea3" style="display: none;">
-                            <select class="form-select" name="selectArea[]" id="floatingSelect" aria-label="Floating label select example" required>
-                                <option value="" selected>Seleccione...</option>
-                                <?php
-                                foreach ($listAreas as $area) {
-                                ?>
-                                    <option value="<?php echo $area[0]; ?>"><?php echo $area[1]; ?></option>
-                                <?php
-                                }
-                                ?>
-                            </select>
-                            <label for="floatingSelect">Elegir el Área donde se desempeña</label>
-                        </div>
-
                         <div class="form-floating mb-3">
                             <input type="number" name="legajo" min="1000000" max="99999999" class="form-control" id="floatingInput" placeholder="ejemplo" required>
-                            <label for="floatingInput">legajo</label>
+                            <label for="floatingInput">Legajo</label>
 
                         </div>
 

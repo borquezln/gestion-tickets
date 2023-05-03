@@ -29,15 +29,6 @@ foreach ($selectArea as $area) {
     echo 'Area: ' . $area;
 }
 
-/*echo 'tipoUsuario: ' . $tipoUsuario . '<br>' .
-    'legajo: ' . $legajo . '<br>' .
-    'cantAreas: ' . $selectAreas . '<br>' .
-    'nombre: ' . $nombre . '<br>' .
-    'apellido: ' . $apellido . '<br>' .
-    'correo: ' . $correo . '<br>' .
-    'username: ' . $username . '<br>' .
-    'pass: ' . $pass . '<br>';*/
-
 if ($co->agregarUsuario($tipoUsuario, $legajo, $nombre, $apellido, $correo, $username, $pass)) {
     if (isset($selectAreas)) {
         foreach ($selectAreas as $codArea) {

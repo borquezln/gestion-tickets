@@ -46,8 +46,7 @@ if (!(time() - $_SESSION['time'] >= 3600)) {
 
                 <?php
                 error_reporting(0);
-                $datosAct = $_SESSION['datosAct'];
-                if ($datosAct == true) {
+                if (isset($_SESSION['datosAct'])) {
                 ?>
                     <script>
                         Swal.fire({

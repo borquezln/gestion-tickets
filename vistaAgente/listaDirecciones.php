@@ -61,7 +61,7 @@ if (!(time() - $_SESSION['time'] >= 3600)) {
             <?php
             error_reporting(0);
 
-            if ($_SESSION['direccionOk'] == true) {
+            if (isset($_SESSION['direccionOk'])) {
             ?>
                 <script>
                     Swal.fire({
@@ -76,7 +76,7 @@ if (!(time() - $_SESSION['time'] >= 3600)) {
                 unset($_SESSION['direccionOk']);
             }
 
-            if ($_SESSION['direccionEditada'] == true) {
+            if (isset($_SESSION['direccionEditada'])) {
             ?>
                 <script>
                     Swal.fire({
@@ -91,7 +91,7 @@ if (!(time() - $_SESSION['time'] >= 3600)) {
                 unset($_SESSION['direccionEditada']);
             }
 
-            if ($_SESSION['direccionEditadaError']) {
+            if (isset($_SESSION['direccionEditadaError'])) {
             ?>
                 <script>
                     Swal.fire({
@@ -106,7 +106,7 @@ if (!(time() - $_SESSION['time'] >= 3600)) {
                 unset($_SESSION['direccionEditadaError']);
             }
 
-            if ($_SESSION['eliminadoOk'] == true) {
+            if (isset($_SESSION['eliminadoOk'])) {
             ?>
                 <script>
                     Swal.fire({
@@ -137,7 +137,7 @@ if (!(time() - $_SESSION['time'] >= 3600)) {
                 }
                 ?>
 
-                <!--Modal Nueva Area-->
+                <!--Modal Nueva Dirección-->
                 <form action="../controlador/c_agregarDireccion.php" method="post">
 
                     <div class="modal fade" id="staticBackdrop" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
@@ -163,7 +163,7 @@ if (!(time() - $_SESSION['time'] >= 3600)) {
                                     </div>
 
                                     <div class="form-floating mb-3">
-                                        <input type="text" name="descripcion" class="form-control" id="floatingInput" placeholder="ejemplo" required>
+                                        <input type="text" name="descripcion" class="form-control" id="floatingInput" placeholder="ejemplo">
                                         <label for="floatingInput">Descripción</label>
                                     </div>
 

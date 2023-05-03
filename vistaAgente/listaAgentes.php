@@ -67,7 +67,7 @@ if (!(time() - $_SESSION['time'] >= 3600)) {
             <section id="container">
                 <?php
                 error_reporting(0);
-                if ($_SESSION['bajaOk'] == true) {
+                if (isset($_SESSION['bajaOk'])) {
                 ?>
                     <script>
                         Swal.fire({
@@ -79,7 +79,7 @@ if (!(time() - $_SESSION['time'] >= 3600)) {
                 <?php
                     unset($_SESSION['bajaOk']);
                 }
-                if ($_SESSION['altaOk']) {
+                if (isset($_SESSION['altaOk'])) {
                 ?>
                     <script>
                         Swal.fire({
@@ -91,7 +91,7 @@ if (!(time() - $_SESSION['time'] >= 3600)) {
                 <?php
                     unset($_SESSION['altaOk']);
                 }
-                if ($_SESSION['agregadoOk']) {
+                if (isset($_SESSION['agregadoOk'])) {
                 ?>
                     <script>
                         Swal.fire({
@@ -103,7 +103,7 @@ if (!(time() - $_SESSION['time'] >= 3600)) {
                 <?php
                     unset($_SESSION['agregadoOk']);
                 }
-                if ($_SESSION['eliminadoOk']) {
+                if (isset($_SESSION['eliminadoOk'])) {
                 ?>
                     <script>
                         Swal.fire({
@@ -122,7 +122,7 @@ if (!(time() - $_SESSION['time'] >= 3600)) {
                 <table class="table table-responsive table-bordered table-hover" id="tablaDinamicaLoad">
                     <thead>
                         <tr>
-                            <th scope="col">legajo</th>
+                            <th scope="col">Legajo</th>
                             <th scope="col">Nombre</th>
                             <th scope="col">Apellido</th>
                             <th scope="col">Correo</th>
@@ -151,43 +151,10 @@ if (!(time() - $_SESSION['time'] >= 3600)) {
                                         </button>
                                         <ul class="dropdown-menu" aria-labelledby="btnGroupDrop1">
                                             <li>
-                                                <a type="button" class="dropdown-item" href="index.php?accion=listarTareaAgente&agente=<?php echo $list[0]; ?>">
-                                                    Ver tareas de <?php echo $list[1] . ' ' . $list[2]; ?>
-                                                </a>
-                                            </li>
-                                            <li>
                                                 <a type="button" class="dropdown-item" data-bs-toggle="modal" data-bs-target="#modalMotivoCancelacion<?php echo $list[0]; ?>">
                                                     Dar de Baja
                                                 </a>
                                             </li>
-                                            <li>
-                                                <a type="button" class="dropdown-item" href="index.php?accion=verEstadisticasAgente&legajo=<?php echo $list[0]; ?>">
-                                                    Ver estadísticas
-                                                </a>
-                                            </li>
-
-                                            <?php
-                                            require_once('../modelo/m_consultas.php');
-                                            $co = new Consultas();
-                                            $cantAreasAgente = $co->verificarTotalAreasAgentelegajo($list[0]);
-                                            if ($list[5] == 'Agente' && $cantAreasAgente == 1 || $cantAreasAgente == 2) {
-                                            ?>
-                                                <li>
-                                                    <a type="button" class="dropdown-item" data-bs-toggle="modal" data-bs-target="#modalAgregarAreaAgente<?php echo $list[0]; ?>">
-                                                        Agregarlo a otra área además de <?php echo $list[6]; ?>
-                                                    </a>
-                                                </li>
-                                            <?php
-                                            } else if ($list[5] == 'Agente' && $cantAreasAgente == 2 || $cantAreasAgente == 3) {
-                                            ?>
-                                                <li>
-                                                    <a type="button" class="dropdown-item" href="../controlador/c_eliminarAreaUsuario.php?legajo=<?php echo $list[0]; ?>&selectArea=<?php echo $list[7]; ?>">
-                                                        Quitar el área actual al agente
-                                                    </a>
-                                                </li>
-                                            <?php
-                                            }
-                                            ?>
                                         </ul>
                                     </div>
                                 </td>
@@ -222,48 +189,6 @@ if (!(time() - $_SESSION['time'] >= 3600)) {
                                     </div>
                                 </div>
                             </div>
-
-                            <!--Modal Asignar Áreas-->
-                            <div class="modal fade" id="modalAgregarAreaAgente<?php echo $list[0]; ?>" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
-                                <div class="modal-dialog">
-                                    <div class="modal-content">
-                                        <div class="modal-header">
-                                            <h5 class="modal-title" id="staticBackdropLabel">Asignar <?php echo $list[1] . ' ' . $list[2]; ?> a otra área</h5>
-                                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                                        </div>
-
-                                        <form action="../controlador/c_agregarAreaUsuario.php" method="post" style="display: none;">
-
-                                            <div class="modal-body">
-
-                                                <input type="hidden" name="legajo" value="<?php echo $list[0]; ?>">
-
-                                                <div class="form-floating">
-                                                    <select class="form-select" name="selectArea" id="floatingSelect" aria-label="Floating label select example">
-                                                        <option value="" selected>Seleccione...</option>
-                                                        <?php
-                                                        foreach ($listAreas as $area) {
-                                                        ?>
-                                                            <option value="<?php echo $area[0]; ?>"><?php echo $area[1]; ?></option>
-                                                        <?php
-                                                        }
-                                                        ?>
-                                                    </select>
-                                                    <label for="floatingSelect">Seleccione el área donde se desempeñara el agente</label>
-                                                </div>
-
-                                            </div>
-                                            <div class="modal-footer">
-                                                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
-                                                <button type="submit" class="btn btn-primary">Aceptar</button>
-                                            </div>
-
-                                        </form>
-
-                                    </div>
-                                </div>
-                            </div>
-
                         <?php
                         }
                         ?>

@@ -65,7 +65,7 @@ if (!(time() - $_SESSION['time'] >= 3600)) {
             <?php
             error_reporting(0);
 
-            if ($_SESSION['areaOk'] == true) {
+            if (isset($_SESSION['areaOk'])) {
             ?>
                 <script>
                     Swal.fire({
@@ -80,7 +80,7 @@ if (!(time() - $_SESSION['time'] >= 3600)) {
                 unset($_SESSION['areaOk']);
             }
 
-            if ($_SESSION['editadoOk'] == true) {
+            if (isset($_SESSION['editadoOk'])) {
             ?>
                 <script>
                     Swal.fire({
@@ -95,7 +95,7 @@ if (!(time() - $_SESSION['time'] >= 3600)) {
                 unset($_SESSION['editadoOk']);
             }
 
-            if ($_SESSION['eliminadoOk'] == true) {
+            if (isset($_SESSION['eliminadoOk'])) {
             ?>
                 <script>
                     Swal.fire({

@@ -1,11 +1,7 @@
 <?php
-
-
 require('../modelo/m_consultas.php');
-
 $user = $_POST['user'];
 $password = $_POST['password'];
-
 $co = new Consultas();
 
 if ($co->autenticarUsuario($user, $password)) {

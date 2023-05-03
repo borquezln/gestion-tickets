@@ -123,19 +123,6 @@ if (!(time() - $_SESSION['time'] >= 3600)) {
                     })
                 })
 
-                function mostrarMotivosProblemas(valor) {
-                    var codigoArea = valor.value;
-
-                    $.ajax({
-                        type: 'POST',
-                        url: 'ajax/selectMotivos.php',
-                        data: 'codigoArea=' + codigoArea,
-                        success: function(r) {
-                            $('select[name=selectMotivos]').html(r);
-                        }
-                    })
-                }
-
                 function mostrarNE(valor) {
                     if (valor.checked) {
                         $('#neSeccion').show(200);
@@ -172,7 +159,7 @@ if (!(time() - $_SESSION['time'] >= 3600)) {
                 <input type="hidden" id="usuario" name="usuario" value="<?php echo $_SESSION['username']; ?>">
                 <?php
                 error_reporting(0);
-                if ($_SESSION['tareaOK'] == true) {
+                if (isset($_SESSION['tareaOK'])) {
                 ?>
                     <script>
                         Swal.fire({
@@ -186,7 +173,7 @@ if (!(time() - $_SESSION['time'] >= 3600)) {
                 <?php
                     unset($_SESSION['tareaOK']);
                 }
-                if ($_SESSION['tareaAsignada']) {
+                if (isset($_SESSION['tareaAsignada'])) {
                 ?>
                     <script>
                         Swal.fire({
@@ -200,7 +187,7 @@ if (!(time() - $_SESSION['time'] >= 3600)) {
                 <?php
                     unset($_SESSION['tareaAsignada']);
                 }
-                if ($_SESSION['tareaAsignadaQuitada']) {
+                if (isset($_SESSION['tareaAsignadaQuitada'])) {
                 ?>
                     <script>
                         Swal.fire({
@@ -214,7 +201,7 @@ if (!(time() - $_SESSION['time'] >= 3600)) {
                 <?php
                     unset($_SESSION['tareaAsignadaQuitada']);
                 }
-                if ($_SESSION['tareaTerminada']) {
+                if (isset($_SESSION['tareaTerminada'])) {
                 ?>
                     <script>
                         Swal.fire({
@@ -228,7 +215,7 @@ if (!(time() - $_SESSION['time'] >= 3600)) {
                 <?php
                     unset($_SESSION['tareaTerminada']);
                 }
-                if ($_SESSION['tareaCancelada']) {
+                if (isset($_SESSION['tareaCancelada'])) {
                 ?>
                     <script>
                         Swal.fire({
@@ -242,7 +229,7 @@ if (!(time() - $_SESSION['time'] >= 3600)) {
                 <?php
                     unset($_SESSION['tareaCancelada']);
                 }
-                if ($_SESSION['tareaEditada']) {
+                if (isset($_SESSION['tareaEditada'])) {
                 ?>
                     <script>
                         Swal.fire({
@@ -256,7 +243,7 @@ if (!(time() - $_SESSION['time'] >= 3600)) {
                 <?php
                     unset($_SESSION['tareaEditada']);
                 }
-                if ($_SESSION['tareaEliminada']) {
+                if (isset($_SESSION['tareaEliminada'])) {
                 ?>
                     <script>
                         Swal.fire({
@@ -305,22 +292,7 @@ if (!(time() - $_SESSION['time'] >= 3600)) {
                                             <?php
                                             if ($_SESSION['cantAreas'] == 1) {
                                             ?>
-
                                                 <input type="hidden" name="selectArea" value="<?php echo $_SESSION['areaUsuario'] ?>">
-
-                                                <div class="form-floating mb-3">
-                                                    <select class="form-select" name="selectMotivos" id="floatingSelect" aria-label="Floating label select example" required>
-                                                        <option value="" selected>Seleccione...</option>
-                                                        <?php
-                                                        foreach ($listMotivos as $motivo) {
-                                                        ?>
-                                                            <option value="<?php echo $motivo[0]; ?>"><?php echo $motivo[1]; ?></option>
-                                                        <?php
-                                                        }
-                                                        ?>
-                                                    </select>
-                                                    <label for="floatingSelect">Seleccione el motivo del incoveniente</label>
-                                                </div>
                                             <?php
                                             }
                                             ?>
@@ -330,7 +302,7 @@ if (!(time() - $_SESSION['time'] >= 3600)) {
                                             ?>
 
                                                 <div class="form-floating mb-3">
-                                                    <select class="form-select" name="selectArea" onchange="mostrarMotivosProblemas(this);" id="floatingSelect" aria-label="Floating label select example" required>
+                                                    <select class="form-select" name="selectArea" id="floatingSelect" aria-label="Floating label select example" required>
                                                         <option value="" selected>Seleccione...</option>
                                                         <?php
                                                         foreach ($areaUsuario as $area) {
@@ -346,14 +318,6 @@ if (!(time() - $_SESSION['time'] >= 3600)) {
                                                     </select>
                                                     <label for="floatingSelect">Seleccione el área de la tarea a crear</label>
                                                 </div>
-
-                                                <div class="form-floating mb-3">
-                                                    <select class="form-select" name="selectMotivos" id="floatingSelect" aria-label="Floating label select example" required>
-                                                        <option value="" selected>Seleccione...</option>
-                                                    </select>
-                                                    <label for="floatingSelect">Seleccione el motivo del incoveniente</label>
-                                                </div>
-
                                             <?php
                                             }
                                             ?>
@@ -428,7 +392,6 @@ if (!(time() - $_SESSION['time'] >= 3600)) {
                                 <thead>
                                     <tr>
                                         <th scope="col">#</th>
-                                        <th scope="col">Motivo</th>
                                         <th scope="col">Descripción</th>
 
                                         <?php
@@ -586,7 +549,6 @@ if (!(time() - $_SESSION['time'] >= 3600)) {
                             <thead>
                                 <tr>
                                     <th scope="col">#</th>
-                                    <th scope="col">Motivo</th>
                                     <th scope="col">Descripción</th>
 
                                     <?php
@@ -736,24 +698,6 @@ if (!(time() - $_SESSION['time'] >= 3600)) {
                                                     <p class="fs-6">Tarea N° <?php echo $listTarea[0]; ?></p>
 
                                                     <input type="hidden" name="nroArreglo" value="<?php echo $listTarea[0]; ?>">
-
-                                                    <div class="form-floating mb-3">
-                                                        <select class="form-select" name="selectMotivos" id="floatingSelect" aria-label="Floating label select example" disabled>
-                                                            <option value="<?php echo $listTarea[1]; ?>" selected><?php echo $listTarea[2]; ?></option>
-                                                            <?php
-                                                            foreach ($listMotivos as $motivo) {
-                                                            ?>
-                                                                <option value="<?php echo $motivo[0]; ?>">
-                                                                    <?php
-                                                                    echo $motivo[1];
-                                                                    ?>
-                                                                </option>
-                                                            <?php
-                                                            }
-                                                            ?>
-                                                        </select>
-                                                        <label for="floatingSelect">Motivo del incoveniente</label>
-                                                    </div>
 
                                                     <div class="form-floating mb-3">
                                                         <textarea class="form-control" name="descripcion" placeholder="Leave a comment here" id="floatingTextarea" style="height: 170px" disabled><?php echo $listTarea[3]; ?></textarea>
@@ -976,36 +920,12 @@ if (!(time() - $_SESSION['time'] >= 3600)) {
                                                         ?>
 
                                                             <input type="hidden" name="selectArea" value="<?php echo $_SESSION['areaUsuario']; ?>">
-
-                                                            <div class="form-floating mb-3">
-
-                                                                <select class="form-select" name="selectMotivos" id="floatingSelect" aria-label="Floating label select example" required>
-                                                                    <option value="<?php echo $listTarea[1]; ?>" selected><?php echo $listTarea[2]; ?> (Actual)</option>
-
-                                                                    <?php
-                                                                    foreach ($listMotivos as $motivos) {
-                                                                    ?>
-
-                                                                        <option value="<?php echo $motivos[0]; ?>">
-                                                                            <?php
-                                                                            echo $motivos[1];
-                                                                            ?>
-                                                                        </option>
-
-                                                                    <?php
-                                                                    }
-                                                                    ?>
-
-                                                                </select>
-                                                                <label for="floatingSelect">Seleccione el motivo del incoveniente</label>
-                                                            </div>
-
                                                         <?php
                                                         } else if ($_SESSION['cantAreas'] > 1) {
                                                         ?>
 
                                                             <div class="form-floating mb-3">
-                                                                <select class="form-select" name="selectArea" onchange="mostrarMotivosProblemas(this);" id="floatingSelect" aria-label="Floating label select example" required>
+                                                                <select class="form-select" name="selectArea" id="floatingSelect" aria-label="Floating label select example" required>
                                                                     <option value="<?php echo $listTarea[17]; ?>" selected><?php echo $listTarea[18]; ?> (Actual)</option>
                                                                     <?php
                                                                     foreach ($areaUsuario as $areasAgente) {
@@ -1021,16 +941,6 @@ if (!(time() - $_SESSION['time'] >= 3600)) {
                                                                 </select>
                                                                 <label for="floatingSelect">Seleccione el área donde se llevará a cabo</label>
                                                             </div>
-
-                                                            <div class="form-floating mb-3">
-
-                                                                <select class="form-select" name="selectMotivos" id="floatingSelect" aria-label="Floating label select example" required>
-                                                                    <option value="<?php echo $listTarea[1]; ?>" selected><?php echo $listTarea[2]; ?> (Actual)</option>
-
-                                                                </select>
-                                                                <label for="floatingSelect">Seleccione el motivo del incoveniente</label>
-                                                            </div>
-
                                                         <?php
                                                         }
                                                         ?>

@@ -54,7 +54,7 @@ if (!(time() - $_SESSION['time'] >= 3600)) {
         <body>
             <?php
             error_reporting(0);
-            if ($_SESSION['tareaEliminada']) {
+            if (isset($_SESSION['tareaEliminada'])) {
             ?>
                 <script>
                     Swal.fire({
@@ -78,7 +78,6 @@ if (!(time() - $_SESSION['time'] >= 3600)) {
                         <thead>
                             <tr>
                                 <th scope="col">#</th>
-                                <th scope="col">Motivo</th>
                                 <th scope="col">Descripción</th>
                                 <th scope="col">Afectado/a</th>
                                 <th scope="col">Fecha Eliminada</th>
@@ -95,17 +94,16 @@ if (!(time() - $_SESSION['time'] >= 3600)) {
                                 <tr>
                                     <td id="nroArreglo"><?php echo $tarea[0]; ?></td>
                                     <td><?php echo $tarea[1]; ?></td>
-                                    <td><?php echo $tarea[2]; ?></td>
-                                    <td><?php echo $tarea[4]; ?></td>
+                                    <td><?php echo $tarea[3]; ?></td>
                                     <td>
                                         <?php
-                                        $date = date_create($tarea[14]);
+                                        $date = date_create($tarea[13]);
                                         $fechaProblema = date_format($date, 'd/m/Y H:i:s');
                                         echo $fechaProblema;
                                         ?>
                                     </td>
-                                    <td><?php echo $tarea[11]; ?></td>
-                                    <td><?php echo $tarea[13]; ?></td>
+                                    <td><?php echo $tarea[10]; ?></td>
+                                    <td><?php echo $tarea[12]; ?></td>
 
                                     <td id="accion">
                                         <div class="btn-group" role="group">
@@ -140,20 +138,15 @@ if (!(time() - $_SESSION['time'] >= 3600)) {
                                                 <input type="hidden" name="nroArreglo" value="<?php echo $tarea[0]; ?>">
 
                                                 <div class="form-floating mb-3">
-                                                    <input type="text" name="motivo" value="<?php echo $tarea[1]; ?>" class="form-control" id="floatingInput" placeholder="..." disabled>
-                                                    <label for="floatingInput">Motivo del incoveniente</label>
-                                                </div>
-
-                                                <div class="form-floating mb-3">
-                                                    <textarea class="form-control" name="descripcion" placeholder="Leave a comment here" id="floatingTextarea" style="height: 100px" disabled><?php echo $tarea[2]; ?></textarea>
+                                                    <textarea class="form-control" name="descripcion" placeholder="Leave a comment here" id="floatingTextarea" style="height: 100px" disabled><?php echo $tarea[1]; ?></textarea>
                                                     <label for="floatingTextarea">Descripción</label>
                                                 </div>
 
                                                 <?php
-                                                if ($tarea[3] == '' || $tarea[3] == null) {
+                                                if ($tarea[2] == '' || $tarea[2] == null) {
                                                     $ne = 'No proporcionado';
                                                 } else {
-                                                    $ne = $tarea[3];
+                                                    $ne = $tarea[2];
                                                 }
                                                 ?>
 
@@ -163,10 +156,10 @@ if (!(time() - $_SESSION['time'] >= 3600)) {
                                                 </div>
 
                                                 <?php
-                                                if ($tarea[4] == '' || $tarea[4] == null) {
+                                                if ($tarea[3] == '' || $tarea[3] == null) {
                                                     $nombreApellidoAfectado = 'No proporcionado';
                                                 } else {
-                                                    $nombreApellidoAfectado = $tarea[4];
+                                                    $nombreApellidoAfectado = $tarea[3];
                                                 }
                                                 ?>
 
@@ -176,10 +169,10 @@ if (!(time() - $_SESSION['time'] >= 3600)) {
                                                 </div>
 
                                                 <?php
-                                                if ($tarea[5] == '' || $tarea[5] == null) {
+                                                if ($tarea[4] == '' || $tarea[4] == null) {
                                                     $cel = 'No proporcionado';
                                                 } else {
-                                                    $cel = $tarea[5];
+                                                    $cel = $tarea[4];
                                                 }
                                                 ?>
 
@@ -189,7 +182,7 @@ if (!(time() - $_SESSION['time'] >= 3600)) {
                                                 </div>
 
                                                 <?php
-                                                if ($tarea[6] != '') {
+                                                if ($tarea[5] != '') {
                                                 ?>
                                                     <div class="form-floating mb-3">
                                                         <textarea class="form-control" name="solucion" placeholder="Leave a comment here" id="floatingTextarea" style="height: 150px" disabled><?php echo $tarea[6]; ?>    
@@ -201,7 +194,7 @@ if (!(time() - $_SESSION['time'] >= 3600)) {
                                                 ?>
 
                                                 <?php
-                                                if ($tarea[8] != '') {
+                                                if ($tarea[7] != '') {
                                                 ?>
                                                     <div class="form-floating mb-3">
                                                         <textarea class="form-control" name="solucion" placeholder="Leave a comment here" id="floatingTextarea" style="height: 100px" disabled><?php echo $tarea[8]; ?>    
@@ -213,7 +206,7 @@ if (!(time() - $_SESSION['time'] >= 3600)) {
                                                 ?>
 
                                                 <?php
-                                                $date = date_create($tarea[9]);
+                                                $date = date_create($tarea[8]);
                                                 $fechaProblema = date_format($date, 'd/m/Y H:i:s');
                                                 ?>
                                                 <div class="form-floating mb-3">
@@ -222,8 +215,8 @@ if (!(time() - $_SESSION['time'] >= 3600)) {
                                                 </div>
 
                                                 <?php
-                                                if ($tarea[10] != '') {
-                                                    $date = date_create($tarea[10]);
+                                                if ($tarea[9] != '') {
+                                                    $date = date_create($tarea[9]);
                                                     $fechaSolucion = date_format($date, 'd/m/Y H:i:s');
                                                 ?>
                                                     <div class="form-floating mb-3">
@@ -235,32 +228,19 @@ if (!(time() - $_SESSION['time'] >= 3600)) {
                                                 ?>
 
                                                 <div class="form-floating mb-3">
-                                                    <input type="text" name="area" value="<?php echo $tarea[11]; ?>" class="form-control" id="floatingInput" placeholder="..." disabled>
+                                                    <input type="text" name="area" value="<?php echo $tarea[10]; ?>" class="form-control" id="floatingInput" placeholder="..." disabled>
                                                     <label for="floatingInput">Área donde se desempeña</label>
-                                                </div>
-
-                                                <?php
-                                                if ($tarea[12] == '' || $tarea[12] == null) {
-                                                    $asignado = 'No proporcionado';
-                                                } else {
-                                                    $asignado = $tarea[12];
-                                                }
-                                                ?>
-
-                                                <div class="form-floating mb-3">
-                                                    <input type="text" name="area" value="<?php echo $asignado; ?>" class="form-control" id="floatingInput" placeholder="..." disabled>
-                                                    <label for="floatingInput">Asignado</label>
                                                 </div>
 
                                                 <hr>
                                                 <div class="form-floating mb-3">
-                                                    <textarea class="form-control" name="motivoEliminacion" placeholder="Leave a comment here" id="floatingTextarea" style="height: 150px" disabled><?php echo $tarea[13]; ?>    
+                                                    <textarea class="form-control" name="motivoEliminacion" placeholder="Leave a comment here" id="floatingTextarea" style="height: 150px" disabled><?php echo $tarea[12]; ?>    
                                                             </textarea>
                                                     <label for="floatingTextarea">Motivo de la eliminación</label>
                                                 </div>
 
                                                 <?php
-                                                $date = date_create($tarea[14]);
+                                                $date = date_create($tarea[13]);
                                                 $fechaEliminado = date_format($date, 'd/m/Y H:i:s');
                                                 ?>
 

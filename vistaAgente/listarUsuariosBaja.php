@@ -63,7 +63,7 @@ if (!(time() - $_SESSION['time'] >= 3600)) {
             <section id="container">
                 <?php
                 error_reporting(0);
-                if ($_SESSION['agenteEditado'] == true) {
+                if (isset($_SESSION['agenteEditado'])) {
                 ?>
                     <script>
                         Swal.fire({
@@ -77,7 +77,7 @@ if (!(time() - $_SESSION['time'] >= 3600)) {
                 }
                 ?>
                 <?php
-                if ($_SESSION['bajaOk'] == true) {
+                if (isset($_SESSION['bajaOk'])) {
                 ?>
                     <script>
                         Swal.fire({

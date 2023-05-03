@@ -78,7 +78,6 @@ CREATE TABLE IF NOT EXISTS `tareas` (
   `fechaSolucion` datetime DEFAULT NULL,
   `estadoTarea_id` int(11) DEFAULT NULL,
   `direccion_codigo` int(11) DEFAULT NULL,
-  `usuario_legajo` int(11) DEFAULT NULL,
   `motivoCancelacion` varchar(500) DEFAULT NULL,
   `motivoEliminacion` varchar(500) DEFAULT NULL,
   `fechaEliminado` datetime DEFAULT NULL,
@@ -96,7 +95,7 @@ CREATE TABLE IF NOT EXISTS `tareas` (
   CONSTRAINT `fk_id_motivos` FOREIGN KEY (`id_motivos`) REFERENCES `motivos` (`id`),
   CONSTRAINT `fk_tareas_direccion` FOREIGN KEY (`direccion_codigo`) REFERENCES `direcciones` (`codigo`),
   CONSTRAINT `fk_tareas_estadoTarea1` FOREIGN KEY (`estadoTarea_id`) REFERENCES `estadotarea` (`id`),
-  CONSTRAINT `fk_usuario_legajo` FOREIGN KEY (`usuario_legajo`) REFERENCES `usuario` (`legajo`) ON DELETE NO ACTION ON UPDATE NO ACTION
+  CONSTRAINT `fk_usuarioCreado` FOREIGN KEY (`usuarioCreado`) REFERENCES `usuario` (`legajo`)
 ) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
 
 -- Volcando datos para la tabla mantenimiento.tareas: ~0 rows (aproximadamente)

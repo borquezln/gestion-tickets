@@ -46,7 +46,7 @@ if (!(time() - $_SESSION['time'] >= 3600)) {
         <body>
             <?php
             error_reporting(0);
-            if ($_SESSION['passBlanqueada']) {
+            if (isset($_SESSION['passBlanqueada'])) {
             ?>
                 <script>
                     Swal.fire({

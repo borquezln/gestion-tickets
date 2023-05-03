@@ -9,7 +9,6 @@ $html =
     <thead>
         <tr>
         <th scope="col">#</th>
-        <th scope="col">Motivo</th>
         <th scope="col">Materiales</th>
         <th scope="col">Estado</th>
         <th scope="col">Fecha Problema</th>
@@ -24,7 +23,7 @@ $html =
 
 switch ($valorRadio) {
     case 'misPendientes':
-        $sql = "SELECT t.nroArreglo, t.motivo, t.solucion, et.nombre, t.fechaProblema, t.fechaSolucion, t.nombreAfectado, a.nombre, CONCAT(u.nombre, ' ', u.apellido) AS nombre_apellido 
+        $sql = "SELECT t.nroArreglo, t.solucion, et.nombre, t.fechaProblema, t.fechaSolucion, t.nombreAfectado, a.nombre, CONCAT(u.nombre, ' ', u.apellido) AS nombre_apellido 
                 FROM tareas AS t, estadotarea AS et, areas AS a, usuario AS u 
                 WHERE t.estadoTarea_id = et.id AND t.area_codigo = a.codigo AND t.usuario_legajo = u.legajo 
                 AND t.usuario_legajo in (SELECT legajo FROM usuario WHERE usuario = '$user') 
@@ -79,7 +78,7 @@ switch ($valorRadio) {
         }
         break;
     case 'enProgreso':
-        $sql = "SELECT t.nroArreglo, t.motivo, t.solucion, et.nombre, t.fechaProblema, t.fechaSolucion, t.nombreAfectado, a.nombre, CONCAT(u.nombre, ' ', u.apellido) AS nombre_apellido 
+        $sql = "SELECT t.nroArreglo, t.solucion, et.nombre, t.fechaProblema, t.fechaSolucion, t.nombreAfectado, a.nombre, CONCAT(u.nombre, ' ', u.apellido) AS nombre_apellido 
                 FROM tareas AS t, estadotarea AS et, areas AS a, usuario AS u 
                 WHERE t.estadoTarea_id = et.id AND t.area_codigo = a.codigo AND t.usuario_legajo = u.legajo 
                 AND t.usuario_legajo in (SELECT legajo FROM usuario WHERE usuario = '$user') 
@@ -133,7 +132,7 @@ switch ($valorRadio) {
         break;
 
     case 'Completas':
-        $sql = "SELECT t.nroArreglo, t.motivo, t.solucion, et.nombre, t.fechaProblema, t.fechaSolucion, t.nombreAfectado, a.nombre, CONCAT(u.nombre, ' ', u.apellido) AS nombre_apellido 
+        $sql = "SELECT t.nroArreglo, t.solucion, et.nombre, t.fechaProblema, t.fechaSolucion, t.nombreAfectado, a.nombre, CONCAT(u.nombre, ' ', u.apellido) AS nombre_apellido 
                 FROM tareas AS t, estadotarea AS et, areas AS a, usuario AS u 
                 WHERE t.estadoTarea_id = et.id AND t.area_codigo = a.codigo AND t.usuario_legajo = u.legajo 
                 AND t.usuario_legajo in (SELECT legajo FROM usuario WHERE usuario = '$user') 

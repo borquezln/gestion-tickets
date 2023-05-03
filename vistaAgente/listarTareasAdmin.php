@@ -65,7 +65,7 @@ if (!(time() - $_SESSION['time'] >= 3600)) {
                         aLengthMenu: [25, 50, 100, 200],
                         dom: 'lBfrtip',
                         aaSorting: [
-                            [0, "desc"]
+                            [0, "asc"]
                         ],
                         buttons: [{
                                 extend: 'excelHtml5',
@@ -95,42 +95,13 @@ if (!(time() - $_SESSION['time'] >= 3600)) {
                     $('#tablaDinamicaLoad2').DataTable({
                         aLengthMenu: [10, 25, 50, 100, 200],
                         aaSorting: [
-                            [0, "desc"]
+                            [0, "asc"]
                         ],
                         language: {
                             "url": "//cdn.datatables.net/plug-ins/1.11.5/i18n/es-ES.json"
                         }
                     })
                 })
-
-                function mostrarMotivosProblemas(valor) {
-                    var codigoArea = valor.value;
-
-                    $.ajax({
-                        type: 'POST',
-                        url: 'ajax/selectMotivos.php',
-                        data: 'codigoArea=' + codigoArea,
-                        success: function(r) {
-                            $('select[name=selectMotivos]').html(r);
-                        }
-                    })
-                }
-
-
-                function cargarAgentesArea(valor) {
-
-                    var codigoArea = valor.value;
-                    $.ajax({
-                        type: 'POST',
-                        url: 'ajax/cargarAgentesArea.php',
-                        data: 'codigoArea=' + codigoArea,
-                        success: function(r) {
-                            $('select[name=selectAgentes]').html(r);
-                        }
-                    })
-                }
-
-
 
                 function mostrarNE(valor) {
                     if (valor.checked) {
@@ -164,11 +135,13 @@ if (!(time() - $_SESSION['time'] >= 3600)) {
         </head>
 
         <body>
+            <?php
+            // error_reporting(0); 
+            ?>
             <section id="container">
                 <input type="hidden" id="usuario" name="usuario" value="<?php echo $_SESSION['username']; ?>">
                 <?php
-                error_reporting(0);
-                if ($_SESSION['tareaOK'] == true) {
+                if (isset($_SESSION['tareaOK'])) {
                 ?>
                     <script>
                         Swal.fire({
@@ -182,7 +155,7 @@ if (!(time() - $_SESSION['time'] >= 3600)) {
                 <?php
                     unset($_SESSION['tareaOK']);
                 }
-                if ($_SESSION['tareaAsignada']) {
+                if (isset($_SESSION['tareaAsignada'])) {
                 ?>
                     <script>
                         Swal.fire({
@@ -196,13 +169,13 @@ if (!(time() - $_SESSION['time'] >= 3600)) {
                 <?php
                     unset($_SESSION['tareaAsignada']);
                 }
-                if ($_SESSION['tareaAsignadaQuitada']) {
+                if (isset($_SESSION['tareaAsignadaQuitada'])) {
                 ?>
                     <script>
                         Swal.fire({
                             position: 'bottom-end',
                             icon: 'success',
-                            title: 'El agente asignado a la tarea ha sido quitado',
+                            title: 'La tarea ha sido desasignada',
                             showConfirmButton: false,
                             timer: 1500
                         })
@@ -210,7 +183,7 @@ if (!(time() - $_SESSION['time'] >= 3600)) {
                 <?php
                     unset($_SESSION['tareaAsignadaQuitada']);
                 }
-                if ($_SESSION['tareaTerminada']) {
+                if (isset($_SESSION['tareaTerminada'])) {
                 ?>
                     <script>
                         Swal.fire({
@@ -224,7 +197,7 @@ if (!(time() - $_SESSION['time'] >= 3600)) {
                 <?php
                     unset($_SESSION['tareaTerminada']);
                 }
-                if ($_SESSION['tareaCancelada']) {
+                if (isset($_SESSION['tareaCancelada'])) {
                 ?>
                     <script>
                         Swal.fire({
@@ -238,7 +211,7 @@ if (!(time() - $_SESSION['time'] >= 3600)) {
                 <?php
                     unset($_SESSION['tareaCancelada']);
                 }
-                if ($_SESSION['tareaEditada']) {
+                if (isset($_SESSION['tareaEditada'])) {
                 ?>
                     <script>
                         Swal.fire({
@@ -281,56 +254,23 @@ if (!(time() - $_SESSION['time'] >= 3600)) {
 
                                             <input type="hidden" name="nombreApellido" value="<?php echo $_SESSION['nombreApellido']; ?>">
 
-                                            <?php
-                                            if ($_SESSION['rol'] == 3) {
-                                            ?>
-                                                <div class="form-floating mb-3">
-                                                    <select class="form-select" name="selectArea" onchange="mostrarMotivosProblemas(this);" id="floatingSelect" aria-label="Floating label select example" required>
-                                                        <option value="" selected>Seleccione...</option>
-                                                        <?php
-                                                        foreach ($listAreas as $area) {
-                                                        ?>
-                                                            <option value="<?php echo $area[0]; ?>">
-                                                                <?php
-                                                                echo $area[1];
-                                                                ?>
-                                                            </option>
-                                                        <?php
-                                                        }
-                                                        ?>
-                                                    </select>
-                                                    <label for="floatingSelect">Seleccione el Área involucrada</label>
-                                                </div>
-
-                                                <div class="form-floating mb-3">
-                                                    <select class="form-select" name="selectMotivos" id="floatingSelect" aria-label="Floating label select example" required>
-                                                        <option value="" selected>Seleccione primero el Área</option>
-                                                    </select>
-                                                    <label for="floatingSelect">Seleccione el motivo del incoveniente</label>
-                                                </div>
-                                            <?php
-                                            } else if ($_SESSION['rol'] == 4) {
-                                            ?>
-
-                                                <input type="hidden" name="selectArea" value="<?php echo $_SESSION['areaUsuario']; ?>">
-
-                                                <div class="form-floating mb-3">
-                                                    <select class="form-select" name="selectMotivos" id="floatingSelect" aria-label="Floating label select example" required>
-                                                        <option value="" selected>Seleccione...</option>
-                                                        <?php
-                                                        foreach ($listMotivos as $motivo) {
-                                                        ?>
-                                                            <option value="<?php echo $motivo[0]; ?>"><?php echo $motivo[1]; ?></option>
-                                                        <?php
-                                                        }
-                                                        ?>
-                                                    </select>
-                                                    <label for="floatingSelect">Seleccione el motivo del incoveniente</label>
-                                                </div>
-                                            <?php
-                                            }
-                                            ?>
-
+                                            <div class="form-floating mb-3">
+                                                <select class="form-select" name="selectArea" id="floatingSelect" aria-label="Floating label select example" required>
+                                                    <option value="" selected>Seleccione...</option>
+                                                    <?php
+                                                    foreach ($listAreas as $area) {
+                                                    ?>
+                                                        <option value="<?php echo $area[0]; ?>">
+                                                            <?php
+                                                            echo $area[1];
+                                                            ?>
+                                                        </option>
+                                                    <?php
+                                                    }
+                                                    ?>
+                                                </select>
+                                                <label for="floatingSelect">Seleccione el Área involucrada</label>
+                                            </div>
 
                                             <div class="form-floating mb-3">
                                                 <textarea class="form-control" name="descripcion" placeholder="Leave a comment" id="floatingTextarea" style="height: 200px;" onchange="buscarComillaSimple(this)" oninput="validarComillas(this);" required></textarea>
@@ -394,8 +334,6 @@ if (!(time() - $_SESSION['time'] >= 3600)) {
                     <?php
                     if ($_GET['lista'] == 'completas') {
                     ?>
-
-
                         <div id="tCompletadosActual">
                             <p class="fs-5 text-center">Tareas completadas hoy día</p>
                             <hr>
@@ -403,7 +341,7 @@ if (!(time() - $_SESSION['time'] >= 3600)) {
                                 <thead>
                                     <tr>
                                         <th scope="col">#</th>
-                                        <th scope="col">Motivo</th>
+                                        <th scope="col">Nota Electrónica</th>
                                         <th scope="col">Descripción</th>
 
                                         <th scope="col">Afectado/a</th>
@@ -411,7 +349,6 @@ if (!(time() - $_SESSION['time'] >= 3600)) {
                                         <th scope="col">Fecha Problema</th>
 
                                         <th scope="col">Dirección/Entidad</th>
-                                        <th scope="col">Asignado</th>
                                         <th scope="col">Área encargada</th>
                                         <th scope="col">Acción</th>
                                     </tr>
@@ -423,25 +360,24 @@ if (!(time() - $_SESSION['time'] >= 3600)) {
                                         <tr>
                                             <td><?php echo $completas[0]; ?></td>
                                             <td><?php echo $completas[2]; ?></td>
+                                            <td><?php echo $completas[1]; ?></td>
                                             <td><?php echo $completas[3]; ?></td>
-                                            <td><?php echo $completas[5]; ?></td>
                                             <td>
                                                 <?php
-                                                if ($completas[9] == 'Completo') {
-                                                    echo '<span class="badge text-bg-success">' . $completas[9] . '</span>';
+                                                if ($completas[7] == 'Completo') {
+                                                    echo '<span class="badge text-bg-success">' . $completas[7] . '</span>';
                                                 }
                                                 ?>
                                             </td>
                                             <td>
                                                 <?php
-                                                $date = date_create($completas[11]);
+                                                $date = date_create($completas[9]);
                                                 $fechaProblema = date_format($date, 'd/m/Y H:i:s');
                                                 echo $fechaProblema;
                                                 ?>
                                             </td>
-                                            <td><?php echo $completas[14]; ?></td>
+                                            <td><?php echo $completas[12]; ?></td>
                                             <td><?php echo $completas[16]; ?></td>
-                                            <td><?php echo $completas[18]; ?></td>
                                             <td id="accion">
                                                 <div class="btn-group" role="group">
                                                     <button id="btnGroupDrop1" type="button" class="btn btn-outline-primary dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">
@@ -454,81 +390,17 @@ if (!(time() - $_SESSION['time'] >= 3600)) {
                                                                 Ver más info
                                                             </a>
                                                         </li>
-
-                                                        <?php
-                                                        if ($completas[9] != 'Cancelado' && $completas[15] == 0) {
-                                                        ?>
-                                                            <li>
-                                                                <a type="button" class="dropdown-item" data-bs-toggle="modal" data-bs-target="#modalAsignarTarea<?php echo $completas[0]; ?>">
-                                                                    Asignar la tarea a un agente
-                                                                </a>
-                                                            </li>
-                                                        <?php
-                                                        }
-                                                        ?>
-                                                        <?php
-                                                        if ($completas[9] != 'Cancelado' && $completas[15] == 0 && $_SESSION['rol'] == 4) {
-                                                        ?>
-                                                            <li>
-                                                                <a class="dropdown-item" href="../controlador/c_tomarTarea.php?id=<?php echo $completas[0]; ?>&selectAgentes=<?php echo $_SESSION['legajo']; ?>">
-                                                                    Asignarme la tarea
-                                                                </a>
-                                                            </li>
-
-                                                        <?php
-                                                        }
-                                                        if ($completas[15] != 0 && $completas[9] != 'Completo' && $completas[9] != 'Cancelado') {
-                                                        ?>
-                                                            <li>
-                                                                <a class="dropdown-item" href="../controlador/c_quitarTareaAsignado.php?id=<?php echo $completas[0]; ?>">
-                                                                    Quitar la tarea asignada al agente
-                                                                </a>
-                                                            </li>
-                                                        <?php
-                                                        }
-                                                        if ($completas[9] == 'En Progreso') {
-                                                        ?>
-                                                            <li>
-                                                                <a type="button" class="dropdown-item" data-bs-toggle="modal" data-bs-target="#modalTareaCompletada<?php echo $completas[0]; ?>">
-                                                                    Terminar tarea
-                                                                </a>
-                                                            </li>
-
-                                                        <?php
-                                                        }
-                                                        if ($completas[9] != 'Cancelado' && $completas[9] != 'Completo') {
-                                                        ?>
-                                                            <li>
-                                                                <a type="button" class="dropdown-item" data-bs-toggle="modal" data-bs-target="#modalCancelarTarea<?php echo $completas[0]; ?>">
-                                                                    Cancelar tarea
-                                                                </a>
-                                                            </li>
-
-                                                        <?php
-                                                        }
-                                                        ?>
-
                                                         <li>
-                                                            <a type="button" class="dropdown-item" data-bs-toggle="modal" data-bs-target="#modalEditarTarea<?php echo $completas[0]; ?>">
-                                                                Editar tarea
+                                                            <a class="dropdown-item" role="button" data-bs-toggle="modal" data-bs-target="#modalEliminarTarea<?php echo $completas[0]; ?>">
+                                                                Eliminar tarea
                                                             </a>
                                                         </li>
-                                                        <?php
-                                                        if ($_SESSION['rol'] == 3) {
-                                                        ?>
-                                                            <li>
-                                                                <a class="dropdown-item" role="button" data-bs-toggle="modal" data-bs-target="#modalEliminarTarea<?php echo $completas[0]; ?>">
-                                                                    Eliminar tarea
-                                                                </a>
-                                                            </li>
-                                                        <?php
-                                                        }
-                                                        ?>
                                                     </ul>
                                                 </div>
                                             </td>
                                         </tr>
 
+                                        <!-- MODALES TERMINADAS HOY -->
                                         <!-- Modal Ver Info Tarea -->
                                         <div class="modal fade modalEditar" id="modalVerInfo<?php echo $completas[0]; ?>" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
                                             <div class="modal-dialog modal-lg">
@@ -544,33 +416,15 @@ if (!(time() - $_SESSION['time'] >= 3600)) {
                                                         <input type="hidden" name="nroArreglo" value="<?php echo $completas[0]; ?>">
 
                                                         <div class="form-floating mb-3">
-                                                            <select class="form-select" name="selectMotivos" id="floatingSelect" aria-label="Floating label select example" disabled>
-                                                                <option value="<?php echo $completas[1]; ?>" selected><?php echo $completas[2]; ?></option>
-                                                                <?php
-                                                                foreach ($listMotivos as $motivo) {
-                                                                ?>
-                                                                    <option value="<?php echo $motivo[0]; ?>">
-                                                                        <?php
-                                                                        echo $motivo[1];
-                                                                        ?>
-                                                                    </option>
-                                                                <?php
-                                                                }
-                                                                ?>
-                                                            </select>
-                                                            <label for="floatingSelect">Motivo del incoveniente</label>
-                                                        </div>
-
-                                                        <div class="form-floating mb-3">
-                                                            <textarea class="form-control" name="descripcion" placeholder="Leave a comment here" id="floatingTextarea" style="height: 170px" disabled><?php echo $completas[3]; ?></textarea>
+                                                            <textarea class="form-control" name="descripcion" placeholder="Leave a comment here" id="floatingTextarea" style="height: 170px" disabled><?php echo $completas[1]; ?></textarea>
                                                             <label for="floatingTextarea">Descripción</label>
                                                         </div>
 
                                                         <?php
-                                                        if ($completas[4] == '' || $completas[4] == null) {
+                                                        if ($completas[2] == '' || $completas[2] == null) {
                                                             $ne = 'No proporcionado';
                                                         } else {
-                                                            $ne = $completas[4];
+                                                            $ne = $completas[2];
                                                         }
                                                         ?>
 
@@ -580,10 +434,10 @@ if (!(time() - $_SESSION['time'] >= 3600)) {
                                                         </div>
 
                                                         <?php
-                                                        if ($completas[5] == '' || $completas[5] == null) {
+                                                        if ($completas[3] == '' || $completas[3] == null) {
                                                             $nombreApellidoAfectado = 'No proporcionado';
                                                         } else {
-                                                            $nombreApellidoAfectado = $completas[5];
+                                                            $nombreApellidoAfectado = $completas[3];
                                                         }
                                                         ?>
 
@@ -593,10 +447,10 @@ if (!(time() - $_SESSION['time'] >= 3600)) {
                                                         </div>
 
                                                         <?php
-                                                        if ($completas[6] == '' || $completas[6] == null) {
+                                                        if ($completas[4] == '' || $completas[4] == null) {
                                                             $cel = 'No proporcionado';
                                                         } else {
-                                                            $cel = $completas[6];
+                                                            $cel = $completas[4];
                                                         }
                                                         ?>
 
@@ -605,38 +459,18 @@ if (!(time() - $_SESSION['time'] >= 3600)) {
                                                             <label for="floatingInput">Nro de celular de contacto</label>
                                                         </div>
 
-
-                                                        <?php
-                                                        if ($completas[7] != '') {
-                                                        ?>
-                                                            <div class="form-floating mb-3">
-                                                                <textarea class="form-control" name="solucion" placeholder="Leave a comment here" id="floatingTextarea" style="height: 100px" disabled><?php echo $completas[7]; ?>    
-                                                            </textarea>
-                                                                <label for="floatingTextarea">Materiales utilizados</label>
-                                                            </div>
-                                                        <?php
-                                                        }
-                                                        ?>
+                                                        <div class="form-floating mb-3">
+                                                            <textarea class="form-control" name="solucion" placeholder="Leave a comment here" id="floatingTextarea" style="height: 100px" disabled><?php echo $completas[5]; ?></textarea>
+                                                            <label for="floatingTextarea">Materiales utilizados</label>
+                                                        </div>
 
                                                         <div class="form-floating mb-3">
-                                                            <input type="text" name="estadoTarea" value="<?php echo $completas[9]; ?>" class="form-control" id="floatingInput" placeholder="..." disabled>
-                                                            <label for="floatingInput">Estado de la tarea</label>
+                                                            <textarea class="form-control" name="comprobante" placeholder="Leave a comment here" id="floatingTextarea" style="height: 100px" disabled><?php echo $completas[18]; ?></textarea>
+                                                            <label for="floatingTextarea">Comprobante</label>
                                                         </div>
 
                                                         <?php
-                                                        if ($completas[10] != '') {
-                                                        ?>
-                                                            <div class="form-floating mb-3">
-                                                                <textarea class="form-control" name="solucion" placeholder="Leave a comment here" id="floatingTextarea" style="height: 100px" disabled><?php echo $completas[10]; ?>    
-                                                            </textarea>
-                                                                <label for="floatingTextarea">Motivo de la cancelación</label>
-                                                            </div>
-                                                        <?php
-                                                        }
-                                                        ?>
-
-                                                        <?php
-                                                        $date = date_create($completas[11]);
+                                                        $date = date_create($completas[9]);
                                                         $fechaProblema = date_format($date, 'd/m/Y H:i:s');
                                                         ?>
                                                         <div class="form-floating mb-3">
@@ -645,30 +479,26 @@ if (!(time() - $_SESSION['time'] >= 3600)) {
                                                         </div>
 
                                                         <?php
-                                                        if ($completas[12] != '') {
-                                                            $date = date_create($completas[12]);
-                                                            $fechaSolucion = date_format($date, 'd/m/Y H:i:s');
+                                                        $date = date_create($completas[10]);
+                                                        $fechaSolucion = date_format($date, 'd/m/Y H:i:s');
                                                         ?>
-                                                            <div class="form-floating mb-3">
-                                                                <input type="text" name="fechaSolucion" value="<?php echo $fechaSolucion; ?>" class="form-control" id="floatingInput" placeholder="..." disabled>
-                                                                <label for="floatingInput">Fecha de la solución</label>
-                                                            </div>
-                                                        <?php
-                                                        }
-                                                        ?>
+                                                        <div class="form-floating mb-3">
+                                                            <input type="text" name="fechaSolucion" value="<?php echo $fechaSolucion; ?>" class="form-control" id="floatingInput" placeholder="..." disabled>
+                                                            <label for="floatingInput">Fecha de la solución</label>
+                                                        </div>
 
                                                         <div class="form-floating mb-3">
-                                                            <input type="text" name="area" value="<?php echo $completas[14]; ?>" class="form-control" id="floatingInput" placeholder="..." disabled>
+                                                            <input type="text" name="area" value="<?php echo $completas[12]; ?>" class="form-control" id="floatingInput" placeholder="..." disabled>
                                                             <label for="floatingInput">Dirección o Entidad donde se desempeña el/la afectado/a</label>
                                                         </div>
 
                                                         <div class="form-floating mb-3">
-                                                            <input type="text" name="area" value="<?php echo $completas[18]; ?>" class="form-control" id="floatingInput" placeholder="..." disabled>
-                                                            <label for="floatingInput">Área donde se lleva a cabo</label>
+                                                            <input type="text" name="area" value="<?php echo $completas[16]; ?>" class="form-control" id="floatingInput" placeholder="..." disabled>
+                                                            <label for="floatingInput">Área que lo lleva a cabo</label>
                                                         </div>
 
                                                         <div class="form-floating mb-3">
-                                                            <input type="text" name="area" value="<?php echo $completas[19]; ?>" class="form-control" id="floatingInput" placeholder="..." disabled>
+                                                            <input type="text" name="area" value="<?php echo $completas[17]; ?>" class="form-control" id="floatingInput" placeholder="..." disabled>
                                                             <label for="floatingInput">Creado por</label>
                                                         </div>
 
@@ -676,143 +506,6 @@ if (!(time() - $_SESSION['time'] >= 3600)) {
                                                     <div class="modal-footer">
                                                         <button type="button" class="btn btn-secondary btnCerrarModalEditar" data-bs-dismiss="modal">Cerrar</button>
                                                     </div>
-                                                </div>
-                                            </div>
-                                        </div>
-
-                                        <!-- Modal Editar Tarea -->
-                                        <div class="modal fade" id="modalEditarTarea<?php echo $completas[0]; ?>" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
-                                            <div class="modal-dialog">
-                                                <div class="modal-content">
-                                                    <div class="modal-header">
-                                                        <h5 class="modal-title" id="staticBackdropLabel">Editar tarea</h5>
-                                                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                                                    </div>
-
-                                                    <form action="../controlador/c_editarTarea.php" method="post" style="display: none;">
-
-                                                        <div class="modal-body">
-
-                                                            <p class="fs-6">Editar en caso de que haya habido un cambio o un error.</p>
-
-                                                            <input type="hidden" name="nroArreglo" value="<?php echo $completas[0]; ?>">
-
-                                                            <?php
-                                                            if ($_SESSION['rol'] == 3) {
-                                                            ?>
-                                                                <div class="form-floating mb-3">
-                                                                    <select class="form-select" name="selectArea" onchange="mostrarMotivosProblemas(this);" id="floatingSelect" aria-label="Floating label select example" required>
-                                                                        <option value="<?php echo $completas[17]; ?>" selected><?php echo $completas[18]; ?> (Actual)</option>
-                                                                        <?php
-                                                                        foreach ($listAreas as $area) {
-                                                                        ?>
-                                                                            <option value="<?php echo $area[0]; ?>">
-                                                                                <?php
-                                                                                echo $area[1];
-                                                                                ?>
-                                                                            </option>
-                                                                        <?php
-                                                                        }
-                                                                        ?>
-                                                                    </select>
-                                                                    <label for="floatingSelect">Seleccione el Área involucrada</label>
-                                                                </div>
-
-                                                            <?php
-                                                            }
-                                                            if ($_SESSION['rol'] == 4) {
-                                                            ?>
-                                                                <input type="hidden" name="areaUsuario" value="<?php echo $_SESSION['areaUsuario']; ?>">
-                                                            <?php
-                                                            }
-                                                            ?>
-
-                                                            <div class="form-floating mb-3">
-                                                                <select class="form-select" name="selectMotivos" id="floatingSelect" aria-label="Floating label select example" required>
-                                                                    <option value="<?php echo $completas[1]; ?>" selected><?php echo $completas[2]; ?> (Actual)</option>
-                                                                    <?php
-                                                                    foreach ($listMotivos as $motivo) {
-                                                                    ?>
-                                                                        <option value="<?php echo $motivo[0]; ?>">
-                                                                            <?php
-                                                                            echo $motivo[1];
-                                                                            ?>
-                                                                        </option>
-                                                                    <?php
-                                                                    }
-                                                                    ?>
-                                                                </select>
-                                                                <label for="floatingSelect">Seleccione el motivo del incoveniente</label>
-                                                            </div>
-
-                                                            <div class="form-floating mb-3">
-                                                                <textarea class="form-control" onchange="buscarComillaSimple(this)" oninput="validarComillas(this);" name="descripcion" placeholder="Leave a comment" id="floatingTextarea" style="height: 170px" required><?php echo $completas[3]; ?></textarea>
-                                                                <label for="floatingTextarea">Descripción</label>
-                                                            </div>
-
-                                                            <div class="form-floating mb-3">
-                                                                <input type="text" name="ne" value="<?php echo $completas[4]; ?>" class="form-control" id="floatingInput" placeholder="Nombre del Afectado">
-                                                                <label for="floatingInput">Nota Electrónica</label>
-                                                            </div>
-
-                                                            <div class="form-floating mb-3">
-                                                                <input type="text" name="nombreApellidoAfectado" onchange="buscarComillaSimple(this)" oninput="validarComillas(this);" value="<?php echo $completas[5]; ?>" class="form-control" id="floatingInput" placeholder="ejemplo">
-                                                                <label for="floatingInput">Nombre y apellido del afectado/a (Opcional)</label>
-                                                            </div>
-
-                                                            <div class="form-floating mb-3">
-                                                                <input type="tel" name="cel" value="<?php echo $completas[6]; ?>" oninput="validarInputNumerico(this);" class="form-control" id="floatingInput" placeholder="ejemplo">
-                                                                <label for="floatingInput">Nro de celular (Opcional)</label>
-                                                            </div>
-
-                                                            <div class="form-floating mb-3">
-                                                                <select class="form-select" name="selectDireccion" id="floatingSelect" aria-label="Floating label select example" required>
-                                                                    <option value="<?php echo $completas[13]; ?>" selected><?php echo $completas[14]; ?> (Actual)</option>
-                                                                    <?php
-                                                                    foreach ($listDirecciones as $direccion) {
-                                                                    ?>
-                                                                        <option value="<?php echo $direccion[0]; ?>">
-                                                                            <?php echo $direccion[1]; ?>
-                                                                        </option>
-                                                                    <?php
-                                                                    }
-                                                                    ?>
-                                                                </select>
-                                                                <label for="floatingSelect">Seleccione la Dirección o Entidad donde se desempeña</label>
-                                                            </div>
-
-
-                                                            <?php
-                                                            if ($completas[7] != '' || $completas[7] != null) {
-                                                            ?>
-                                                                <hr>
-                                                                <div class="form-floating mb-3">
-                                                                    <textarea class="form-control" name="solucion" placeholder="Leave a comment" id="floatingTextarea" style="height: 100px" required><?php echo $completas[7]; ?></textarea>
-                                                                    <label for="floatingTextarea">Materiales utilizados</label>
-                                                                </div>
-                                                            <?php
-                                                            }
-                                                            ?>
-
-                                                            <?php
-                                                            if ($completas[10] != '' || $completas[10] != null) {
-                                                            ?>
-                                                                <hr>
-                                                                <div class="form-floating mb-3">
-                                                                    <textarea class="form-control" name="motivoCancelacion" placeholder="Leave a comment" id="floatingTextarea" style="height: 100px" required><?php echo $completas[10]; ?></textarea>
-                                                                    <label for="floatingTextarea">Motivo de la cancelación</label>
-                                                                </div>
-                                                            <?php
-                                                            }
-                                                            ?>
-
-                                                        </div>
-                                                        <div class="modal-footer">
-                                                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
-                                                            <button type="submit" class="btn btn-primary">Guardar</button>
-                                                        </div>
-
-                                                    </form>
                                                 </div>
                                             </div>
                                         </div>
@@ -844,8 +537,6 @@ if (!(time() - $_SESSION['time'] >= 3600)) {
                                                             <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
                                                             <button type="submit" class="btn btn-danger">Eliminar tarea</button>
                                                         </div>
-
-
                                                     </form>
                                                 </div>
                                             </div>
@@ -853,7 +544,6 @@ if (!(time() - $_SESSION['time'] >= 3600)) {
                                     <?php
                                     }
                                     ?>
-
                                 </tbody>
                             </table>
                         </div>
@@ -878,15 +568,15 @@ if (!(time() - $_SESSION['time'] >= 3600)) {
                             <thead>
                                 <tr>
                                     <th scope="col">#</th>
-                                    <th scope="col">Motivo</th>
+                                    <th scope="col">Nota Electrónica</th>
                                     <th scope="col">Descripción</th>
 
                                     <th scope="col">Afectado/a</th>
+                                    <th scope="col">Contacto</th>
                                     <th scope="col">Estado</th>
                                     <th scope="col">Fecha Problema</th>
 
                                     <th scope="col">Dirección/Entidad</th>
-                                    <th scope="col">Asignado</th>
                                     <th scope="col">Área encargada</th>
                                     <th scope="col">Acción</th>
                                 </tr>
@@ -898,33 +588,34 @@ if (!(time() - $_SESSION['time'] >= 3600)) {
                                     <tr>
                                         <td style="text-align: center;"><?php echo $listTarea[0]; ?></td>
                                         <td><?php echo $listTarea[2]; ?></td>
+                                        <td><?php echo $listTarea[1]; ?></td>
                                         <td><?php echo $listTarea[3]; ?></td>
+                                        <td><?php echo $listTarea[4]; ?></td>
 
-                                        <td><?php echo $listTarea[5]; ?></td>
                                         <td>
                                             <?php
-                                            if ($listTarea[9] == 'Pendiente') {
-                                                echo '<span class="badge bg-secondary">' . $listTarea[9] . '</span>';
-                                            } else if ($listTarea[9] == 'En Progreso') {
-                                                echo '<span class="badge bg-primary">' . $listTarea[9] . '</span>';
-                                            } else if ($listTarea[9] == 'Completo') {
-                                                echo '<span class="badge bg-success">' . $listTarea[9] . '</span>';
-                                            } else if ($listTarea[9] == 'Cancelado') {
-                                                echo '<span class="badge bg-danger">' . $listTarea[9] . '</span>';
+                                            if ($listTarea[7] == 'Pendiente') {
+                                                echo '<span class="badge bg-secondary">' . $listTarea[7] . '</span>';
+                                            } else if ($listTarea[7] == 'En Progreso') {
+                                                echo '<span class="badge bg-primary">' . $listTarea[7] . '</span>';
+                                            } else if ($listTarea[7] == 'Completo') {
+                                                echo '<span class="badge bg-success">' . $listTarea[7] . '</span>';
+                                            } else if ($listTarea[7] == 'Cancelado') {
+                                                echo '<span class="badge bg-danger">' . $listTarea[7] . '</span>';
                                             }
                                             ?>
                                         </td>
+
                                         <td>
                                             <?php
-                                            $date = date_create($listTarea[11]);
+                                            $date = date_create($listTarea[9]);
                                             $fechaProblema = date_format($date, 'd/m/Y H:i:s');
                                             echo $fechaProblema;
                                             ?>
                                         </td>
 
-                                        <td><?php echo $listTarea[14]; ?></td>
+                                        <td><?php echo $listTarea[12]; ?></td>
                                         <td><?php echo $listTarea[16]; ?></td>
-                                        <td><?php echo $listTarea[18]; ?></td>
                                         <td id="accion">
                                             <div class="btn-group" role="group">
                                                 <button id="btnGroupDrop1" type="button" class="btn btn-outline-primary dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">
@@ -939,37 +630,16 @@ if (!(time() - $_SESSION['time'] >= 3600)) {
                                                     </li>
 
                                                     <?php
-                                                    if ($listTarea[9] != 'Cancelado' && $listTarea[15] == 0) {
+                                                    if ($listTarea[7] == 'Pendiente') {
                                                     ?>
                                                         <li>
                                                             <a type="button" class="dropdown-item" data-bs-toggle="modal" data-bs-target="#modalAsignarTarea<?php echo $listTarea[0]; ?>">
-                                                                Asignar la tarea a un agente
+                                                                Iniciar la tarea
                                                             </a>
                                                         </li>
                                                     <?php
                                                     }
-                                                    ?>
-                                                    <?php
-                                                    if ($listTarea[9] != 'Cancelado' && $listTarea[15] == 0 && $_SESSION['rol'] == 4) {
-                                                    ?>
-                                                        <li>
-                                                            <a class="dropdown-item" href="../controlador/c_tomarTarea.php?id=<?php echo $listTarea[0]; ?>&selectAgentes=<?php echo $_SESSION['legajo']; ?>">
-                                                                Asignarme la tarea
-                                                            </a>
-                                                        </li>
-
-                                                    <?php
-                                                    }
-                                                    if ($listTarea[15] != 0 && $listTarea[9] != 'Completo' && $listTarea[9] != 'Cancelado') {
-                                                    ?>
-                                                        <li>
-                                                            <a class="dropdown-item" href="../controlador/c_quitarTareaAsignado.php?id=<?php echo $listTarea[0]; ?>">
-                                                                Quitar la tarea asignada al agente
-                                                            </a>
-                                                        </li>
-                                                    <?php
-                                                    }
-                                                    if ($listTarea[9] == 'En Progreso') {
+                                                    if ($listTarea[7] == 'En Progreso') {
                                                     ?>
                                                         <li>
                                                             <a type="button" class="dropdown-item" data-bs-toggle="modal" data-bs-target="#modalTareaCompletada<?php echo $listTarea[0]; ?>">
@@ -979,7 +649,7 @@ if (!(time() - $_SESSION['time'] >= 3600)) {
 
                                                     <?php
                                                     }
-                                                    if ($listTarea[9] != 'Cancelado' && $listTarea[9] != 'Completo') {
+                                                    if ($listTarea[7] != 'Cancelado' && $listTarea[7] != 'Completo') {
                                                     ?>
                                                         <li>
                                                             <a type="button" class="dropdown-item" data-bs-toggle="modal" data-bs-target="#modalCancelarTarea<?php echo $listTarea[0]; ?>">
@@ -987,32 +657,26 @@ if (!(time() - $_SESSION['time'] >= 3600)) {
                                                             </a>
                                                         </li>
 
-                                                    <?php
-                                                    }
-                                                    ?>
-
-                                                    <li>
-                                                        <a type="button" class="dropdown-item" data-bs-toggle="modal" data-bs-target="#modalEditarTarea<?php echo $listTarea[0]; ?>">
-                                                            Editar tarea
-                                                        </a>
-                                                    </li>
-                                                    <?php
-                                                    if ($_SESSION['rol'] == 3) {
-                                                    ?>
                                                         <li>
-                                                            <a class="dropdown-item" role="button" data-bs-toggle="modal" data-bs-target="#modalEliminarTarea<?php echo $listTarea[0]; ?>">
-                                                                Eliminar tarea
+                                                            <a type="button" class="dropdown-item" data-bs-toggle="modal" data-bs-target="#modalEditarTarea<?php echo $listTarea[0]; ?>">
+                                                                Editar tarea
                                                             </a>
                                                         </li>
                                                     <?php
                                                     }
                                                     ?>
+
+                                                    <li>
+                                                        <a class="dropdown-item" role="button" data-bs-toggle="modal" data-bs-target="#modalEliminarTarea<?php echo $listTarea[0]; ?>">
+                                                            Eliminar tarea
+                                                        </a>
+                                                    </li>
                                                 </ul>
                                             </div>
                                         </td>
                                     </tr>
 
-
+                                    <!-- MODALES TAREAS GENERALES -->
                                     <!-- Modal Ver Info Tarea -->
                                     <div class="modal fade modalEditar" id="modalVerInfo<?php echo $listTarea[0]; ?>" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
                                         <div class="modal-dialog modal-lg">
@@ -1028,46 +692,29 @@ if (!(time() - $_SESSION['time'] >= 3600)) {
                                                     <input type="hidden" name="nroArreglo" value="<?php echo $listTarea[0]; ?>">
 
                                                     <div class="form-floating mb-3">
-                                                        <select class="form-select" name="selectMotivos" id="floatingSelect" aria-label="Floating label select example" disabled>
-                                                            <option value="<?php echo $listTarea[1]; ?>" selected><?php echo $listTarea[2]; ?></option>
-                                                            <?php
-                                                            foreach ($listMotivos as $motivo) {
-                                                            ?>
-                                                                <option value="<?php echo $motivo[0]; ?>">
-                                                                    <?php
-                                                                    echo $motivo[1];
-                                                                    ?>
-                                                                </option>
-                                                            <?php
-                                                            }
-                                                            ?>
-                                                        </select>
-                                                        <label for="floatingSelect">Motivo del incoveniente</label>
-                                                    </div>
-
-                                                    <div class="form-floating mb-3">
-                                                        <textarea class="form-control" name="descripcion" placeholder="Leave a comment here" id="floatingTextarea" style="height: 170px" disabled><?php echo $listTarea[3]; ?></textarea>
+                                                        <textarea class="form-control" name="descripcion" placeholder="Leave a comment here" id="floatingTextarea" style="height: 170px" disabled><?php echo $listTarea[1]; ?>
+                                                        </textarea>
                                                         <label for="floatingTextarea">Descripción</label>
                                                     </div>
 
                                                     <?php
-                                                    if ($listTarea[4] == '' || $listTarea[4] == null) {
+                                                    if ($listTarea[2] == '' || $listTarea[2] == null) {
                                                         $ne = 'No proporcionado';
                                                     } else {
-                                                        $ne = $listTarea[4];
+                                                        $ne = $listTarea[2];
                                                     }
                                                     ?>
 
                                                     <div class="form-floating mb-3">
                                                         <input type="text" name="ne" value="<?php echo $ne; ?>" class="form-control" id="floatingInput" placeholder="..." disabled>
-                                                        <label for="floatingInput">ne</label>
+                                                        <label for="floatingInput">Nota Electrónica</label>
                                                     </div>
 
                                                     <?php
-                                                    if ($listTarea[5] == '' || $listTarea[5] == null) {
+                                                    if ($listTarea[3] == '' || $listTarea[3] == null) {
                                                         $nombreApellidoAfectado = 'No proporcionado';
                                                     } else {
-                                                        $nombreApellidoAfectado = $listTarea[5];
+                                                        $nombreApellidoAfectado = $listTarea[3];
                                                     }
                                                     ?>
 
@@ -1077,10 +724,10 @@ if (!(time() - $_SESSION['time'] >= 3600)) {
                                                     </div>
 
                                                     <?php
-                                                    if ($listTarea[6] == '' || $listTarea[6] == null) {
+                                                    if ($listTarea[4] == '' || $listTarea[4] == null) {
                                                         $cel = 'No proporcionado';
                                                     } else {
-                                                        $cel = $listTarea[6];
+                                                        $cel = $listTarea[4];
                                                     }
                                                     ?>
 
@@ -1091,10 +738,10 @@ if (!(time() - $_SESSION['time'] >= 3600)) {
 
 
                                                     <?php
-                                                    if ($listTarea[7] != '') {
+                                                    if ($listTarea[5] != '') {
                                                     ?>
                                                         <div class="form-floating mb-3">
-                                                            <textarea class="form-control" name="solucion" placeholder="Leave a comment here" id="floatingTextarea" style="height: 100px" disabled><?php echo $listTarea[7]; ?>    
+                                                            <textarea class="form-control" name="solucion" placeholder="Leave a comment here" id="floatingTextarea" style="height: 100px" disabled><?php echo $listTarea[5]; ?>
                                                             </textarea>
                                                             <label for="floatingTextarea">Materiales utilizados</label>
                                                         </div>
@@ -1103,15 +750,16 @@ if (!(time() - $_SESSION['time'] >= 3600)) {
                                                     ?>
 
                                                     <div class="form-floating mb-3">
-                                                        <input type="text" name="estadoTarea" value="<?php echo $listTarea[9]; ?>" class="form-control" id="floatingInput" placeholder="..." disabled>
+                                                        <input type="text" name="estadoTarea" value="<?php echo $listTarea[7]; ?>" class="form-control" id="floatingInput" placeholder="..." disabled>
                                                         <label for="floatingInput">Estado de la tarea</label>
                                                     </div>
 
                                                     <?php
-                                                    if ($listTarea[10] != '') {
+                                                    if ($listTarea[8] != '') {
                                                     ?>
                                                         <div class="form-floating mb-3">
-                                                            <textarea class="form-control" name="solucion" placeholder="Leave a comment here" id="floatingTextarea" style="height: 100px" disabled><?php echo $listTarea[10]; ?>    
+                                                            <textarea class="form-control" name="solucion" placeholder="Leave a comment here" id="floatingTextarea" style="height: 100px" disabled>
+                                                                <?php echo $listTarea[8]; ?>
                                                             </textarea>
                                                             <label for="floatingTextarea">Motivo de la cancelación</label>
                                                         </div>
@@ -1120,7 +768,7 @@ if (!(time() - $_SESSION['time'] >= 3600)) {
                                                     ?>
 
                                                     <?php
-                                                    $date = date_create($listTarea[11]);
+                                                    $date = date_create($listTarea[9]);
                                                     $fechaProblema = date_format($date, 'd/m/Y H:i:s');
                                                     ?>
                                                     <div class="form-floating mb-3">
@@ -1129,8 +777,8 @@ if (!(time() - $_SESSION['time'] >= 3600)) {
                                                     </div>
 
                                                     <?php
-                                                    if ($listTarea[12] != '') {
-                                                        $date = date_create($listTarea[12]);
+                                                    if ($listTarea[10] != '') {
+                                                        $date = date_create($listTarea[10]);
                                                         $fechaSolucion = date_format($date, 'd/m/Y H:i:s');
                                                     ?>
                                                         <div class="form-floating mb-3">
@@ -1142,17 +790,17 @@ if (!(time() - $_SESSION['time'] >= 3600)) {
                                                     ?>
 
                                                     <div class="form-floating mb-3">
-                                                        <input type="text" name="area" value="<?php echo $listTarea[14]; ?>" class="form-control" id="floatingInput" placeholder="..." disabled>
+                                                        <input type="text" name="area" value="<?php echo $listTarea[12]; ?>" class="form-control" id="floatingInput" placeholder="..." disabled>
                                                         <label for="floatingInput">Dirección o Entidad donde se desempeña el/la afectado/a</label>
                                                     </div>
 
                                                     <div class="form-floating mb-3">
-                                                        <input type="text" name="area" value="<?php echo $listTarea[18]; ?>" class="form-control" id="floatingInput" placeholder="..." disabled>
+                                                        <input type="text" name="area" value="<?php echo $listTarea[16]; ?>" class="form-control" id="floatingInput" placeholder="..." disabled>
                                                         <label for="floatingInput">Área donde se lleva a cabo</label>
                                                     </div>
 
                                                     <div class="form-floating mb-3">
-                                                        <input type="text" name="area" value="<?php echo $listTarea[19]; ?>" class="form-control" id="floatingInput" placeholder="..." disabled>
+                                                        <input type="text" name="area" value="<?php echo $listTarea[17]; ?>" class="form-control" id="floatingInput" placeholder="..." disabled>
                                                         <label for="floatingInput">Creado por</label>
                                                     </div>
 
@@ -1164,36 +812,21 @@ if (!(time() - $_SESSION['time'] >= 3600)) {
                                         </div>
                                     </div>
 
-
-
-                                    <!--Modal Asignar Tarea-->
+                                    <!--Modal Iniciar Tarea-->
                                     <div class="modal fade" id="modalAsignarTarea<?php echo $listTarea[0]; ?>" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
                                         <div class="modal-dialog">
                                             <div class="modal-content">
                                                 <div class="modal-header">
-                                                    <h5 class="modal-title" id="staticBackdropLabel">Asignar tarea - <?php echo $listTarea[18]; ?></h5>
+                                                    <h5 class="modal-title" id="staticBackdropLabel">Iniciar tarea - <?php echo $listTarea[16]; ?></h5>
                                                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                                                 </div>
-                                                <form action="../controlador/c_tomarTarea.php" method="get">
+                                                <form action="../controlador/c_iniciarTarea.php" method="get">
                                                     <div class="modal-body">
-
                                                         <input type="hidden" name="id" value="<?php echo $listTarea[0]; ?>">
-
                                                         <div class="form-floating mb-3">
-                                                            <select class="form-select" onchange="cargarAgentesArea(this);" aria-label="Floating label select example">
-                                                                <option value="" selected>Seleccionar...</option>
-                                                                <option value="<?php echo $listTarea[17]; ?>"><?php echo $listTarea[18]; ?></option>
-                                                            </select>
-                                                            <label for="floatingSelect">Área donde se lleva a cabo la tarea</label>
+                                                            <textarea class="form-control" name="descripcion" placeholder="Leave a comment" id="floatingTextarea" style="height: 170px" disabled><?php echo $listTarea[1]; ?></textarea>
+                                                            <label for="floatingTextarea">Descripción</label>
                                                         </div>
-
-                                                        <div class="form-floating mb-3">
-                                                            <select class="form-select" name="selectAgentes" aria-label="Floating label select example" required>
-                                                                <option value="" selected>Seleccione...</option>
-                                                            </select>
-                                                            <label for="floatingSelect">Seleccione el agente que llevará a cabo la tarea</label>
-                                                        </div>
-
                                                     </div>
                                                     <div class="modal-footer">
                                                         <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
@@ -1254,77 +887,47 @@ if (!(time() - $_SESSION['time'] >= 3600)) {
 
                                                         <input type="hidden" name="nroArreglo" value="<?php echo $listTarea[0]; ?>">
 
-                                                        <?php
-                                                        if ($_SESSION['rol'] == 3) {
-                                                        ?>
-                                                            <div class="form-floating mb-3">
-                                                                <select class="form-select" name="selectArea" onchange="mostrarMotivosProblemas(this);" id="floatingSelect" aria-label="Floating label select example" required>
-                                                                    <option value="<?php echo $listTarea[17]; ?>" selected><?php echo $listTarea[18]; ?> (Actual)</option>
-                                                                    <?php
-                                                                    foreach ($listAreas as $area) {
-                                                                    ?>
-                                                                        <option value="<?php echo $area[0]; ?>">
-                                                                            <?php
-                                                                            echo $area[1];
-                                                                            ?>
-                                                                        </option>
-                                                                    <?php
-                                                                    }
-                                                                    ?>
-                                                                </select>
-                                                                <label for="floatingSelect">Seleccione el Área involucrada</label>
-                                                            </div>
-
-                                                        <?php
-                                                        }
-                                                        if ($_SESSION['rol'] == 4) {
-                                                        ?>
-                                                            <input type="hidden" name="selectArea" value="<?php echo $_SESSION['areaUsuario']; ?>">
-                                                        <?php
-                                                        }
-                                                        ?>
-
                                                         <div class="form-floating mb-3">
-                                                            <select class="form-select" name="selectMotivos" id="floatingSelect" aria-label="Floating label select example" required>
-                                                                <option value="<?php echo $listTarea[1]; ?>" selected><?php echo $listTarea[2]; ?> (Actual)</option>
+                                                            <select class="form-select" name="selectArea" id="floatingSelect" aria-label="Floating label select example" required>
+                                                                <option value="<?php echo $listTarea[15]; ?>" selected><?php echo $listTarea[16]; ?> (Actual)</option>
                                                                 <?php
-                                                                foreach ($listMotivos as $motivo) {
+                                                                foreach ($listAreas as $area) {
                                                                 ?>
-                                                                    <option value="<?php echo $motivo[0]; ?>">
+                                                                    <option value="<?php echo $area[0]; ?>">
                                                                         <?php
-                                                                        echo $motivo[1];
+                                                                        echo $area[1];
                                                                         ?>
                                                                     </option>
                                                                 <?php
                                                                 }
                                                                 ?>
                                                             </select>
-                                                            <label for="floatingSelect">Seleccione el motivo del incoveniente</label>
+                                                            <label for="floatingSelect">Seleccione el Área involucrada</label>
                                                         </div>
 
                                                         <div class="form-floating mb-3">
-                                                            <textarea class="form-control" name="descripcion" placeholder="Leave a comment" id="floatingTextarea" style="height: 170px" required><?php echo $listTarea[3]; ?></textarea>
+                                                            <textarea class="form-control" name="descripcion" placeholder="Leave a comment" id="floatingTextarea" style="height: 170px" required><?php echo $listTarea[1]; ?></textarea>
                                                             <label for="floatingTextarea">Descripción</label>
                                                         </div>
 
                                                         <div class="form-floating mb-3">
-                                                            <input type="text" name="ne" value="<?php echo $listTarea[4]; ?>" class="form-control" id="floatingInput" placeholder="Nombre del Afectado">
+                                                            <input type="text" name="ne" value="<?php echo $listTarea[2]; ?>" class="form-control" id="floatingInput" placeholder="Nombre del Afectado">
                                                             <label for="floatingInput">Nota Electrónica</label>
                                                         </div>
 
                                                         <div class="form-floating mb-3">
-                                                            <input type="text" name="nombreApellidoAfectado" value="<?php echo $listTarea[5]; ?>" class="form-control" id="floatingInput" placeholder="ejemplo">
+                                                            <input type="text" name="nombreApellidoAfectado" value="<?php echo $listTarea[3]; ?>" class="form-control" id="floatingInput" placeholder="ejemplo">
                                                             <label for="floatingInput">Nombre y apellido del afectado/a (Opcional)</label>
                                                         </div>
 
                                                         <div class="form-floating mb-3">
-                                                            <input type="tel" name="cel" value="<?php echo $listTarea[6]; ?>" oninput="validarInputNumerico(this);" class="form-control" id="floatingInput" placeholder="ejemplo">
+                                                            <input type="tel" name="cel" value="<?php echo $listTarea[4]; ?>" oninput="validarInputNumerico(this);" class="form-control" id="floatingInput" placeholder="ejemplo">
                                                             <label for="floatingInput">Nro de celular (Opcional)</label>
                                                         </div>
 
                                                         <div class="form-floating mb-3">
                                                             <select class="form-select" name="selectDireccion" id="floatingSelect" aria-label="Floating label select example" required>
-                                                                <option value="<?php echo $listTarea[13]; ?>" selected><?php echo $listTarea[14]; ?> (Actual)</option>
+                                                                <option value="<?php echo $listTarea[11]; ?>" selected><?php echo $listTarea[12]; ?> (Actual)</option>
                                                                 <?php
                                                                 foreach ($listDirecciones as $direccion) {
                                                                 ?>
@@ -1337,32 +940,6 @@ if (!(time() - $_SESSION['time'] >= 3600)) {
                                                             </select>
                                                             <label for="floatingSelect">Seleccione la Dirección o Entidad donde se desempeña</label>
                                                         </div>
-
-
-                                                        <?php
-                                                        if ($listTarea[7] != '' || $listTarea[7] != null) {
-                                                        ?>
-                                                            <hr>
-                                                            <div class="form-floating mb-3">
-                                                                <textarea class="form-control" name="solucion" placeholder="Leave a comment" id="floatingTextarea" style="height: 100px" required><?php echo $listTarea[7]; ?></textarea>
-                                                                <label for="floatingTextarea">Materiales utilizados</label>
-                                                            </div>
-                                                        <?php
-                                                        }
-                                                        ?>
-
-                                                        <?php
-                                                        if ($listTarea[10] != '' || $listTarea[10] != null) {
-                                                        ?>
-                                                            <hr>
-                                                            <div class="form-floating mb-3">
-                                                                <textarea class="form-control" name="motivoCancelacion" placeholder="Leave a comment" id="floatingTextarea" style="height: 100px" required><?php echo $listTarea[10]; ?></textarea>
-                                                                <label for="floatingTextarea">Motivo de la cancelación</label>
-                                                            </div>
-                                                        <?php
-                                                        }
-                                                        ?>
-
                                                     </div>
                                                     <div class="modal-footer">
                                                         <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
@@ -1374,39 +951,8 @@ if (!(time() - $_SESSION['time'] >= 3600)) {
                                         </div>
                                     </div>
 
-
                                     <!-- Modal Tarea Terminada -->
-                                    <div class="modal fade" id="modalTareaCompletada<?php echo $listTarea[0]; ?>" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
-                                        <div class="modal-dialog">
-                                            <div class="modal-content">
-                                                <div class="modal-header">
-                                                    <h5 class="modal-title" id="staticBackdropLabel">Terminar tarea</h5>
-                                                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                                                </div>
-
-                                                <form action="../controlador/c_terminarTarea.php" method="post" style="display: none;">
-
-                                                    <div class="modal-body">
-
-                                                        <p class="fs-6">Para terminar la tarea debe completar lo siguiente</p>
-
-                                                        <input type="hidden" name="id" value="<?php echo $listTarea[0]; ?>">
-
-                                                        <div class="form-floating mb-3">
-                                                            <textarea class="form-control" onchange="buscarComillaSimple(this)" oninput="validarComillas(this);" name="solucion" placeholder="Leave a comment" id="floatingTextarea" style="height: 100px" required></textarea>
-                                                            <label for="floatingTextarea">Materiales utilizados</label>
-                                                        </div>
-
-                                                    </div>
-                                                    <div class="modal-footer">
-                                                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
-                                                        <button type="submit" class="btn btn-success">Terminar tarea</button>
-                                                    </div>
-
-                                                </form>
-                                            </div>
-                                        </div>
-                                    </div>
+                                    <!--  -->
 
                                     <!-- Modal Eliminar Tarea -->
                                     <div class="modal fade" id="modalEliminarTarea<?php echo $listTarea[0]; ?>" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
@@ -1441,7 +987,6 @@ if (!(time() - $_SESSION['time'] >= 3600)) {
                                             </div>
                                         </div>
                                     </div>
-
                                 <?php
                                 }
                                 ?>

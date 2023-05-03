@@ -44,7 +44,7 @@ if (!(time() - $_SESSION['time'] >= 3600)) {
         <body>
 
             <?php
-            if ($_SESSION['usuarioAgregado']) {
+            if (isset($_SESSION['usuarioAgregado'])) {
             ?>
                 <script>
                     Swal.fire({
@@ -59,7 +59,7 @@ if (!(time() - $_SESSION['time'] >= 3600)) {
                 unset($_SESSION['usuarioAgregado']);
             }
 
-            if ($_SESSION['usuarioError']) {
+            if (isset($_SESSION['usuarioError'])) {
             ?>
                 <script>
                     Swal.fire({

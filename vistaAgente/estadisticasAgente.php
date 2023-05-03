@@ -48,10 +48,6 @@ if (!(time() - $_SESSION['time'] >= 3600)) {
                     <div id="totalEstadoTareas">
                         <canvas id="diagramaEstadoTareas"></canvas>
                     </div>
-
-                    <div id="totalMotivosTareas">
-                        <canvas id="diagramaMotivosTareas"></canvas>
-                    </div>
                 </div>
 
             </section>
@@ -102,95 +98,12 @@ if (!(time() - $_SESSION['time'] >= 3600)) {
                     }
                 }
             };
-
-            const labelsMotivosTareas = [
-                <?php
-                foreach ($listMotivosTareas as $motivos) {
-                    echo "'" . $motivos[1] . "', ";
-                }
-                ?>
-            ];
-
-            const dataMotivosTareas = {
-                labels: labelsMotivosTareas,
-                datasets: [{
-                    backgroundColor: [
-                        'Aquamarine',
-                        'LightBlue',
-                        'LightCyan',
-                        'MediumPurple',
-                        'MediumSlateBlue',
-                        'RoyalBlue',
-                        'DeepSkyBlue',
-                        'Lavender',
-                        'LightGreen',
-                        'MediumOrchid',
-                        'MediumSeaGreen',
-                        'NavajoWhite',
-                        'Wheat',
-                        'Crimson',
-                        'DarkSlateGray',
-                        'Khaki',
-                        'LightSalmon',
-                        'LightSeaGreen',
-                        'LightSteelBlue',
-                        'MistyRose',
-                        'PaleGreen',
-                        'LightSkyBlue',
-                        'HotPink',
-                        'YellowGreen',
-                        'SpringGreen',
-                        'SlateBlue',
-                        'SandyBrown',
-                        'Plum',
-                        'PaleTurquoise',
-                        'PaleGoldenRod',
-                        'Pink',
-                        'BlueViolet',
-                        'Gold',
-                        'Peru',
-                        'SeaGreen',
-                        'Violet',
-                        'Turquoise'
-                    ],
-
-                    data: [
-                        <?php
-                        foreach ($listMotivosTareas as $motivos) {
-                            echo $motivos[0] . ', ';
-                        }
-                        ?>
-                    ],
-                }]
-            };
-
-            const configMotivosTareas = {
-                type: 'pie',
-                data: dataMotivosTareas,
-                options: {
-                    plugins: {
-                        title: {
-                            display: true,
-                            text: 'Motivos de requerimientos'
-                        },
-                        legend: {
-                            display: true,
-                            position: 'top',
-                            align: 'center',
-                        },
-                    }
-                }
-            };
         </script>
 
         <script>
             const diagramaEstadoTareas = new Chart(
                 document.getElementById('diagramaEstadoTareas'),
                 configEstadoTareas
-            );
-            const diagramaMotivosTareas = new Chart(
-                document.getElementById('diagramaMotivosTareas'),
-                configMotivosTareas
             );
         </script>
 

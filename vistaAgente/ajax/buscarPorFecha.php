@@ -10,7 +10,6 @@ $html = '<table class="table table-responsive table-bordered table-hover" id="ta
 <thead>
     <tr>
         <th scope="col">#</th>
-        <th scope="col">Motivo</th>
         <th scope="col">Descripción</th>
         <th scope="col">Nota Electrónica</th>
         <th scope="col">Afectado/a</th>
@@ -27,10 +26,10 @@ switch ($opcionBusqueda) {
         $fechaProblemaInicio = $_POST['fechaProblemaInicio'];
         $fechaProblemaFin = $_POST['fechaProblemaFin'];
 
-        $sql = "SELECT t.nroArreglo, m.motivos, t.descripcion, t.nota_electronica, t.nombreApellidoAfectado, t.celular, t.solucion, e.nombre, t.motivoCancelacion, 
+        $sql = "SELECT t.nroArreglo, t.descripcion, t.nota_electronica, t.nombreApellidoAfectado, t.celular, t.solucion, e.nombre, t.motivoCancelacion, 
                 t.fechaProblema, t.fechaSolucion, d.nombre, concat(u.nombre, ' ', u.apellido) as nombreApellido, t.motivoEliminacion
-                from tareas t, motivos m, estadotarea e, direcciones d, usuario u 
-                where t.id_motivos = m.id and t.estadoTarea_id = e.id and t.direccion_codigo = d.codigo and t.usuario_legajo = u.legajo and u.legajo = '$legajo' and t.estadoTarea_id < 5
+                from tareas t, estadotarea e, direcciones d, usuario u 
+                where t.estadoTarea_id = e.id and t.direccion_codigo = d.codigo and t.usuario_legajo = u.legajo and u.legajo = '$legajo' and t.estadoTarea_id < 5
                 and t.fechaProblema between '$fechaProblemaInicio' and '$fechaProblemaFin'";
 
         $result = mysqli_query($link, $sql);
@@ -75,10 +74,10 @@ switch ($opcionBusqueda) {
         $fechaSolucionInicio = $_POST['fechaSolucionInicio'];
         $fechaSolucionFin = $_POST['fechaSolucionFin'];
 
-        $sql = "SELECT t.nroArreglo, m.motivos, t.descripcion, t.nota_electronica, t.nombreApellidoAfectado, t.celular, t.solucion, e.nombre, t.motivoCancelacion, 
+        $sql = "SELECT t.nroArreglo, t.descripcion, t.nota_electronica, t.nombreApellidoAfectado, t.celular, t.solucion, e.nombre, t.motivoCancelacion, 
                 t.fechaProblema, t.fechaSolucion, d.nombre, concat(u.nombre, ' ', u.apellido) as nombreApellido, t.motivoEliminacion
-                from tareas t, motivos m, estadotarea e, direcciones d, usuario u 
-                where t.id_motivos = m.id and t.estadoTarea_id = e.id and t.direccion_codigo = d.codigo and t.usuario_legajo = u.legajo and u.legajo = '$legajo' and t.estadoTarea_id < 5
+                from tareas t, estadotarea e, direcciones d, usuario u 
+                where t.estadoTarea_id = e.id and t.direccion_codigo = d.codigo and t.usuario_legajo = u.legajo and u.legajo = '$legajo' and t.estadoTarea_id < 5
                 and t.fechaSolucion between '$fechaSolucionInicio' and '$fechaSolucionFin'";
 
         $result = mysqli_query($link, $sql);
@@ -124,10 +123,10 @@ switch ($opcionBusqueda) {
     case 3:
         $fechaProblemaEspecifico = $_POST['fechaProblemaEspecifico'];
 
-        $sql = "SELECT t.nroArreglo, m.motivos, t.descripcion, t.nota_electronica, t.nombreApellidoAfectado, t.celular, t.solucion, e.nombre, t.motivoCancelacion, 
+        $sql = "SELECT t.nroArreglo, t.descripcion, t.nota_electronica, t.nombreApellidoAfectado, t.celular, t.solucion, e.nombre, t.motivoCancelacion, 
                 t.fechaProblema, t.fechaSolucion, d.nombre, concat(u.nombre, ' ', u.apellido) as nombreApellido, t.motivoEliminacion
-                from tareas t, motivos m, estadotarea e, direcciones d, usuario u 
-                where t.id_motivos = m.id and t.estadoTarea_id = e.id and t.direccion_codigo = d.codigo and t.usuario_legajo = u.legajo and u.legajo = '$legajo' and t.estadoTarea_id < 5
+                from tareas t, estadotarea e, direcciones d, usuario u 
+                where t.estadoTarea_id = e.id and t.direccion_codigo = d.codigo and t.usuario_legajo = u.legajo and u.legajo = '$legajo' and t.estadoTarea_id < 5
                 and t.fechaProblema like '$fechaProblemaEspecifico%'";
         $result = mysqli_query($link, $sql);
 
@@ -171,10 +170,10 @@ switch ($opcionBusqueda) {
     case 4:
         $fechaSolucionEspecifico = $_POST['fechaSolucionEspecifico'];
 
-        $sql = "SELECT t.nroArreglo, m.motivos, t.descripcion, t.nota_electronica, t.nombreApellidoAfectado, t.celular, t.solucion, e.nombre, t.motivoCancelacion, 
+        $sql = "SELECT t.nroArreglo, t.descripcion, t.nota_electronica, t.nombreApellidoAfectado, t.celular, t.solucion, e.nombre, t.motivoCancelacion, 
                 t.fechaProblema, t.fechaSolucion, d.nombre, concat(u.nombre, ' ', u.apellido) as nombreApellido, t.motivoEliminacion
-                from tareas t, motivos m, estadotarea e, direcciones d, usuario u 
-                where t.id_motivos = m.id and t.estadoTarea_id = e.id and t.direccion_codigo = d.codigo and t.usuario_legajo = u.legajo and u.legajo = '$legajo' and t.estadoTarea_id < 5
+                from tareas t, estadotarea e, direcciones d, usuario u 
+                where t.estadoTarea_id = e.id and t.direccion_codigo = d.codigo and t.usuario_legajo = u.legajo and u.legajo = '$legajo' and t.estadoTarea_id < 5
                 and t.fechaSolucion like '$fechaSolucionEspecifico%'";
         $result = mysqli_query($link, $sql);
 

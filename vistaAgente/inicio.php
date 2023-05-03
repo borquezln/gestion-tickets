@@ -44,8 +44,7 @@ if (!(time() - $_SESSION['time'] >= 3600)) {
             require('headerNav.php');
 
             error_reporting(0);
-            $datosAct = $_SESSION['datosAct'];
-            if ($datosAct == true) {
+            if (isset($_SESSION['datosAct'])) {
             ?>
                 <script>
                     Swal.fire({
@@ -59,7 +58,7 @@ if (!(time() - $_SESSION['time'] >= 3600)) {
             <?php
                 unset($_SESSION['datosAct']);
             }
-            if ($_SESSION['datosActError'] == true) {
+            if (isset($_SESSION['datosActError'])) {
             ?>
                 <script>
                     Swal.fire({
@@ -394,108 +393,8 @@ if (!(time() - $_SESSION['time'] >= 3600)) {
                     </div>
                 </a>
 
-                <?php
-                if ($_SESSION['rol'] == 2 || $_SESSION['rol'] == 4) {
-                ?>
-
-                    <hr class="mt-5 mb-5">
-
-                    <div id="totalMotivosArea">
-                        <canvas id="diagramaMotivos" width="600px"></canvas>
-                    </div>
-
-                <?php
-                }
-                ?>
-
             </section>
         </body>
-
-        <?php
-        if ($_SESSION['rol'] == 2 || $_SESSION['rol'] == 4) {
-            require_once('../modelo/m_consultas.php');
-            $co = new Consultas();
-            $listMotivos = $co->listarCantidadMotivosAreas($_SESSION['areaUsuario'], $_SESSION['areaUsuario2'], $_SESSION['areaUsuario3']);
-        ?>
-
-            <script>
-                //Total Motivos
-                const labels = [
-                    <?php
-                    foreach ($listMotivos as $motivo) {
-                        echo "'" . $motivo[1] . "',";
-                    }
-                    ?>
-                ];
-
-                const data = {
-                    labels: labels,
-                    datasets: [{
-                        label: 'Total de motivos',
-                        backgroundColor: [
-                            'Aquamarine',
-                            'LightBlue',
-                            'LightCyan',
-                            'MediumPurple',
-                            'MediumSlateBlue',
-                            'RoyalBlue',
-                            'DeepSkyBlue',
-                            'Lavender',
-                            'LightGreen',
-                            'MediumOrchid',
-                            'MediumSeaGreen',
-                            '#EEFF41',
-                            'Wheat',
-                            'Crimson',
-                            '#26A69A',
-                            'DarkSlateGray',
-                            'Khaki',
-                            'LightSalmon',
-                            'LightSeaGreen',
-                        ],
-
-                        data: [
-                            <?php
-                            foreach ($listMotivos as $motivo) {
-                                echo $motivo[0] . ", ";
-                            }
-                            ?>
-                        ],
-                    }]
-                };
-
-                const config = {
-                    type: 'pie',
-                    data: data,
-                    options: {
-                        plugins: {
-                            title: {
-                                text: 'Total de motivos',
-                                display: true,
-                            },
-                            legend: {
-                                display: true,
-                                position: 'left',
-                                align: 'middle',
-                            },
-
-                        },
-
-                        responsive: true,
-                        maintainAspectRatio: false,
-
-                    }
-                };
-
-                const motivosTareas = new Chart(
-                    document.getElementById('diagramaMotivos'),
-                    config
-                );
-            </script>
-
-        <?php
-        }
-        ?>
 
         </html>
     <?php

@@ -52,7 +52,7 @@ if (!(time() - $_SESSION['time'] >= 3600)) {
             <section id="container">
                 <?php
                 error_reporting(0);
-                if ($_SESSION['asignadoOk'] == true) {
+                if (isset($_SESSION['asignadoOk'])) {
                 ?>
                     <script>
                         Swal.fire({
@@ -66,7 +66,7 @@ if (!(time() - $_SESSION['time'] >= 3600)) {
                 <?php
                     unset($_SESSION['asignadoOk']);
                 }
-                if ($_SESSION['asignadoError'] == true) {
+                if (isset($_SESSION['asignadoError'])) {
                 ?>
                     <script>
                         Swal.fire({
