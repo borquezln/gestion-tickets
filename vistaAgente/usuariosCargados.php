@@ -42,34 +42,15 @@ if (!(time() - $_SESSION['time'] >= 3600)) {
         </script>
 
         <body>
-
             <?php
+            error_reporting(0);
+            require "../scripts/alerta.php";
+
             if (isset($_SESSION['usuarioAgregado'])) {
-            ?>
-                <script>
-                    Swal.fire({
-                        position: 'bottom-end',
-                        icon: 'success',
-                        title: 'El usuario ha sido agregado al sistema',
-                        showConfirmButton: false,
-                        timer: 2000
-                    })
-                </script>
-            <?php
+                alerta("El usuario ha sido agregado al sistema");
                 unset($_SESSION['usuarioAgregado']);
-            }
-
-            if (isset($_SESSION['usuarioError'])) {
-            ?>
-                <script>
-                    Swal.fire({
-                        position: 'bottom-end',
-                        icon: 'error',
-                        title: 'Error!',
-                        text: 'No se ha podido añadir el usuario. Posiblemente el legajo del usuario ya exista en el Sistema. Intente nuevamente'
-                    })
-                </script>
-            <?php
+            } else if (isset($_SESSION['usuarioError'])) {
+                alerta("No se ha podido añadir el usuario. Revise los datos e intente nuevamente", "error");
                 unset($_SESSION['usuarioError']);
             }
             ?>
@@ -97,12 +78,12 @@ if (!(time() - $_SESSION['time'] >= 3600)) {
                             foreach ($listUsuarios as $usuario) {
                             ?>
                                 <tr>
-                                    <td><?php echo $usuario[0]; ?></td>
-                                    <td><?php echo $usuario[1]; ?></td>
-                                    <td><?php echo $usuario[2]; ?></td>
-                                    <td><?php echo $usuario[3]; ?></td>
-                                    <td><?php echo $usuario[4]; ?></td>
-                                    <td><?php echo $usuario[5]; ?></td>
+                                    <td><?= $usuario[0]; ?></td>
+                                    <td><?= $usuario[1]; ?></td>
+                                    <td><?= $usuario[2]; ?></td>
+                                    <td><?= $usuario[3]; ?></td>
+                                    <td><?= $usuario[4]; ?></td>
+                                    <td><?= $usuario[5]; ?></td>
                                     <td>
                                         <?php
                                         if ($usuario[6] != '' || $usuario[6] != null) {
@@ -127,37 +108,9 @@ if (!(time() - $_SESSION['time'] >= 3600)) {
         </body>
 
         </html>
-
-    <?php
+<?php
     }
 } else {
-    session_destroy();
-    ?>
-
-    <!DOCTYPE html>
-    <html lang="en">
-
-    <head>
-        <meta charset="UTF-8">
-        <meta http-equiv="X-UA-Compatible" content="IE=edge">
-        <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <title>Document</title>
-        <style>
-            body {
-                background-color: #5a3377 !important;
-                color: white !important;
-                padding: 10px;
-            }
-        </style>
-        <?php require('libreriaEstilos.php'); ?>
-    </head>
-
-    <body>
-        <p class="fs-5">Sesión caducada. Para acceder a esta sección debe iniciar sesión <a href="../vista/login.php" class="link-primary">Click aquí</a></p>
-    </body>
-
-    </html>
-
-<?php
+    require "destroySession.php";
 }
 ?>

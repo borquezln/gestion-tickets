@@ -120,22 +120,6 @@ class Consultas extends Conexion
         return $totalAreasAgente;
     }
 
-    public function verificarAreaUsuario($usuario)
-    {
-        try {
-            $link = parent::conexionBD();
-            $sql = "SELECT a.codigo from areas a where a.codigo in (select ua.codigo_area2 from usuario_area ua where ua.usuario_legajo2
-                    in (select u.legajo from usuario u where u.usuario = '$usuario'))";
-            $result = mysqli_query($link, $sql);
-            while ($row = mysqli_fetch_row($result)) {
-                $areaUsuario = $row[0];
-            }
-        } catch (Exception $e) {
-            $e->getMessage();
-        }
-        return $areaUsuario;
-    }
-
     public function verificarNombreAreaUsuario($usuario)
     {
         try {

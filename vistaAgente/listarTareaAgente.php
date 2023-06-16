@@ -156,7 +156,7 @@ if (!(time() - $_SESSION['time'] >= 3600)) {
 
             <section id="container">
 
-                <p class="fs-5">Lista de tareas de <?php echo $agente ?></p>
+                <p class="fs-5">Lista de tareas de <?= $agente ?></p>
                 <hr>
 
                 <p class="fs-6">
@@ -176,7 +176,7 @@ if (!(time() - $_SESSION['time'] >= 3600)) {
 
                     <div class="form-floating mb-3" style="width: 400px;">
 
-                        <input type="hidden" id="legajo" value="<?php echo $_GET['agente']; ?>">
+                        <input type="hidden" id="legajo" value="<?= $_GET['agente']; ?>">
 
                         <select class="form-select" onchange="filtrosBusqueda(this);" id="opcionBusqueda" aria-label="Floating label select example">
                             <option value="" selected>Seleccione...</option>
@@ -237,10 +237,8 @@ if (!(time() - $_SESSION['time'] >= 3600)) {
                                 foreach ($listEstados as $estado) {
                                     if ($estado[0] != 1 && $estado[0] != 5) {
                                 ?>
-                                        <option value="<?php echo $estado[0]; ?>">
-                                            <?php
-                                            echo $estado[1];
-                                            ?>
+                                        <option value="<?= $estado[0]; ?>">
+                                            <?= $estado[1]; ?>
                                         </option>
                                 <?php
                                     }
@@ -274,10 +272,10 @@ if (!(time() - $_SESSION['time'] >= 3600)) {
                                 foreach ($listTareaAgente as $tarea) {
                                 ?>
                                     <tr>
-                                        <td id="nroArreglo"><?php echo $tarea[0]; ?></td>
-                                        <td><?php echo $tarea[1]; ?></td>
-                                        <td><?php echo $tarea[2]; ?></td>
-                                        <td><?php echo $tarea[4]; ?></td>
+                                        <td id="nroArreglo"><?= $tarea[0]; ?></td>
+                                        <td><?= $tarea[1]; ?></td>
+                                        <td><?= $tarea[2]; ?></td>
+                                        <td><?= $tarea[4]; ?></td>
                                         <td>
                                             <?php
                                             if ($tarea[7] == 'Pendiente') {
@@ -307,7 +305,7 @@ if (!(time() - $_SESSION['time'] >= 3600)) {
                                             }
                                             ?>
                                         </td>
-                                        <td><?php echo $tarea[11]; ?></td>
+                                        <td><?= $tarea[11]; ?></td>
 
                                         <td id="accion">
                                             <div class="btn-group" role="group">
@@ -316,7 +314,7 @@ if (!(time() - $_SESSION['time'] >= 3600)) {
                                                 </button>
                                                 <ul class="dropdown-menu" aria-labelledby="btnGroupDrop1">
                                                     <li>
-                                                        <a type="button" class="dropdown-item" data-bs-toggle="modal" data-bs-target="#modalInfoTarea<?php echo $tarea[0]; ?>">
+                                                        <a type="button" class="dropdown-item" data-bs-toggle="modal" data-bs-target="#modalInfoTarea<?= $tarea[0]; ?>">
                                                             Ver más info
                                                         </a>
                                                     </li>
@@ -326,7 +324,7 @@ if (!(time() - $_SESSION['time'] >= 3600)) {
                                     </tr>
 
                                     <!--Modal Ver más info-->
-                                    <div class="modal fade modalEditar" id="modalInfoTarea<?php echo $tarea[0]; ?>" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+                                    <div class="modal fade modalEditar" id="modalInfoTarea<?= $tarea[0]; ?>" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
                                         <div class="modal-dialog modal-lg">
                                             <div class="modal-content">
                                                 <div class="modal-header">
@@ -336,12 +334,12 @@ if (!(time() - $_SESSION['time'] >= 3600)) {
 
                                                 <div class="modal-body bodyModalInfo">
 
-                                                    <p class="fs-6">Tarea N° <?php echo $tarea[0]; ?></p>
+                                                    <p class="fs-6">Tarea N° <?= $tarea[0]; ?></p>
 
-                                                    <input type="hidden" name="nroArreglo" value="<?php echo $tarea[0]; ?>">
+                                                    <input type="hidden" name="nroArreglo" value="<?= $tarea[0]; ?>">
 
                                                     <div class="form-floating mb-3">
-                                                        <textarea class="form-control" name="descripcion" placeholder="Leave a comment here" id="floatingTextarea" style="height: 100px" disabled><?php echo $tarea[2]; ?></textarea>
+                                                        <textarea class="form-control" name="descripcion" placeholder="Leave a comment here" id="floatingTextarea" style="height: 100px" disabled><?= $tarea[2]; ?></textarea>
                                                         <label for="floatingTextarea">Descripción</label>
                                                     </div>
 
@@ -354,7 +352,7 @@ if (!(time() - $_SESSION['time'] >= 3600)) {
                                                     ?>
 
                                                     <div class="form-floating mb-3">
-                                                        <input type="text" name="ne" value="<?php echo $ne; ?>" class="form-control" id="floatingInput" placeholder="..." disabled>
+                                                        <input type="text" name="ne" value="<?= $ne; ?>" class="form-control" id="floatingInput" placeholder="..." disabled>
                                                         <label for="floatingInput">Nota Electrónica</label>
                                                     </div>
 
@@ -367,7 +365,7 @@ if (!(time() - $_SESSION['time'] >= 3600)) {
                                                     ?>
 
                                                     <div class="form-floating mb-3">
-                                                        <input type="text" name="nombreApellido" value="<?php echo $nombreApellidoAfectado; ?>" class="form-control" id="floatingInput" placeholder="..." disabled>
+                                                        <input type="text" name="nombreApellido" value="<?= $nombreApellidoAfectado; ?>" class="form-control" id="floatingInput" placeholder="..." disabled>
                                                         <label for="floatingInput">Nombre y apellido del afectado/a</label>
                                                     </div>
 
@@ -380,7 +378,7 @@ if (!(time() - $_SESSION['time'] >= 3600)) {
                                                     ?>
 
                                                     <div class="form-floating mb-3">
-                                                        <input type="text" name="cel" value="<?php echo $cel; ?>" class="form-control" id="floatingInput" placeholder="..." disabled>
+                                                        <input type="text" name="cel" value="<?= $cel; ?>" class="form-control" id="floatingInput" placeholder="..." disabled>
                                                         <label for="floatingInput">Nro de celular de contacto</label>
                                                     </div>
 
@@ -388,7 +386,7 @@ if (!(time() - $_SESSION['time'] >= 3600)) {
                                                     if ($tarea[6] != '') {
                                                     ?>
                                                         <div class="form-floating mb-3">
-                                                            <textarea class="form-control" name="solucion" placeholder="Leave a comment here" id="floatingTextarea" style="height: 150px" disabled><?php echo $tarea[6]; ?>    
+                                                            <textarea class="form-control" name="solucion" placeholder="Leave a comment here" id="floatingTextarea" style="height: 150px" disabled><?= $tarea[6]; ?>    
                                                             </textarea>
                                                             <label for="floatingTextarea">Materiales utilizados</label>
                                                         </div>
@@ -400,7 +398,7 @@ if (!(time() - $_SESSION['time'] >= 3600)) {
                                                     if ($tarea[8] != '') {
                                                     ?>
                                                         <div class="form-floating mb-3">
-                                                            <textarea class="form-control" name="solucion" placeholder="Leave a comment here" id="floatingTextarea" style="height: 100px" disabled><?php echo $tarea[8]; ?>    
+                                                            <textarea class="form-control" name="solucion" placeholder="Leave a comment here" id="floatingTextarea" style="height: 100px" disabled><?= $tarea[8]; ?>    
                                                             </textarea>
                                                             <label for="floatingTextarea">Motivo de la cancelación</label>
                                                         </div>
@@ -413,7 +411,7 @@ if (!(time() - $_SESSION['time'] >= 3600)) {
                                                     $fechaProblema = date_format($date, 'd/m/Y H:i:s');
                                                     ?>
                                                     <div class="form-floating mb-3">
-                                                        <input type="text" name="fechaProblema" value="<?php echo $fechaProblema; ?>" class="form-control" id="floatingInput" placeholder="..." disabled>
+                                                        <input type="text" name="fechaProblema" value="<?= $fechaProblema; ?>" class="form-control" id="floatingInput" placeholder="..." disabled>
                                                         <label for="floatingInput">Fecha del problema</label>
                                                     </div>
 
@@ -423,7 +421,7 @@ if (!(time() - $_SESSION['time'] >= 3600)) {
                                                         $fechaSolucion = date_format($date, 'd/m/Y H:i:s');
                                                     ?>
                                                         <div class="form-floating mb-3">
-                                                            <input type="text" name="fechaSolucion" value="<?php echo $fechaSolucion; ?>" class="form-control" id="floatingInput" placeholder="..." disabled>
+                                                            <input type="text" name="fechaSolucion" value="<?= $fechaSolucion; ?>" class="form-control" id="floatingInput" placeholder="..." disabled>
                                                             <label for="floatingInput">Fecha de la solución</label>
                                                         </div>
                                                     <?php
@@ -431,7 +429,7 @@ if (!(time() - $_SESSION['time'] >= 3600)) {
                                                     ?>
 
                                                     <div class="form-floating mb-3">
-                                                        <input type="text" name="area" value="<?php echo $tarea[11]; ?>" class="form-control" id="floatingInput" placeholder="..." disabled>
+                                                        <input type="text" name="area" value="<?= $tarea[11]; ?>" class="form-control" id="floatingInput" placeholder="..." disabled>
                                                         <label for="floatingInput">Área donde se desempeña</label>
                                                     </div>
 
@@ -444,7 +442,7 @@ if (!(time() - $_SESSION['time'] >= 3600)) {
                                                     ?>
 
                                                     <div class="form-floating mb-3">
-                                                        <input type="text" name="area" value="<?php echo $asignado; ?>" class="form-control" id="floatingInput" placeholder="..." disabled>
+                                                        <input type="text" name="area" value="<?= $asignado; ?>" class="form-control" id="floatingInput" placeholder="..." disabled>
                                                         <label for="floatingInput">Asignado</label>
                                                     </div>
 
@@ -456,22 +454,20 @@ if (!(time() - $_SESSION['time'] >= 3600)) {
                                                     ?>
 
                                                         <div class="form-floating mb-3">
-                                                            <textarea class="form-control" name="motivoEliminacion" placeholder="Leave a comment here" id="floatingTextarea" style="height: 150px" disabled><?php echo $motivoCancelacion; ?>    
+                                                            <textarea class="form-control" name="motivoEliminacion" placeholder="Leave a comment here" id="floatingTextarea" style="height: 150px" disabled><?= $motivoCancelacion; ?>    
                                                             </textarea>
                                                             <label for="floatingTextarea">Motivo de la cancelación</label>
                                                         </div>
 
                                                     <?php
                                                     }
-                                                    ?>
 
-                                                    <?php
                                                     if ($tarea[13] != '') {
                                                         $motivoEliminacion = $tarea[13];
                                                     ?>
 
                                                         <div class="form-floating mb-3">
-                                                            <input type="text" name="motivoEliminado" value="<?php echo $motivoEliminacion; ?>" class="form-control" id="floatingInput" placeholder="..." disabled>
+                                                            <input type="text" name="motivoEliminado" value="<?= $motivoEliminacion; ?>" class="form-control" id="floatingInput" placeholder="..." disabled>
                                                             <label for="floatingInput">Motivo de la eliminación</label>
                                                         </div>
 
@@ -497,9 +493,6 @@ if (!(time() - $_SESSION['time'] >= 3600)) {
                     <div id="tResultado">
                         <?php
                         foreach ($listTareaAgente as $tarea) {
-                        ?>
-
-                        <?php
                         }
                         ?>
                     </div>
@@ -510,37 +503,9 @@ if (!(time() - $_SESSION['time'] >= 3600)) {
         </body>
 
         </html>
-
-    <?php
+<?php
     }
 } else {
-    session_destroy();
-    ?>
-
-    <!DOCTYPE html>
-    <html lang="en">
-
-    <head>
-        <meta charset="UTF-8">
-        <meta http-equiv="X-UA-Compatible" content="IE=edge">
-        <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <title>Document</title>
-        <style>
-            body {
-                background-color: #5a3377 !important;
-                color: white !important;
-                padding: 10px;
-            }
-        </style>
-        <?php require('libreriaEstilos.php'); ?>
-    </head>
-
-    <body>
-        <p class="fs-5">Sesión caducada. Para acceder a esta sección debe iniciar sesión <a href="login.php" class="link-primary">Click aquí</a></p>
-    </body>
-
-    </html>
-
-<?php
+    require "destroySession.php";
 }
 ?>

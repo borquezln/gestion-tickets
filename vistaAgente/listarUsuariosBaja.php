@@ -63,33 +63,17 @@ if (!(time() - $_SESSION['time'] >= 3600)) {
             <section id="container">
                 <?php
                 error_reporting(0);
+                require "../scripts/alerta.php";
+
                 if (isset($_SESSION['agenteEditado'])) {
-                ?>
-                    <script>
-                        Swal.fire({
-                            title: 'Confirmado!',
-                            text: 'Los datos del agente han sido modificados',
-                            icon: 'success'
-                        });
-                    </script>
-                <?php
+                    alerta("Los datos del agente han sido modificados");
                     unset($_SESSION['agenteEditado']);
-                }
-                ?>
-                <?php
-                if (isset($_SESSION['bajaOk'])) {
-                ?>
-                    <script>
-                        Swal.fire({
-                            title: 'Confirmado!',
-                            text: 'El agente ha sido dado de baja',
-                            icon: 'success'
-                        });
-                    </script>
-                <?php
+                } else if (isset($_SESSION['bajaOk'])) {
+                    alerta("El agente ha sido dado de baja");
                     unset($_SESSION['bajaOk']);
                 }
                 ?>
+
                 <p class="fs-5">Lista de Agentes que están de baja del Sistema</p>
                 <hr>
                 <table class="table table-bordered" id="tablaDinamicaLoad">
@@ -108,24 +92,24 @@ if (!(time() - $_SESSION['time'] >= 3600)) {
                         foreach ($listBajas as $list) {
                         ?>
                             <tr>
-                                <td><?php echo $list[0]; ?></td>
-                                <td><?php echo $list[1]; ?></td>
-                                <td><?php echo $list[2]; ?></td>
-                                <td><?php echo $list[3]; ?></td>
-                                <td><?php echo $list[4]; ?></td>
+                                <td><?= $list[0]; ?></td>
+                                <td><?= $list[1]; ?></td>
+                                <td><?= $list[2]; ?></td>
+                                <td><?= $list[3]; ?></td>
+                                <td><?= $list[4]; ?></td>
                                 <td id="accion">
-                                    <button type="button" class="btn btn-success" data-bs-toggle="modal" data-bs-target="#modalAlta<?php echo $list[0]; ?>">
+                                    <button type="button" class="btn btn-success" data-bs-toggle="modal" data-bs-target="#modalAlta<?= $list[0]; ?>">
                                         Dar de alta
                                     </button>
                                 </td>
                             </tr>
 
                             <!-- Modal Alta -->
-                            <div class="modal fade" id="modalAlta<?php echo $list[0]; ?>" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                            <div class="modal fade" id="modalAlta<?= $list[0]; ?>" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
                                 <div class="modal-dialog">
                                     <div class="modal-content">
                                         <div class="modal-header">
-                                            <h5 class="modal-title" id="exampleModalLabel">Dar de alta: <?php echo $list[1] . ' ' . $list[2]; ?></h5>
+                                            <h5 class="modal-title" id="exampleModalLabel">Dar de alta: <?= $list[1] . ' ' . $list[2]; ?></h5>
                                             <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                                         </div>
                                         <form action="../controlador/c_altaAgente.php" method="post" style="display: none;">
@@ -133,7 +117,7 @@ if (!(time() - $_SESSION['time'] >= 3600)) {
 
                                                 <p class="fs-6">Completar lo siguente.</p>
 
-                                                <input type="hidden" name="legajo" value="<?php echo $list[0]; ?>">
+                                                <input type="hidden" name="legajo" value="<?= $list[0]; ?>">
 
                                                 <div class="form-floating mb-3">
                                                     <select class="form-select" name="selectRol" id="floatingSelect" aria-label="Floating label select example" required>
@@ -141,7 +125,7 @@ if (!(time() - $_SESSION['time'] >= 3600)) {
                                                         <?php
                                                         foreach ($listRoles as $rol) {
                                                         ?>
-                                                            <option value="<?php echo $rol[0]; ?>"><?php echo $rol[1]; ?></option>
+                                                            <option value="<?= $rol[0]; ?>"><?= $rol[1]; ?></option>
                                                         <?php
                                                         }
                                                         ?>
@@ -171,36 +155,9 @@ if (!(time() - $_SESSION['time'] >= 3600)) {
         </body>
 
         </html>
-    <?php
+<?php
     }
 } else {
-    session_destroy();
-    ?>
-    <!DOCTYPE html>
-    <html lang="en">
-
-    <head>
-        <meta charset="UTF-8">
-        <meta http-equiv="X-UA-Compatible" content="IE=edge">
-        <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <title>Document</title>
-        <style>
-            body {
-                background-color: #5a3377 !important;
-                color: white !important;
-                padding: 10px;
-            }
-        </style>
-        <?php
-        require('libreriaEstilos.php');
-        ?>
-    </head>
-
-    <body>
-        <p class="fs-5">Sesión caducada. Para acceder a esta sección debe iniciar sesión <a href="../vista/login.php" class="link-primary">Click aquí</a></p>
-    </body>
-
-    </html>
-<?php
+    require "destroySession.php";
 }
 ?>

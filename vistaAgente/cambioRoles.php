@@ -52,33 +52,12 @@ if (!(time() - $_SESSION['time'] >= 3600)) {
             <section id="container">
                 <?php
                 error_reporting(0);
+                require "../scripts/alerta.php";
                 if (isset($_SESSION['asignadoOk'])) {
-                ?>
-                    <script>
-                        Swal.fire({
-                            position: 'bottom-end',
-                            icon: 'success',
-                            title: 'El usuario ha cambiado de Rol',
-                            showConfirmButton: false,
-                            timer: 1500
-                        })
-                    </script>
-                <?php
+                    alerta("El usuario ha cambiado de rol");
                     unset($_SESSION['asignadoOk']);
-                }
-                if (isset($_SESSION['asignadoError'])) {
-                ?>
-                    <script>
-                        Swal.fire({
-                            position: 'bottom-end',
-                            icon: 'error',
-                            title: 'Error',
-                            text: 'Debe seleccionar el Agente y el Rol a asignar',
-                            showConfirmButton: false,
-                            timer: 2000
-                        })
-                    </script>
-                <?php
+                } else if (isset($_SESSION['asignadoError'])) {
+                    alerta("Debe seleccionar el agente y el rol a asignar", "error");
                     unset($_SESSION['asignadoError']);
                 }
                 ?>
@@ -105,15 +84,15 @@ if (!(time() - $_SESSION['time'] >= 3600)) {
                                 foreach ($listUsuarios as $usuarios) {
                                     if ($usuarios[5] != 'Admin' && $_SESSION['rol'] == 4 && $usuarios[0] != $_SESSION['legajo']) {
                                 ?>
-                                        <option value="<?php echo $usuarios[0]; ?>">
-                                            <?php echo $usuarios[1] . ' ' . $usuarios[2] . ' - ' . $usuarios[3] . ' - ' . $usuarios[4] . ' - ' . $usuarios[5]; ?>
+                                        <option value="<?= $usuarios[0]; ?>">
+                                            <?= $usuarios[1] . ' ' . $usuarios[2] . ' - ' . $usuarios[3] . ' - ' . $usuarios[4] . ' - ' . $usuarios[5]; ?>
                                         </option>
                                     <?php
                                     }
                                     if ($_SESSION['rol'] == 3 && $usuarios[0] != $_SESSION['legajo']) {
                                     ?>
-                                        <option value="<?php echo $usuarios[0]; ?>">
-                                            <?php echo $usuarios[1] . ' ' . $usuarios[2] . ' - ' . $usuarios[3] . ' - ' . $usuarios[4] . ' - ' . $usuarios[5]; ?>
+                                        <option value="<?= $usuarios[0]; ?>">
+                                            <?= $usuarios[1] . ' ' . $usuarios[2] . ' - ' . $usuarios[3] . ' - ' . $usuarios[4] . ' - ' . $usuarios[5]; ?>
                                         </option>
                                 <?php
                                     }
@@ -133,12 +112,12 @@ if (!(time() - $_SESSION['time'] >= 3600)) {
                                 foreach ($listRoles as $roles) {
                                     if ($_SESSION['rol'] == 4 && $roles[0] != 3) {
                                 ?>
-                                        <option value="<?php echo $roles[0] ?>"><?php echo $roles[1] ?></option>
+                                        <option value="<?= $roles[0] ?>"><?= $roles[1] ?></option>
                                     <?php
                                     }
                                     if ($_SESSION['rol'] == 3) {
                                     ?>
-                                        <option value="<?php echo $roles[0] ?>"><?php echo $roles[1] ?></option>
+                                        <option value="<?= $roles[0] ?>"><?= $roles[1] ?></option>
                                 <?php
                                     }
                                 }
@@ -158,36 +137,9 @@ if (!(time() - $_SESSION['time'] >= 3600)) {
         </body>
 
         </html>
-    <?php
+<?php
     }
 } else {
-    session_destroy();
-    ?>
-
-    <!DOCTYPE html>
-    <html lang="en">
-
-    <head>
-        <meta charset="UTF-8">
-        <meta http-equiv="X-UA-Compatible" content="IE=edge">
-        <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <title>Document</title>
-        <style>
-            body {
-                background-color: #5a3377 !important;
-                color: white !important;
-                padding: 10px;
-            }
-        </style>
-        <?php require('libreriaEstilos.php'); ?>
-    </head>
-
-    <body>
-        <p class="fs-5">Sesión caducada. Para acceder a esta sección debe iniciar sesión <a href="../vista/login.php" class="link-primary">Click aquí</a></p>
-    </body>
-
-    </html>
-
-<?php
+    require "destroySession.php";
 }
 ?>

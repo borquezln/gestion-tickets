@@ -192,52 +192,6 @@ if (isset($_SESSION['rol'])) {
         }
 
         //MODAL NUEVO USUARIO
-
-        function mostrarSelectArea(valor) {
-            var selectRol = valor.value;
-
-            if (selectRol == 1 || selectRol == 3) {
-                $('.selectCantArea').hide(200).find('select').prop('disabled', true);
-                $('.selectArea').hide(200).find('select').prop('disabled', true);
-                $('.selectArea2').hide(200).find('select').prop('disabled', true);
-                $('.selectArea3').hide(200).find('select').prop('disabled', true);
-            } else if (selectRol == 2) {
-                $('.selectCantArea').show(200).find('select').prop('disabled', false);
-                $('.selectArea').hide(200).find('select').prop('disabled', false);
-                $('.selectArea2').hide(200).find('select').prop('disabled', false);
-                $('.selectArea3').hide(200).find('select').prop('disabled', false);
-            } else if (selectRol == 4) {
-                $('.selectCantArea').hide(200).find('select').prop('disabled', true);
-                $('.selectArea').show(200).find('select').prop('disabled', false);
-                $('.selectArea2').hide(200).find('select').prop('disabled', true);
-                $('.selectArea3').hide(200).find('select').prop('disabled', true);
-            } else if (selectRol == '') {
-                $('.selectCantArea').hide(200).find('select').prop('disabled', true);
-                $('.selectArea').hide(200).find('select').prop('disabled', true);
-            }
-        }
-
-        function mostrarCantSelectAreas(valor) {
-            var cantAreas = valor.value;
-            if (cantAreas == 1) {
-                $('.selectArea').show(200).find('select').prop('disabled', false);
-                $('.selectArea2').hide(200).find('select').prop('disabled', true);
-                $('.selectArea3').hide(200).find('select').prop('disabled', true);
-            } else if (cantAreas == 2) {
-                $('.selectArea').show(200).find('select').prop('disabled', false);
-                $('.selectArea2').show(200).find('select').prop('disabled', false);
-                $('.selectArea3').hide(200).find('select').prop('disabled', true);
-            } else if (cantAreas == 3) {
-                $('.selectArea').show(200).find('select').prop('disabled', false);
-                $('.selectArea2').show(200).find('select').prop('disabled', false);
-                $('.selectArea3').show(200).find('select').prop('disabled', false);
-            } else {
-                $('.selectArea').hide(200).find('select').prop('disabled', true);
-                $('.selectArea2').hide(200).find('select').prop('disabled', true);
-                $('.selectArea3').hide(200).find('select').prop('disabled', true);
-            }
-        }
-
         function validarUsernameExistente(username) {
             $.ajax({
                 type: 'POST',
@@ -262,7 +216,7 @@ if (isset($_SESSION['rol'])) {
             <ul class="navbar-nav settingsUser">
                 <li class="nav-item dropdown">
                     <a class="nav-link dropdown-toggle" href="#" id="navbarDarkDropdownMenuLink" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-                        <?php echo $_SESSION['nombreApellido']; ?>
+                        <?= $_SESSION['nombreApellido']; ?>
                     </a>
                     <ul class="dropdown-menu dropdown-menu-dark dropdown-menu-end" aria-labelledby="navbarDarkDropdownMenuLink">
                         <li><a class="dropdown-item" type="button" data-bs-toggle="modal" data-bs-target="#exampleModal">Gestionar usuario actual</a></li>
@@ -276,8 +230,8 @@ if (isset($_SESSION['rol'])) {
 
     <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
         <form action="../controlador/c_editarUsuario.php" method="post">
-            <input type="hidden" name="userAnterior" value="<?php echo $_SESSION['username']; ?>">
-            <input type="hidden" name="rol" value="<?php echo $_SESSION['rol']; ?>">
+            <input type="hidden" name="userAnterior" value="<?= $_SESSION['username']; ?>">
+            <input type="hidden" name="rol" value="<?= $_SESSION['rol']; ?>">
             <div class="modal-dialog">
                 <div class="modal-content">
                     <div class="modal-header">
@@ -295,23 +249,23 @@ if (isset($_SESSION['rol'])) {
                         ?>
 
                             <div class="form-floating mb-3 input">
-                                <input type="number" name="legajo" class="form-control" value="<?php echo $row[0]; ?>" id="floatingInput" placeholder="legajo" readonly>
+                                <input type="number" name="legajo" class="form-control" value="<?= $row[0]; ?>" id="floatingInput" placeholder="legajo" readonly>
                                 <label for="floatingInput">Legajo</label>
                             </div>
                             <div class="form-floating mb-3 input">
-                                <input type="text" name="nombre" class="form-control" value="<?php echo $row[1]; ?>" id="floatingInput" placeholder="Nombre">
+                                <input type="text" name="nombre" class="form-control" value="<?= $row[1]; ?>" id="floatingInput" placeholder="Nombre">
                                 <label for="floatingInput">Nombre</label>
                             </div>
                             <div class="form-floating mb-3 input">
-                                <input type="text" name="apellido" class="form-control" value="<?php echo $row[2]; ?>" id="floatingInput" placeholder="Apellido">
+                                <input type="text" name="apellido" class="form-control" value="<?= $row[2]; ?>" id="floatingInput" placeholder="Apellido">
                                 <label for="floatingInput">Apellido</label>
                             </div>
                             <div class="form-floating mb-3 input">
-                                <input type="email" name="correo" class="form-control" value="<?php echo $row[3]; ?>" id="floatingInput" placeholder="Correo">
+                                <input type="email" name="correo" class="form-control" value="<?= $row[3]; ?>" id="floatingInput" placeholder="Correo">
                                 <label for="floatingInput">Correo</label>
                             </div>
                             <div class="form-floating mb-3 input">
-                                <input type="text" name="user" class="form-control" value="<?php echo $row[4]; ?>" id="floatingInput" placeholder="Usuario">
+                                <input type="text" name="user" class="form-control" value="<?= $row[4]; ?>" id="floatingInput" placeholder="Usuario">
                                 <label for="floatingInput">Usuario</label>
                             </div>
                             <button type="button" id="btnCambiarPass" class="btn btn-warning">Cambiar Contraseña</button>
@@ -392,7 +346,7 @@ if (isset($_SESSION['rol'])) {
                 <?php
                 if ($_SESSION['rol'] == 2) {
                 ?>
-                    <span class="fs-5 titlePage"><?php echo $_SESSION['areaUsuarioNombre']; ?></span>
+                    <span class="fs-5 titlePage"><?= $_SESSION['areaUsuarioNombre']; ?></span>
                 <?php
                 } else if ($_SESSION['rol'] == 3) {
                 ?>
@@ -400,7 +354,7 @@ if (isset($_SESSION['rol'])) {
                 <?php
                 } else {
                 ?>
-                    <span class="fs-5 titlePage"><?php echo $_SESSION['areaUsuarioNombre']; ?></span>
+                    <span class="fs-5 titlePage"><?= $_SESSION['areaUsuarioNombre']; ?></span>
                 <?php
                 }
                 ?>
@@ -427,13 +381,13 @@ if (isset($_SESSION['rol'])) {
 
                     <ul class="navbar-nav" id="desplegarMenuTarea">
                         <li class="nav-item">
-                            <a class="nav-link" aria-current="page" href="index.php?accion=listarTareasAdmin&area=<?php echo $_SESSION['areaUsuario']; ?>&lista=actual">Tareas pendientes y En progreso</a>
+                            <a class="nav-link" aria-current="page" href="index.php?accion=listarTareasAdmin&area=<?= $_SESSION['areaUsuario']; ?>&lista=actual">Tareas pendientes y En progreso</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link" aria-current="page" href="index.php?accion=listarTareasAdmin&area=<?php echo $_SESSION['areaUsuario']; ?>&lista=completas">Tareas completadas</a>
+                            <a class="nav-link" aria-current="page" href="index.php?accion=listarTareasAdmin&area=<?= $_SESSION['areaUsuario']; ?>&lista=completas">Tareas completadas</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link" aria-current="page" href="index.php?accion=listarTareasAdmin&area=<?php echo $_SESSION['areaUsuario']; ?>&lista=canceladas">Tareas canceladas</a>
+                            <a class="nav-link" aria-current="page" href="index.php?accion=listarTareasAdmin&area=<?= $_SESSION['areaUsuario']; ?>&lista=canceladas">Tareas canceladas</a>
                         </li>
                     </ul>
 
@@ -454,13 +408,13 @@ if (isset($_SESSION['rol'])) {
 
                         <ul class="navbar-nav" id="desplegarMenuTarea">
                             <li class="nav-item">
-                                <a class="nav-link" aria-current="page" href="index.php?accion=listarTareas&listado=actual&area=<?php echo $_SESSION['areaUsuario']; ?>">Tareas pendientes y En progreso</a>
+                                <a class="nav-link" aria-current="page" href="index.php?accion=listarTareas&listado=actual&area=<?= $_SESSION['areaUsuario']; ?>">Tareas pendientes y En progreso</a>
                             </li>
                             <li class="nav-item">
-                                <a class="nav-link" aria-current="page" href="index.php?accion=listarTareas&listado=completas&area=<?php echo $_SESSION['areaUsuario']; ?>">Tareas completadas</a>
+                                <a class="nav-link" aria-current="page" href="index.php?accion=listarTareas&listado=completas&area=<?= $_SESSION['areaUsuario']; ?>">Tareas completadas</a>
                             </li>
                             <li class="nav-item">
-                                <a class="nav-link" aria-current="page" href="index.php?accion=listarTareas&listado=canceladas&area=<?php echo $_SESSION['areaUsuario']; ?>">Tareas canceladas</a>
+                                <a class="nav-link" aria-current="page" href="index.php?accion=listarTareas&listado=canceladas&area=<?= $_SESSION['areaUsuario']; ?>">Tareas canceladas</a>
                             </li>
                         </ul>
                     <?php
@@ -479,13 +433,13 @@ if (isset($_SESSION['rol'])) {
 
                         <ul class="navbar-nav" id="desplegarMenuTarea">
                             <li class="nav-item">
-                                <a class="nav-link" aria-current="page" href="index.php?accion=listarTareas&listado=actual&area=<?php echo $_SESSION['areaUsuario']; ?>&area2=<?php echo $_SESSION['areaUsuario2']; ?>">Tareas pendientes y En progreso</a>
+                                <a class="nav-link" aria-current="page" href="index.php?accion=listarTareas&listado=actual&area=<?= $_SESSION['areaUsuario']; ?>&area2=<?= $_SESSION['areaUsuario2']; ?>">Tareas pendientes y En progreso</a>
                             </li>
                             <li class="nav-item">
-                                <a class="nav-link" aria-current="page" href="index.php?accion=listarTareas&listado=completas&area=<?php echo $_SESSION['areaUsuario']; ?>&area2=<?php echo $_SESSION['areaUsuario2']; ?>">Tareas completadas</a>
+                                <a class="nav-link" aria-current="page" href="index.php?accion=listarTareas&listado=completas&area=<?= $_SESSION['areaUsuario']; ?>&area2=<?= $_SESSION['areaUsuario2']; ?>">Tareas completadas</a>
                             </li>
                             <li class="nav-item">
-                                <a class="nav-link" aria-current="page" href="index.php?accion=listarTareas&listado=canceladas&area=<?php echo $_SESSION['areaUsuario']; ?>&area2=<?php echo $_SESSION['areaUsuario2']; ?>">Tareas canceladas</a>
+                                <a class="nav-link" aria-current="page" href="index.php?accion=listarTareas&listado=canceladas&area=<?= $_SESSION['areaUsuario']; ?>&area2=<?= $_SESSION['areaUsuario2']; ?>">Tareas canceladas</a>
                             </li>
                         </ul>
 
@@ -505,13 +459,13 @@ if (isset($_SESSION['rol'])) {
 
                         <ul class="navbar-nav" id="desplegarMenuTarea">
                             <li class="nav-item">
-                                <a class="nav-link" aria-current="page" href="index.php?accion=listarTareas&listado=actual&area=<?php echo $_SESSION['areaUsuario']; ?>&area2=<?php echo $_SESSION['areaUsuario2']; ?>&area3=<?php echo $_SESSION['areaUsuario3'] ?>">Tareas pendientes y En progreso</a>
+                                <a class="nav-link" aria-current="page" href="index.php?accion=listarTareas&listado=actual&area=<?= $_SESSION['areaUsuario']; ?>&area2=<?= $_SESSION['areaUsuario2']; ?>&area3=<?= $_SESSION['areaUsuario3'] ?>">Tareas pendientes y En progreso</a>
                             </li>
                             <li class="nav-item">
-                                <a class="nav-link" aria-current="page" href="index.php?accion=listarTareas&listado=completas&area=<?php echo $_SESSION['areaUsuario']; ?>&area2=<?php echo $_SESSION['areaUsuario2']; ?>&area3=<?php echo $_SESSION['areaUsuario3'] ?>">Tareas completadas</a>
+                                <a class="nav-link" aria-current="page" href="index.php?accion=listarTareas&listado=completas&area=<?= $_SESSION['areaUsuario']; ?>&area2=<?= $_SESSION['areaUsuario2']; ?>&area3=<?= $_SESSION['areaUsuario3'] ?>">Tareas completadas</a>
                             </li>
                             <li class="nav-item">
-                                <a class="nav-link" aria-current="page" href="index.php?accion=listarTareas&listado=canceladas&area=<?php echo $_SESSION['areaUsuario']; ?>&area2=<?php echo $_SESSION['areaUsuario2']; ?>&area3=<?php echo $_SESSION['areaUsuario3'] ?>">Tareas canceladas</a>
+                                <a class="nav-link" aria-current="page" href="index.php?accion=listarTareas&listado=canceladas&area=<?= $_SESSION['areaUsuario']; ?>&area2=<?= $_SESSION['areaUsuario2']; ?>&area3=<?= $_SESSION['areaUsuario3'] ?>">Tareas canceladas</a>
                             </li>
                         </ul>
 
@@ -661,7 +615,7 @@ if (isset($_SESSION['rol'])) {
                                 <?php
                                 foreach ($listRoles as $rol) {
                                 ?>
-                                    <option value="<?php echo $rol[0]; ?>"><?php echo $rol[1]; ?></option>
+                                    <option value="<?= $rol[0]; ?>"><?= $rol[1]; ?></option>
                                 <?php
                                 }
                                 ?>
@@ -670,7 +624,7 @@ if (isset($_SESSION['rol'])) {
                         </div>
 
                         <div class="form-floating mb-3">
-                            <input type="number" name="legajo" min="1000000" max="99999999" class="form-control" id="floatingInput" placeholder="ejemplo" required>
+                            <input type="number" name="legajo" min="1000" max="19999" class="form-control" id="floatingInput" placeholder="ejemplo" required>
                             <label for="floatingInput">Legajo</label>
 
                         </div>

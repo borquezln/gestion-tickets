@@ -60,64 +60,19 @@ if (!(time() - $_SESSION['time'] >= 3600)) {
 
             <?php
             error_reporting(0);
+            require "../scripts/alerta.php";
 
             if (isset($_SESSION['direccionOk'])) {
-            ?>
-                <script>
-                    Swal.fire({
-                        position: 'bottom-end',
-                        icon: 'success',
-                        title: 'La dirección ha sido añadida exitosamente',
-                        showConfirmButton: false,
-                        timer: 1500
-                    })
-                </script>
-            <?php
+                alerta("La dirección ha sido añadida exitosamente");
                 unset($_SESSION['direccionOk']);
-            }
-
-            if (isset($_SESSION['direccionEditada'])) {
-            ?>
-                <script>
-                    Swal.fire({
-                        position: 'bottom-end',
-                        icon: 'success',
-                        title: 'La dirección ha sido modificada',
-                        showConfirmButton: false,
-                        timer: 1500
-                    })
-                </script>
-            <?php
+            } else if (isset($_SESSION['direccionEditada'])) {
+                alerta("La dirección ha sido modificada");
                 unset($_SESSION['direccionEditada']);
-            }
-
-            if (isset($_SESSION['direccionEditadaError'])) {
-            ?>
-                <script>
-                    Swal.fire({
-                        position: 'bottom-end',
-                        icon: 'success',
-                        title: 'La Dirección no se ha podido modificar. Verificar el código',
-                        showConfirmButton: false,
-                        timer: 1500
-                    })
-                </script>
-            <?php
+            } else if (isset($_SESSION['direccionEditadaError'])) {
+                alerta("La Dirección no se ha podido modificar. Verificar el código", "error");
                 unset($_SESSION['direccionEditadaError']);
-            }
-
-            if (isset($_SESSION['eliminadoOk'])) {
-            ?>
-                <script>
-                    Swal.fire({
-                        position: 'bottom-end',
-                        icon: 'success',
-                        title: 'La Dirección ha sido eliminada',
-                        showConfirmButton: false,
-                        timer: 1500
-                    })
-                </script>
-            <?php
+            } else if (isset($_SESSION['eliminadoOk'])) {
+                alerta("La Dirección ha sido eliminada");
                 unset($_SESSION['eliminadoOk']);
             }
 
@@ -197,9 +152,9 @@ if (!(time() - $_SESSION['time'] >= 3600)) {
                         foreach ($listDirecciones as $direccion) {
                         ?>
                             <tr>
-                                <td><?php echo $direccion[0]; ?></td>
-                                <td><?php echo $direccion[1]; ?></td>
-                                <td><?php echo $direccion[2]; ?></td>
+                                <td><?= $direccion[0]; ?></td>
+                                <td><?= $direccion[1]; ?></td>
+                                <td><?= $direccion[2]; ?></td>
                                 <?php
                                 if ($_SESSION['rol'] == 3) {
                                 ?>
@@ -210,7 +165,7 @@ if (!(time() - $_SESSION['time'] >= 3600)) {
                                             </button>
                                             <ul class="dropdown-menu" aria-labelledby="btnGroupDrop1">
                                                 <li>
-                                                    <a type="button" class="dropdown-item" data-bs-toggle="modal" data-bs-target="#modalEditar<?php echo $direccion[0]; ?>">
+                                                    <a type="button" class="dropdown-item" data-bs-toggle="modal" data-bs-target="#modalEditar<?= $direccion[0]; ?>">
                                                         Editar
                                                     </a>
                                                 </li>
@@ -224,7 +179,7 @@ if (!(time() - $_SESSION['time'] >= 3600)) {
                             </tr>
 
                             <!-- Modal Editar Area-->
-                            <div class="modal fade" id="modalEditar<?php echo $direccion[0]; ?>" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+                            <div class="modal fade" id="modalEditar<?= $direccion[0]; ?>" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
                                 <div class="modal-dialog">
                                     <div class="modal-content">
                                         <div class="modal-header">
@@ -236,20 +191,20 @@ if (!(time() - $_SESSION['time'] >= 3600)) {
 
                                                 <p class="fs-6">Editar en caso de un error o algún cambio</p>
 
-                                                <input type="hidden" name="codigoAnterior" value="<?php echo $direccion[0]; ?>">
+                                                <input type="hidden" name="codigoAnterior" value="<?= $direccion[0]; ?>">
 
                                                 <div class="form-floating mb-3">
-                                                    <input type="number" name="codigo" value="<?php echo $direccion[0]; ?>" class="form-control codigo" id="floatingInput" placeholder="ejemplo" onkeyup="comprobarCodigo(this)" required>
+                                                    <input type="number" name="codigo" value="<?= $direccion[0]; ?>" class="form-control codigo" id="floatingInput" placeholder="ejemplo" onkeyup="comprobarCodigo(this)" required>
                                                     <label for="floatingInput">Código (Debe ser númerico)</label>
                                                 </div>
 
                                                 <div class="form-floating mb-3">
-                                                    <input type="text" name="direccion" value="<?php echo $direccion[1]; ?>" class="form-control" id="floatingInput" placeholder="ejemplo" required>
+                                                    <input type="text" name="direccion" value="<?= $direccion[1]; ?>" class="form-control" id="floatingInput" placeholder="ejemplo" required>
                                                     <label for="floatingInput">Nombre de la Direccón o Entidad</label>
                                                 </div>
 
                                                 <div class="form-floating mb-3">
-                                                    <textarea class="form-control" name="descripcion" value="<?php echo $direccion[2]; ?>" placeholder="Leave a comment" id="floatingTextarea" style="height: 100px"></textarea>
+                                                    <textarea class="form-control" name="descripcion" value="<?= $direccion[2]; ?>" placeholder="Leave a comment" id="floatingTextarea" style="height: 100px"></textarea>
                                                     <label for="floatingTextarea">Descripción</label>
                                                 </div>
 
@@ -273,36 +228,9 @@ if (!(time() - $_SESSION['time'] >= 3600)) {
         </body>
 
         </html>
-    <?php
+<?php
     }
 } else {
-    session_destroy();
-    ?>
-    <!DOCTYPE html>
-    <html lang="en">
-
-    <head>
-        <meta charset="UTF-8">
-        <meta http-equiv="X-UA-Compatible" content="IE=edge">
-        <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <title>Document</title>
-        <style>
-            body {
-                background-color: #5a3377 !important;
-                color: white !important;
-                padding: 10px;
-            }
-        </style>
-        <?php
-        require('libreriaEstilos.php');
-        ?>
-    </head>
-
-    <body>
-        <p class="fs-5">Sesión caducada. Para acceder a esta sección debe iniciar sesión <a href="../vista/login.php" class="link-primary">Click aquí</a></p>
-    </body>
-
-    </html>
-<?php
+    require "destroySession.php";
 }
 ?>

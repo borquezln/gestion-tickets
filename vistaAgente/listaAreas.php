@@ -57,35 +57,17 @@ if (!(time() - $_SESSION['time'] >= 3600)) {
         <body>
             <?php
             error_reporting(0);
+            require "../scripts/alerta.php";
+
             if (isset($_SESSION['areaOk'])) {
-            ?>
-                <script>
-                    Swal.fire({
-                        position: 'bottom-end',
-                        icon: 'success',
-                        title: 'El área ha sido agregada',
-                        showConfirmButton: false,
-                        timer: 1500
-                    })
-                </script>
-            <?php
+                alerta("El área ha sido agregada");
                 unset($_SESSION['areaOk']);
-            }
-            if (isset($_SESSION['editadoOk'])) {
-            ?>
-                <script>
-                    Swal.fire({
-                        position: 'bottom-end',
-                        icon: 'success',
-                        title: 'El área ha sido modificada',
-                        showConfirmButton: false,
-                        timer: 1500
-                    })
-                </script>
-            <?php
+            } else if (isset($_SESSION['editadoOk'])) {
+                alerta("El área ha sido modificada");
                 unset($_SESSION['editadoOk']);
             }
             ?>
+
             <section id="container">
                 <p class="fs-5">Áreas</p>
                 <hr>
@@ -104,15 +86,15 @@ if (!(time() - $_SESSION['time'] >= 3600)) {
                             foreach ($listAreas as $area) {
                             ?>
                                 <tr>
-                                    <td><?php echo $area[1]; ?></td>
-                                    <td><?php echo $area[2]; ?></td>
+                                    <td><?= $area[1]; ?></td>
+                                    <td><?= $area[2]; ?></td>
                                     <td id="accion">
-                                        <button type="button" class="btn btn-outline-primary" data-bs-toggle="modal" data-bs-target="#editarArea<?php echo $area[0]; ?>"><i class="bi bi-pencil-square"></i>Editar</button>
+                                        <button type="button" class="btn btn-outline-primary" data-bs-toggle="modal" data-bs-target="#editarArea<?= $area[0]; ?>"><i class="bi bi-pencil-square"></i>Editar</button>
                                     </td>
                                 </tr>
 
                                 <!-- Modal Editar Area-->
-                                <div class="modal fade" id="editarArea<?php echo $area[0]; ?>" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+                                <div class="modal fade" id="editarArea<?= $area[0]; ?>" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
                                     <div class="modal-dialog">
                                         <div class="modal-content">
                                             <div class="modal-header">
@@ -122,18 +104,18 @@ if (!(time() - $_SESSION['time'] >= 3600)) {
 
                                             <form action="../controlador/c_editarArea.php" method="post" style="display: none;">
 
-                                                <input type="hidden" name="id" value="<?php echo $area[0]; ?>">
+                                                <input type="hidden" name="id" value="<?= $area[0]; ?>">
 
                                                 <div class="modal-body">
 
                                                     <p class="fs-6">Completar los siguientes campos</p>
 
                                                     <div class="form-floating mb-3">
-                                                        <textarea class="form-control" placeholder="Leave a comment here" name="area" id="floatingTextarea2" style="height: 75px" required><?php echo $area[1]; ?></textarea>
+                                                        <textarea class="form-control" placeholder="Leave a comment here" name="area" id="floatingTextarea2" style="height: 75px" required><?= $area[1]; ?></textarea>
                                                         <label for="floatingTextarea2">Nombre del área</label>
                                                     </div>
                                                     <div class="form-floating mb-3">
-                                                        <textarea class="form-control" placeholder="Leave a comment here" name="descripcion" id="floatingTextarea2" style="height: 150px" required><?php echo $area[2]; ?></textarea>
+                                                        <textarea class="form-control" placeholder="Leave a comment here" name="descripcion" id="floatingTextarea2" style="height: 150px" required><?= $area[2]; ?></textarea>
                                                         <label for="floatingTextarea2">Descripción del área</label>
                                                     </div>
 
@@ -185,35 +167,9 @@ if (!(time() - $_SESSION['time'] >= 3600)) {
         </body>
 
         </html>
-
-    <?php
+<?php
     }
 } else {
-    session_destroy();
-    ?>
-    <!DOCTYPE html>
-    <html lang="en">
-
-    <head>
-        <meta charset="UTF-8">
-        <meta http-equiv="X-UA-Compatible" content="IE=edge">
-        <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <title>Document</title>
-        <style>
-            body {
-                background-color: #5a3377 !important;
-                color: white !important;
-                padding: 10px;
-            }
-        </style>
-        <?php require('libreriaEstilos.php'); ?>
-    </head>
-
-    <body>
-        <p class="fs-5">Sesión caducada. Para acceder a esta sección debe iniciar sesión <a href="login.php" class="link-primary">Click aquí</a></p>
-    </body>
-
-    </html>
-<?php
+    require "destroySession.php";
 }
 ?>

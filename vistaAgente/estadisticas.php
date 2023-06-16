@@ -65,23 +65,19 @@ if (!(time() - $_SESSION['time'] >= 3600)) {
                 foreach ($totalPendientes as $pendiente) {
                     echo "'" . $pendiente[1] . "',";
                 }
-                ?>
-                <?php
+                
                 foreach ($totalEnProgreso as $progreso) {
                     echo "'" . $progreso[1] . "', ";
                 }
-                ?>
-                <?php
+                
                 foreach ($totalCompletas as $completas) {
                     echo "'" . $completas[1] . "', ";
                 }
-                ?>
-                <?php
+                
                 foreach ($totalCanceladas as $canceladas) {
                     echo "'" . $canceladas[1] . "', ";
                 }
-                ?>
-                <?php
+                
                 foreach ($totalEliminadas as $eliminadas) {
                     echo "'" . $eliminadas[1] . "', ";
                 }
@@ -105,23 +101,19 @@ if (!(time() - $_SESSION['time'] >= 3600)) {
                         foreach ($totalPendientes as $pendiente) {
                             echo $pendiente[0] . ", ";
                         }
-                        ?>
-                        <?php
+                        
                         foreach ($totalEnProgreso as $progreso) {
                             echo $progreso[0] . ", ";
                         }
-                        ?>
-                        <?php
+                        
                         foreach ($totalCompletas as $completas) {
                             echo $completas[0] . ", ";
                         }
-                        ?>
-                        <?php
+                        
                         foreach ($totalCanceladas as $canceladas) {
                             echo $canceladas[0] . ", ";
                         }
-                        ?>
-                        <?php
+                        
                         foreach ($totalEliminadas as $eliminadas) {
                             echo $eliminadas[0] . ", ";
                         }
@@ -137,7 +129,7 @@ if (!(time() - $_SESSION['time'] >= 3600)) {
                     plugins: {
                         title: {
                             display: true,
-                            text: 'Total de requerimientos: <?php echo $totalTareas; ?>'
+                            text: 'Total de requerimientos: <?= $totalTareas; ?>'
                         },
                         legend: {
                             display: true,
@@ -155,33 +147,27 @@ if (!(time() - $_SESSION['time'] >= 3600)) {
                 foreach ($totalRedes as $redes) {
                     echo "'" . $redes[1] . "', ";
                 }
-                ?>
-                <?php
+                
                 foreach ($totalInfraestrucutra as $infr) {
                     echo "'" . $infr[1] . "', ";
                 }
-                ?>
-                <?php
+                
                 foreach ($totalSTecnico as $stecnico) {
                     echo "'" . $stecnico[1] . "', ";
                 }
-                ?>
-                <?php
+                
                 foreach ($totalRequerimientos as $requerimientos) {
                     echo "'" . $requerimientos[1] . "', ";
                 }
-                ?>
-                <?php
+                
                 foreach ($totalFDigital as $fdigital) {
                     echo "'" . $fdigital[1] . "', ";
                 }
-                ?>
-                <?php
+                
                 foreach ($totalPDigital as $pdigital) {
                     echo "'" . $pdigital[1] . "', ";
                 }
-                ?>
-                <?php
+                
                 foreach ($totalCctv as $cctv) {
                     echo "'" . $cctv[1] . "', ";
                 }
@@ -207,33 +193,27 @@ if (!(time() - $_SESSION['time'] >= 3600)) {
                         foreach ($totalRedes as $redes) {
                             echo $redes[0] . ", ";
                         }
-                        ?>
-                        <?php
+                        
                         foreach ($totalInfraestrucutra as $infr) {
                             echo $infr[0] . ", ";
                         }
-                        ?>
-                        <?php
+                        
                         foreach ($totalSTecnico as $stecnico) {
                             echo $stecnico[0] . ", ";
                         }
-                        ?>
-                        <?php
+                        
                         foreach ($totalRequerimientos as $requerimientos) {
                             echo $requerimientos[0] . ", ";
                         }
-                        ?>
-                        <?php
+                        
                         foreach ($totalFDigital as $fdigital) {
                             echo $fdigital[0] . ", ";
                         }
-                        ?>
-                        <?php
+                        
                         foreach ($totalPDigital as $pdigital) {
                             echo $pdigital[0] . ", ";
                         }
-                        ?>
-                        <?php
+                        
                         foreach ($totalCctv as $cctv) {
                             echo $cctv[0] . ", ";
                         }
@@ -275,37 +255,9 @@ if (!(time() - $_SESSION['time'] >= 3600)) {
         </script>
 
         </html>
-
-    <?php
+<?php
     }
 } else {
-    session_destroy();
-    ?>
-
-    <!DOCTYPE html>
-    <html lang="en">
-
-    <head>
-        <meta charset="UTF-8">
-        <meta http-equiv="X-UA-Compatible" content="IE=edge">
-        <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <title>Document</title>
-        <style>
-            body {
-                background-color: #5a3377 !important;
-                color: white !important;
-                padding: 10px;
-            }
-        </style>
-        <?php require('libreriaEstilos.php'); ?>
-    </head>
-
-    <body>
-        <p class="fs-5">Sesión caducada. Para acceder a esta sección debe iniciar sesión <a href="login.php" class="link-primary">Click aquí</a></p>
-    </body>
-
-    </html>
-
-<?php
+    require "destroySession.php";
 }
 ?>
