@@ -3,117 +3,7 @@ error_reporting(E_ALL ^ E_NOTICE);
 session_start();
 if (isset($_SESSION['rol'])) {
 ?>
-
-    <style>
-        .header {
-            margin-left: 250px;
-            transition: 0.2s all;
-        }
-
-        #buttonText {
-            display: flex;
-            align-items: center;
-        }
-
-        #buttonText span {
-            padding: 15px;
-        }
-
-        #buttonText button {
-            color: white;
-            border-radius: 5px;
-            transition: 0.1s all;
-            background-color: transparent;
-            border: none;
-        }
-
-        #buttonText button:active {
-            box-shadow: 0 0 0 2px gray;
-        }
-
-        .sidebar {
-            width: 250px;
-            height: 100%;
-            color: white;
-            transition: 0.2s all;
-            overflow-y: scroll;
-        }
-
-        ::-webkit-scrollbar {
-            width: 10px;
-        }
-
-        ::-webkit-scrollbar-track {
-            background: #dddddd;
-        }
-
-        ::-webkit-scrollbar-thumb {
-            background: #47c5b5;
-        }
-
-
-
-        .sidebar #txtRol {
-            padding: 15px;
-        }
-
-        .sidebar a {
-            padding-left: 20px;
-            padding-right: 20px;
-            font-weight: bold;
-            display: flex;
-            align-items: center;
-        }
-
-        .sidebar i {
-            padding-right: 5px;
-        }
-
-        .sidebar a:hover {
-            background-color: #47c5b5;
-        }
-
-        .sidebar a:active {
-            box-shadow: 0 0 5px 0 #47c5b5;
-        }
-
-
-        .sidebar #menu a {
-            border-left: 5px solid darkviolet;
-        }
-
-        .sidebar i {
-            color: white;
-        }
-
-
-        .sidebar #desplegarMenuTarea a,
-        .sidebar #desplegarMenuEst a,
-        .sidebar #desplegarMenuUsuarios a {
-            border-left: 5px solid #47c5b5;
-        }
-
-        section {
-            margin-left: 250px;
-            margin-top: 56px;
-            transition: 0.2s all;
-        }
-
-        .hideSidebar {
-            transition: 0.2s all;
-            left: -250px;
-        }
-
-        .expandHeader {
-            transition: 0.2s all;
-            margin-left: 0;
-        }
-
-        .expandContainer {
-            margin-left: 0;
-        }
-    </style>
-
+    <link rel="stylesheet" href="../styles/headerNav.css">
     <script>
         $(document).ready(function() {
 
@@ -344,17 +234,13 @@ if (isset($_SESSION['rol'])) {
         <div id="sidebarSuperior">
             <div id="txtRol">
                 <?php
-                if ($_SESSION['rol'] == 2) {
+                if ($_SESSION['rol'] == 3) {
                 ?>
-                    <span class="fs-5 titlePage"><?= $_SESSION['areaUsuarioNombre']; ?></span>
-                <?php
-                } else if ($_SESSION['rol'] == 3) {
-                ?>
-                    <span class="fs-5 titlePage">Admin</span>
+                    <span class="fs-5 titlePage">Administrador</span>
                 <?php
                 } else {
                 ?>
-                    <span class="fs-5 titlePage"><?= $_SESSION['areaUsuarioNombre']; ?></span>
+                    <span class="fs-5 titlePage">Supervisor</span>
                 <?php
                 }
                 ?>
@@ -365,181 +251,68 @@ if (isset($_SESSION['rol'])) {
                 <a class="nav-link" aria-current="page" href="inicio.php"><i class="bi bi-gear"></i>Panel de Control</a>
 
 
-                <?php
-                if ($_SESSION['rol'] == 4) {
-                ?>
+                <a class="nav-link" role="button" id="menuEst" aria-current="page" style="display: flex; justify-content: space-between; align-items: center;">
+                    <div id="textItem">
+                        <i class="bi bi-list-check"></i>
+                        <span style="margin-left: -5px;">
+                            Estadísticas
+                        </span>
+                    </div>
+                    <i class="bi bi-caret-down"></i>
+                </a>
 
-                    <a class="nav-link" role="button" id="menuTarea" aria-current="page" style="display: flex; justify-content: space-between; align-items: center;">
-                        <div id="textItem">
-                            <i class="bi bi-list-check"></i>
-                            <span style="margin-left: -5px;">
-                                Tareas
-                            </span>
-                        </div>
-                        <i class="bi bi-caret-down"></i>
-                    </a>
+                <ul class="navbar-nav" id="desplegarMenuEst">
 
-                    <ul class="navbar-nav" id="desplegarMenuTarea">
-                        <li class="nav-item">
-                            <a class="nav-link" aria-current="page" href="index.php?accion=listarTareasAdmin&area=<?= $_SESSION['areaUsuario']; ?>&lista=actual">Tareas pendientes y En progreso</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link" aria-current="page" href="index.php?accion=listarTareasAdmin&area=<?= $_SESSION['areaUsuario']; ?>&lista=completas">Tareas completadas</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link" aria-current="page" href="index.php?accion=listarTareasAdmin&area=<?= $_SESSION['areaUsuario']; ?>&lista=canceladas">Tareas canceladas</a>
-                        </li>
-                    </ul>
-
-                    <?php
-                } else if ($_SESSION['rol'] == 2) {
-
-                    if ($_SESSION['cantAreas'] == 1) {
-                    ?>
-                        <a class="nav-link" role="button" id="menuTarea" aria-current="page" style="display: flex; justify-content: space-between; align-items: center;">
-                            <div id="textItem">
-                                <i class="bi bi-list-check"></i>
-                                <span style="margin-left: -5px;">
-                                    Tareas
-                                </span>
-                            </div>
-                            <i class="bi bi-caret-down"></i>
-                        </a>
-
-                        <ul class="navbar-nav" id="desplegarMenuTarea">
-                            <li class="nav-item">
-                                <a class="nav-link" aria-current="page" href="index.php?accion=listarTareas&listado=actual&area=<?= $_SESSION['areaUsuario']; ?>">Tareas pendientes y En progreso</a>
-                            </li>
-                            <li class="nav-item">
-                                <a class="nav-link" aria-current="page" href="index.php?accion=listarTareas&listado=completas&area=<?= $_SESSION['areaUsuario']; ?>">Tareas completadas</a>
-                            </li>
-                            <li class="nav-item">
-                                <a class="nav-link" aria-current="page" href="index.php?accion=listarTareas&listado=canceladas&area=<?= $_SESSION['areaUsuario']; ?>">Tareas canceladas</a>
-                            </li>
-                        </ul>
-                    <?php
-                    } else if ($_SESSION['cantAreas'] == 2) {
-                    ?>
-
-                        <a class="nav-link" role="button" id="menuTarea" aria-current="page" style="display: flex; justify-content: space-between; align-items: center;">
-                            <div id="textItem">
-                                <i class="bi bi-list-check"></i>
-                                <span style="margin-left: -5px;">
-                                    Tareas
-                                </span>
-                            </div>
-                            <i class="bi bi-caret-down"></i>
-                        </a>
-
-                        <ul class="navbar-nav" id="desplegarMenuTarea">
-                            <li class="nav-item">
-                                <a class="nav-link" aria-current="page" href="index.php?accion=listarTareas&listado=actual&area=<?= $_SESSION['areaUsuario']; ?>&area2=<?= $_SESSION['areaUsuario2']; ?>">Tareas pendientes y En progreso</a>
-                            </li>
-                            <li class="nav-item">
-                                <a class="nav-link" aria-current="page" href="index.php?accion=listarTareas&listado=completas&area=<?= $_SESSION['areaUsuario']; ?>&area2=<?= $_SESSION['areaUsuario2']; ?>">Tareas completadas</a>
-                            </li>
-                            <li class="nav-item">
-                                <a class="nav-link" aria-current="page" href="index.php?accion=listarTareas&listado=canceladas&area=<?= $_SESSION['areaUsuario']; ?>&area2=<?= $_SESSION['areaUsuario2']; ?>">Tareas canceladas</a>
-                            </li>
-                        </ul>
-
-                    <?php
-                    } else if ($_SESSION['cantAreas'] == 3) {
-                    ?>
-
-                        <a class="nav-link" role="button" id="menuTarea" aria-current="page" style="display: flex; justify-content: space-between; align-items: center;">
-                            <div id="textItem">
-                                <i class="bi bi-list-check"></i>
-                                <span style="margin-left: -5px;">
-                                    Tareas
-                                </span>
-                            </div>
-                            <i class="bi bi-caret-down"></i>
-                        </a>
-
-                        <ul class="navbar-nav" id="desplegarMenuTarea">
-                            <li class="nav-item">
-                                <a class="nav-link" aria-current="page" href="index.php?accion=listarTareas&listado=actual&area=<?= $_SESSION['areaUsuario']; ?>&area2=<?= $_SESSION['areaUsuario2']; ?>&area3=<?= $_SESSION['areaUsuario3'] ?>">Tareas pendientes y En progreso</a>
-                            </li>
-                            <li class="nav-item">
-                                <a class="nav-link" aria-current="page" href="index.php?accion=listarTareas&listado=completas&area=<?= $_SESSION['areaUsuario']; ?>&area2=<?= $_SESSION['areaUsuario2']; ?>&area3=<?= $_SESSION['areaUsuario3'] ?>">Tareas completadas</a>
-                            </li>
-                            <li class="nav-item">
-                                <a class="nav-link" aria-current="page" href="index.php?accion=listarTareas&listado=canceladas&area=<?= $_SESSION['areaUsuario']; ?>&area2=<?= $_SESSION['areaUsuario2']; ?>&area3=<?= $_SESSION['areaUsuario3'] ?>">Tareas canceladas</a>
-                            </li>
-                        </ul>
-
-                    <?php
-                    }
-                } else if ($_SESSION['rol'] == 3) {
-                    ?>
-
-                    <a class="nav-link" role="button" id="menuEst" aria-current="page" style="display: flex; justify-content: space-between; align-items: center;">
-                        <div id="textItem">
-                            <i class="bi bi-list-check"></i>
-                            <span style="margin-left: -5px;">
-                                Estadísticas
-                            </span>
-                        </div>
-                        <i class="bi bi-caret-down"></i>
-                    </a>
-
-                    <ul class="navbar-nav" id="desplegarMenuEst">
-
-                        <li class="nav-item">
-                            <a class="nav-link" aria-current="page" href="index.php?accion=verEstadisticas&time=now">Creados en el día actual</a>
-                        </li>
-                        <!-- Button trigger modal -->
-                        <li>
-                            <a class="nav-link" role="button" aria-current="page" data-bs-toggle="modal" data-bs-target="#fechas">Rango por fechas</a>
-                        </li>
-                        <li>
-                            <a class="nav-link" aria-current="page" href="index.php?accion=verEstadisticas&time=year">Creados en el año actual</a>
-                        </li>
-                        <li>
-                            <a class="nav-link" aria-current="page" href="index.php?accion=verEstadisticas&time=all">Requerimientos en total</a>
-                        </li>
-                    </ul>
+                    <li class="nav-item">
+                        <a class="nav-link" aria-current="page" href="index.php?accion=verEstadisticas&time=now">Creados en el día actual</a>
+                    </li>
+                    <!-- Button trigger modal -->
+                    <li>
+                        <a class="nav-link" role="button" aria-current="page" data-bs-toggle="modal" data-bs-target="#fechas">Rango por fechas</a>
+                    </li>
+                    <li>
+                        <a class="nav-link" aria-current="page" href="index.php?accion=verEstadisticas&time=year">Creados en el año actual</a>
+                    </li>
+                    <li>
+                        <a class="nav-link" aria-current="page" href="index.php?accion=verEstadisticas&time=all">Requerimientos en total</a>
+                    </li>
+                </ul>
 
 
-                    <a class="nav-link" role="button" id="menuTarea" aria-current="page" style="display: flex; justify-content: space-between; align-items: center;">
-                        <div id="textItem">
-                            <i class="bi bi-list-check"></i>
-                            <span style="margin-left: -5px;">
-                                Tareas
-                            </span>
-                        </div>
-                        <i class="bi bi-caret-down"></i>
-                    </a>
+                <a class="nav-link" role="button" id="menuTarea" aria-current="page" style="display: flex; justify-content: space-between; align-items: center;">
+                    <div id="textItem">
+                        <i class="bi bi-list-check"></i>
+                        <span style="margin-left: -5px;">
+                            Tareas
+                        </span>
+                    </div>
+                    <i class="bi bi-caret-down"></i>
+                </a>
 
-                    <ul class="navbar-nav" id="desplegarMenuTarea">
-                        <li class="nav-item">
-                            <a class="nav-link" aria-current="page" href="index.php?accion=listarTareasAdmin&lista=actual">Tareas pendientes y En progreso</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link" aria-current="page" href="index.php?accion=listarTareasAdmin&lista=completas">Tareas completadas</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link" aria-current="page" href="index.php?accion=listarTareasAdmin&lista=canceladas">Tareas canceladas</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link" aria-current="page" href="index.php?accion=listarTareasEliminadas">Tareas eliminadas</a>
-                        </li>
-                    </ul>
+                <ul class="navbar-nav" id="desplegarMenuTarea">
+                    <li class="nav-item">
+                        <a class="nav-link" aria-current="page" href="index.php?accion=listarTareasAdmin&lista=actual">Tareas pendientes y En progreso</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" aria-current="page" href="index.php?accion=listarTareasAdmin&lista=completas">Tareas completadas</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" aria-current="page" href="index.php?accion=listarTareasAdmin&lista=canceladas">Tareas canceladas</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" aria-current="page" href="index.php?accion=listarTareasEliminadas">Tareas eliminadas</a>
+                    </li>
+                </ul>
 
-                    <a class="nav-link" aria-current="page" href="index.php?accion=listarAreas">
-                        <i class="bi bi-list-nested"></i>Listado de áreas
-                    </a>
-                <?php
-                }
-                ?>
+                <a class="nav-link" aria-current="page" href="index.php?accion=listarAreas">
+                    <i class="bi bi-list-nested"></i>Listado de áreas
+                </a>
 
                 <a class="nav-link" aria-current="page" href="index.php?accion=listarDirecciones"><i class="bi bi-list-ul"></i>Direcciones/Entidades</a>
 
                 <?php
                 if ($_SESSION['rol'] == 3) {
                 ?>
-
                     <a class="nav-link" role="button" id="menuUsuarios" aria-current="page" style="display: flex; justify-content: space-between; align-items: center;">
                         <div id="textItem">
                             <i class="bi bi-people"></i>
@@ -555,13 +328,7 @@ if (isset($_SESSION['rol'])) {
                             <a class="nav-link" role="button" data-bs-toggle="modal" data-bs-target="#modalNuevoUsuario">Agregar nuevo Usuario</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link" aria-current="page" href="index.php?accion=listarAgentes">Listado de Agentes</a>
-                        </li>
-                        <li class="nav-item">
                             <a class="nav-link" aria-current="page" href="index.php?accion=listarUsuarios">Listado de Usuarios</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link" aria-current="page" href="index.php?accion=cambioRoles">Cambio de roles</a>
                         </li>
                         <li class="nav-item">
                             <a class="nav-link" aria-current="page" href="index.php?accion=listarBajas">Listado de bajas</a>
@@ -572,7 +339,6 @@ if (isset($_SESSION['rol'])) {
                 <?php
                 }
                 ?>
-
             </div>
 
         </div>

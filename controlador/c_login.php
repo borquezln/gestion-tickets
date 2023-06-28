@@ -1,11 +1,11 @@
 <?php
+session_start();
 require('../modelo/m_consultas.php');
 $user = $_POST['user'];
 $password = $_POST['password'];
 $co = new Consultas();
 
 if ($co->autenticarUsuario($user, $password)) {
-    session_start();
     $_SESSION['username'] = $user;
     $_SESSION['rol'] = $co->verificarTipoUsuario($user);
     $_SESSION['legajo'] = $co->listarlegajoUserActual($user);
@@ -16,7 +16,6 @@ if ($co->autenticarUsuario($user, $password)) {
 
     header('Location: ../vistaAgente/inicio.php');
 } else {
-    session_start();
     $_SESSION['errLogin'] = true;
-    header('Location: ../vista/login.php');
+    header('Location: ../vistaAgente/login.php');
 }

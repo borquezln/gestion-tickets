@@ -3,976 +3,212 @@ require_once('../modelo/m_conexion.php');
 
 class ConsultasEstadisticas extends Conexion
 {
-    public function contarTareasActual()
+    // TAREAS HOY
+    public function contarTareasHoy()
     {
         try {
             $link = parent::conexionBD();
-            $sql = "SELECT COUNT(*) FROM tareas t where t.fechaCreada = curdate()";
+            $sql = "SELECT COUNT(*) FROM tareas t WHERE t.fechaCreada = curdate()";
             $result = mysqli_query($link, $sql);
             while ($row = mysqli_fetch_row($result)) {
                 $cantTareas = $row[0];
             }
+            return $cantTareas;
         } catch (Exception $e) {
             $e->getMessage();
         }
-        return $cantTareas;
     }
 
-    public function contarTotalPendientesActual()
+    public function contarEstadoHoy($estado)
     {
         try {
             $link = parent::conexionBD();
-            $sql = "SELECT count(*), e.nombre from tareas t, estadotarea e where t.estadoTarea_id = e.id and e.nombre = 'Pendiente' and t.fechaCreada = curdate()";
+            $sql = "SELECT count(*) FROM tareas t, estadotarea e
+                    WHERE t.estadoTarea_id = e.id AND e.nombre = '$estado' AND t.fechaProblema = curdate()";
             $result = mysqli_query($link, $sql);
-            $totalTareasPendientes = [];
-            $i = 0;
+            $totalTareasEstado = [];
             while ($row = mysqli_fetch_row($result)) {
-                $totalTareasPendientes[$i] = $row;
+                $totalTareasEstado = $row[0];
             }
+            return $totalTareasEstado;
         } catch (Exception $e) {
             $e->getMessage();
         }
-        return $totalTareasPendientes;
     }
 
-    public function contarTotalEnProgresoActual()
+    public function contarAreaHoy($area)
     {
         try {
             $link = parent::conexionBD();
-            $sql = "SELECT count(*), e.nombre from tareas t, estadotarea e where t.estadoTarea_id = e.id and e.nombre = 'En progreso' and t.fechaCreada = curdate()";
+            $sql = "SELECT count(*) FROM tareas t, areas a
+                    WHERE t.codigoArea3 = a.codigo AND a.codigo = $area AND t.fechaCreada = curdate()";
             $result = mysqli_query($link, $sql);
-            $totalTareasEnProgreso = [];
-            $i = 0;
+            $totalArea = [];
             while ($row = mysqli_fetch_row($result)) {
-                $totalTareasEnProgreso[$i] = $row;
+                $totalArea = $row[0];
             }
+            return $totalArea;
         } catch (Exception $e) {
             $e->getMessage();
         }
-        return $totalTareasEnProgreso;
-    }
-
-    public function contarTotalCompletasActual()
-    {
-        try {
-            $link = parent::conexionBD();
-            $sql = "SELECT count(*), e.nombre from tareas t, estadotarea e where t.estadoTarea_id = e.id and e.nombre = 'Completo' and t.fechaCreada = curdate()";
-            $result = mysqli_query($link, $sql);
-            $totalTareasCompletas = [];
-            $i = 0;
-            while ($row = mysqli_fetch_row($result)) {
-                $totalTareasCompletas[$i] = $row;
-            }
-        } catch (Exception $e) {
-            $e->getMessage();
-        }
-        return $totalTareasCompletas;
-    }
-
-    public function contarTotalCanceladasActual()
-    {
-        try {
-            $link = parent::conexionBD();
-            $sql = "SELECT count(*), e.nombre from tareas t, estadotarea e where t.estadoTarea_id = e.id and e.nombre = 'Cancelado' and t.fechaCreada = curdate()";
-            $result = mysqli_query($link, $sql);
-            $totalTareasCanceladas = [];
-            $i = 0;
-            while ($row = mysqli_fetch_row($result)) {
-                $totalTareasCanceladas[$i] = $row;
-            }
-        } catch (Exception $e) {
-            $e->getMessage();
-        }
-        return $totalTareasCanceladas;
-    }
-
-    public function contarTotalEliminadasActual()
-    {
-        try {
-            $link = parent::conexionBD();
-            $sql = "SELECT count(*), e.nombre from tareas t, estadotarea e where t.estadoTarea_id = e.id and e.nombre = 'Eliminado' and t.fechaCreada = curdate()";
-            $result = mysqli_query($link, $sql);
-            $totalTareasEliminadas = [];
-            $i = 0;
-            while ($row = mysqli_fetch_row($result)) {
-                $totalTareasEliminadas[$i] = $row;
-            }
-        } catch (Exception $e) {
-            $e->getMessage();
-        }
-        return $totalTareasEliminadas;
-    }
-
-    //TOTAL POR AREAS------------------------------------------
-    public function contarTotalRedesActual()
-    {
-        try {
-            $link = parent::conexionBD();
-            $sql = "SELECT count(*), a.nombre from tareas t, areas a where t.codigoArea3 = a.codigo and a.codigo = '1' and t.fechaCreada = curdate()";
-            $result = mysqli_query($link, $sql);
-            $totalRedes = [];
-            $i = 0;
-            while ($row = mysqli_fetch_row($result)) {
-                $totalRedes[$i] = $row;
-            }
-        } catch (Exception $e) {
-            $e->getMessage();
-        }
-        return $totalRedes;
-    }
-
-    public function contarTotalInfraestructuraActual()
-    {
-        try {
-            $link = parent::conexionBD();
-            $sql = "SELECT count(*), a.nombre from tareas t, areas a where t.codigoArea3 = a.codigo and a.codigo = '2' and t.fechaCreada = curdate()";
-            $result = mysqli_query($link, $sql);
-            $totalInfraestructura = [];
-            $i = 0;
-            while ($row = mysqli_fetch_row($result)) {
-                $totalInfraestructura[$i] = $row;
-            }
-        } catch (Exception $e) {
-            $e->getMessage();
-        }
-        return $totalInfraestructura;
-    }
-
-    public function contarTotalSTecnicoActual()
-    {
-        try {
-            $link = parent::conexionBD();
-            $sql = "SELECT count(*), a.nombre from tareas t, areas a where t.codigoArea3 = a.codigo and a.codigo = '3' and t.fechaCreada = curdate()";
-            $result = mysqli_query($link, $sql);
-            $totalSTecnico = [];
-            $i = 0;
-            while ($row = mysqli_fetch_row($result)) {
-                $totalSTecnico[$i] = $row;
-            }
-        } catch (Exception $e) {
-            $e->getMessage();
-        }
-        return $totalSTecnico;
-    }
-
-    public function contarTotalRequerimientosActual()
-    {
-        try {
-            $link = parent::conexionBD();
-            $sql = "SELECT count(*), a.nombre from tareas t, areas a where t.codigoArea3 = a.codigo and a.codigo = '4' and t.fechaCreada = curdate()";
-            $result = mysqli_query($link, $sql);
-            $totalRequerimientos = [];
-            $i = 0;
-            while ($row = mysqli_fetch_row($result)) {
-                $totalRequerimientos[$i] = $row;
-            }
-        } catch (Exception $e) {
-            $e->getMessage();
-        }
-        return $totalRequerimientos;
-    }
-
-    public function contarTotalFDigitalActual()
-    {
-        try {
-            $link = parent::conexionBD();
-            $sql = "SELECT count(*), a.nombre from tareas t, areas a where t.codigoArea3 = a.codigo and a.codigo = '5' and t.fechaCreada = curdate()";
-            $result = mysqli_query($link, $sql);
-            $totalFDigital = [];
-            $i = 0;
-            while ($row = mysqli_fetch_row($result)) {
-                $totalFDigital[$i] = $row;
-            }
-        } catch (Exception $e) {
-            $e->getMessage();
-        }
-        return $totalFDigital;
-    }
-
-    public function contarTotalPDigitalActual()
-    {
-        try {
-            $link = parent::conexionBD();
-            $sql = "SELECT count(*), a.nombre from tareas t, areas a where t.codigoArea3 = a.codigo and a.codigo = '6' and t.fechaCreada = curdate()";
-            $result = mysqli_query($link, $sql);
-            $totalPDigital = [];
-            $i = 0;
-            while ($row = mysqli_fetch_row($result)) {
-                $totalPDigital[$i] = $row;
-            }
-        } catch (Exception $e) {
-            $e->getMessage();
-        }
-        return $totalPDigital;
-    }
-
-    public function contarTotalCCTVActual()
-    {
-        try {
-            $link = parent::conexionBD();
-            $sql = "SELECT count(*), a.nombre from tareas t, areas a where t.codigoArea3 = a.codigo and a.codigo = '7' and t.fechaCreada = curdate()";
-            $result = mysqli_query($link, $sql);
-            $totalCCTV = [];
-            $i = 0;
-            while ($row = mysqli_fetch_row($result)) {
-                $totalCCTV[$i] = $row;
-            }
-        } catch (Exception $e) {
-            $e->getMessage();
-        }
-        return $totalCCTV;
     }
 
 
-    //--------------------POR MES-----------------------------
+    // TAREAS POR FECHAS
     public function contarTareasxFechas($inicio, $fin)
     {
         try {
             $link = parent::conexionBD();
-            $sql = "SELECT COUNT(*) FROM tareas t where t.fechaCreada between '$inicio' and '$fin'";
+            $sql = "SELECT COUNT(*) FROM tareas t
+                    WHERE t.fechaCreada BETWEEN '$inicio' AND '$fin'";
             $result = mysqli_query($link, $sql);
             while ($row = mysqli_fetch_row($result)) {
                 $cantTareas = $row[0];
             }
+            return $cantTareas;
         } catch (Exception $e) {
             $e->getMessage();
         }
-        return $cantTareas;
     }
 
-    public function contarTotalPendientesxFechas($inicio, $fin)
+    public function contarEstadoxFechas($estado, $inicio, $fin)
     {
         try {
             $link = parent::conexionBD();
-            $sql = "SELECT count(*), e.nombre from tareas t, estadotarea e 
-                    where t.estadoTarea_id = e.id and e.nombre = 'Pendiente' and t.fechaCreada between '$inicio' and '$fin'";
+            $sql = "SELECT count(*) FROM tareas t, estadotarea e 
+                    WHERE t.estadoTarea_id = e.id AND e.nombre = '$estado'
+                    AND t.fechaCreada BETWEEN '$inicio' AND '$fin'";
             $result = mysqli_query($link, $sql);
-            $totalTareasPendientes = [];
-            $i = 0;
+            $totalTareasEstado = [];
             while ($row = mysqli_fetch_row($result)) {
-                $totalTareasPendientes[$i] = $row;
+                $totalTareasEstado = $row[0];
             }
+            return $totalTareasEstado;
         } catch (Exception $e) {
             $e->getMessage();
         }
-        return $totalTareasPendientes;
     }
 
-    public function contarTotalEnProgresoxFechas($inicio, $fin)
+    public function contarAreaxFechas($area, $inicio, $fin)
     {
         try {
             $link = parent::conexionBD();
-            $sql = "SELECT count(*), e.nombre from tareas t, estadotarea e 
-                    where t.estadoTarea_id = e.id and e.nombre = 'En Progreso' and t.fechaCreada between '$inicio' and '$fin'";
+            $sql = "SELECT count(*) FROM tareas t, areas a 
+                    WHERE t.codigoArea3 = a.codigo AND a.codigo = $area
+                    AND t.fechaCreada BETWEEN '$inicio' AND '$fin'";
             $result = mysqli_query($link, $sql);
-            $totalTareasEnProgreso = [];
-            $i = 0;
+            $totalArea = [];
             while ($row = mysqli_fetch_row($result)) {
-                $totalTareasEnProgreso[$i] = $row;
+                $totalArea = $row[0];
             }
+            return $totalArea;
         } catch (Exception $e) {
             $e->getMessage();
         }
-        return $totalTareasEnProgreso;
-    }
-
-    public function contarTotalCompletasxFechas($inicio, $fin)
-    {
-        try {
-            $link = parent::conexionBD();
-            $sql = "SELECT count(*), e.nombre from tareas t, estadotarea e 
-                    where t.estadoTarea_id = e.id and e.nombre = 'Completo' and t.fechaCreada between '$inicio' and '$fin'";
-            $result = mysqli_query($link, $sql);
-            $totalTareasCompletas = [];
-            $i = 0;
-            while ($row = mysqli_fetch_row($result)) {
-                $totalTareasCompletas[$i] = $row;
-            }
-        } catch (Exception $e) {
-            $e->getMessage();
-        }
-        return $totalTareasCompletas;
-    }
-
-    public function contarTotalCanceladasxFechas($inicio, $fin)
-    {
-        try {
-            $link = parent::conexionBD();
-            $sql = "SELECT count(*), e.nombre from tareas t, estadotarea e 
-                    where t.estadoTarea_id = e.id and e.nombre = 'Cancelado' and t.fechaCreada between '$inicio' and '$fin'";
-            $result = mysqli_query($link, $sql);
-            $totalTareasCanceladas = [];
-            $i = 0;
-            while ($row = mysqli_fetch_row($result)) {
-                $totalTareasCanceladas[$i] = $row;
-            }
-        } catch (Exception $e) {
-            $e->getMessage();
-        }
-        return $totalTareasCanceladas;
-    }
-
-    public function contarTotalEliminadasxFechas($inicio, $fin)
-    {
-        try {
-            $link = parent::conexionBD();
-            $sql = "SELECT count(*), e.nombre from tareas t, estadotarea e 
-                    where t.estadoTarea_id = e.id and e.nombre = 'Eliminado' and t.fechaCreada between '$inicio' and '$fin'";
-            $result = mysqli_query($link, $sql);
-            $totalTareasEliminadas = [];
-            $i = 0;
-            while ($row = mysqli_fetch_row($result)) {
-                $totalTareasEliminadas[$i] = $row;
-            }
-        } catch (Exception $e) {
-            $e->getMessage();
-        }
-        return $totalTareasEliminadas;
-    }
-
-    //TOTAL POR AREAS------------------------------------------
-    public function contarTotalRedesxFechas($inicio, $fin)
-    {
-        try {
-            $link = parent::conexionBD();
-            $sql = "SELECT count(*), a.nombre from tareas t, areas a 
-                    where t.codigoArea3 = a.codigo and a.codigo = '1' and t.fechaCreada between '$inicio' and '$fin'";
-            $result = mysqli_query($link, $sql);
-            $totalRedes = [];
-            $i = 0;
-            while ($row = mysqli_fetch_row($result)) {
-                $totalRedes[$i] = $row;
-            }
-        } catch (Exception $e) {
-            $e->getMessage();
-        }
-        return $totalRedes;
-    }
-
-    public function contarTotalInfraestructuraxFechas($inicio, $fin)
-    {
-        try {
-            $link = parent::conexionBD();
-            $sql = "SELECT count(*), a.nombre from tareas t, areas a 
-                    where t.codigoArea3 = a.codigo and a.codigo = '2' and t.fechaCreada between '$inicio' and '$fin'";
-            $result = mysqli_query($link, $sql);
-            $totalInfraestructura = [];
-            $i = 0;
-            while ($row = mysqli_fetch_row($result)) {
-                $totalInfraestructura[$i] = $row;
-            }
-        } catch (Exception $e) {
-            $e->getMessage();
-        }
-        return $totalInfraestructura;
-    }
-
-    public function contarTotalSTecnicoxFechas($inicio, $fin)
-    {
-        try {
-            $link = parent::conexionBD();
-            $sql = "SELECT count(*), a.nombre from tareas t, areas a 
-                    where t.codigoArea3 = a.codigo and a.codigo = '3' and t.fechaCreada between '$inicio' and '$fin'";
-            $result = mysqli_query($link, $sql);
-            $totalSTecnico = [];
-            $i = 0;
-            while ($row = mysqli_fetch_row($result)) {
-                $totalSTecnico[$i] = $row;
-            }
-        } catch (Exception $e) {
-            $e->getMessage();
-        }
-        return $totalSTecnico;
-    }
-
-    public function contarTotalRequerimientosxFechas($inicio, $fin)
-    {
-        try {
-            $link = parent::conexionBD();
-            $sql = "SELECT count(*), a.nombre from tareas t, areas a 
-                    where t.codigoArea3 = a.codigo and a.codigo = '4' and t.fechaCreada between '$inicio' and '$fin'";
-            $result = mysqli_query($link, $sql);
-            $totalRequerimientos = [];
-            $i = 0;
-            while ($row = mysqli_fetch_row($result)) {
-                $totalRequerimientos[$i] = $row;
-            }
-        } catch (Exception $e) {
-            $e->getMessage();
-        }
-        return $totalRequerimientos;
-    }
-
-    public function contarTotalFDigitalxFechas($inicio, $fin)
-    {
-        try {
-            $link = parent::conexionBD();
-            $sql = "SELECT count(*), a.nombre from tareas t, areas a 
-                    where t.codigoArea3 = a.codigo and a.codigo = '5' and t.fechaCreada between '$inicio' and '$fin'";
-            $result = mysqli_query($link, $sql);
-            $totalFDigital = [];
-            $i = 0;
-            while ($row = mysqli_fetch_row($result)) {
-                $totalFDigital[$i] = $row;
-            }
-        } catch (Exception $e) {
-            $e->getMessage();
-        }
-        return $totalFDigital;
-    }
-
-    public function contarTotalPDigitalxFechas($inicio, $fin)
-    {
-        try {
-            $link = parent::conexionBD();
-            $sql = "SELECT count(*), a.nombre from tareas t, areas a 
-                    where t.codigoArea3 = a.codigo and a.codigo = '6' and t.fechaCreada between '$inicio' and '$fin'";
-            $result = mysqli_query($link, $sql);
-            $totalPDigital = [];
-            $i = 0;
-            while ($row = mysqli_fetch_row($result)) {
-                $totalPDigital[$i] = $row;
-            }
-        } catch (Exception $e) {
-            $e->getMessage();
-        }
-        return $totalPDigital;
-    }
-
-    public function contarTotalCCTVxFechas($inicio, $fin)
-    {
-        try {
-            $link = parent::conexionBD();
-            $sql = "SELECT count(*), a.nombre from tareas t, areas a 
-                    where t.codigoArea3 = a.codigo and a.codigo = '7' and t.fechaCreada between '$inicio' and '$fin'";
-            $result = mysqli_query($link, $sql);
-            $totalCCTV = [];
-            $i = 0;
-            while ($row = mysqli_fetch_row($result)) {
-                $totalCCTV[$i] = $row;
-            }
-        } catch (Exception $e) {
-            $e->getMessage();
-        }
-        return $totalCCTV;
     }
 
 
-    //Por Año-----------------------------------------------------------------
-
+    // TAREAS AÑO ACTUAL
     public function contarTareasxAnio()
     {
         try {
             $link = parent::conexionBD();
-            $sql = "SELECT COUNT(*), t.fechaCreada FROM tareas t 
-                    where year(t.fechaCreada) = (select max(year(t2.fechaCreada)) from tareas t2)";
+            $sql = "SELECT COUNT(*) FROM tareas t 
+                    WHERE year(t.fechaCreada) = (SELECT year(curdate()))";
             $result = mysqli_query($link, $sql);
             while ($row = mysqli_fetch_row($result)) {
                 $cantTareas = $row[0];
             }
+            return $cantTareas;
         } catch (Exception $e) {
             $e->getMessage();
         }
-        return $cantTareas;
     }
 
-    public function contarTotalPendientesxAnio()
+    public function contarEstadoxAnio($estado)
     {
         try {
             $link = parent::conexionBD();
-            $sql = "SELECT count(*), e.nombre from tareas t, estadotarea e 
-                    where t.estadoTarea_id = e.id and e.nombre = 'Pendiente' and year(t.fechaCreada) = (select max(year(t2.fechaCreada)) from tareas t2)";
+            $sql = "SELECT count(*) FROM tareas t, estadotarea e 
+                    WHERE t.estadoTarea_id = e.id AND e.nombre = '$estado'
+                    AND year(t.fechaCreada) = (SELECT year(curdate()))";
             $result = mysqli_query($link, $sql);
-            $totalTareasPendientes = [];
-            $i = 0;
+            $totalTareasEstado = [];
             while ($row = mysqli_fetch_row($result)) {
-                $totalTareasPendientes[$i] = $row;
+                $totalTareasEstado = $row[0];
             }
+            return $totalTareasEstado;
         } catch (Exception $e) {
             $e->getMessage();
         }
-        return $totalTareasPendientes;
     }
 
-    public function contarTotalEnProgresoxAnio()
+    public function contarAreaxAnio($area)
     {
         try {
             $link = parent::conexionBD();
-            $sql = "SELECT count(*), e.nombre from tareas t, estadotarea e where t.estadoTarea_id = e.id and e.nombre = 'En Progreso' 
-                    and year(t.fechaCreada) = (select max(year(t2.fechaCreada)) from tareas t2)";
+            $sql = "SELECT count(*) FROM tareas t, areas a 
+                    WHERE t.codigoArea3 = a.codigo AND a.codigo = $area
+                    AND year(t.fechaCreada) = (SELECT year(curdate()))";
             $result = mysqli_query($link, $sql);
-            $totalTareasEnProgreso = [];
-            $i = 0;
+            $totalArea = [];
             while ($row = mysqli_fetch_row($result)) {
-                $totalTareasEnProgreso[$i] = $row;
+                $totalArea = $row[0];
             }
+            return $totalArea;
         } catch (Exception $e) {
             $e->getMessage();
         }
-        return $totalTareasEnProgreso;
-    }
-
-    public function contarTotalCompletasxAnio()
-    {
-        try {
-            $link = parent::conexionBD();
-            $sql = "SELECT count(*), e.nombre from tareas t, estadotarea e where t.estadoTarea_id = e.id and e.nombre = 'Completo' 
-                    and year(t.fechaCreada) = (select max(year(t2.fechaCreada)) from tareas t2)";
-            $result = mysqli_query($link, $sql);
-            $totalTareasCompletas = [];
-            $i = 0;
-            while ($row = mysqli_fetch_row($result)) {
-                $totalTareasCompletas[$i] = $row;
-            }
-        } catch (Exception $e) {
-            $e->getMessage();
-        }
-        return $totalTareasCompletas;
-    }
-
-    public function contarTotalCanceladasxAnio()
-    {
-        try {
-            $link = parent::conexionBD();
-            $sql = "SELECT count(*), e.nombre from tareas t, estadotarea e where t.estadoTarea_id = e.id and e.nombre = 'Cancelado' 
-                    and year(t.fechaCreada) = (select max(year(t2.fechaCreada)) from tareas t2)";
-            $result = mysqli_query($link, $sql);
-            $totalTareasCanceladas = [];
-            $i = 0;
-            while ($row = mysqli_fetch_row($result)) {
-                $totalTareasCanceladas[$i] = $row;
-            }
-        } catch (Exception $e) {
-            $e->getMessage();
-        }
-        return $totalTareasCanceladas;
-    }
-
-    public function contarTotalEliminadasxAnio()
-    {
-        try {
-            $link = parent::conexionBD();
-            $sql = "SELECT count(*), e.nombre from tareas t, estadotarea e where t.estadoTarea_id = e.id and e.nombre = 'Eliminado' 
-                    and year(t.fechaCreada) = (select max(year(t2.fechaCreada)) from tareas t2)";
-            $result = mysqli_query($link, $sql);
-            $totalTareasEliminadas = [];
-            $i = 0;
-            while ($row = mysqli_fetch_row($result)) {
-                $totalTareasEliminadas[$i] = $row;
-            }
-        } catch (Exception $e) {
-            $e->getMessage();
-        }
-        return $totalTareasEliminadas;
-    }
-
-    //TOTAL POR AREAS------------------------------------------
-    public function contarTotalRedesxAnio()
-    {
-        try {
-            $link = parent::conexionBD();
-            $sql = "SELECT count(*), a.nombre from tareas t, areas a 
-                    where t.codigoArea3 = a.codigo and a.codigo = '1' 
-                    and year(t.fechaCreada) = (select max(year(t2.fechaCreada)) from tareas t2)";
-            $result = mysqli_query($link, $sql);
-            $totalRedes = [];
-            $i = 0;
-            while ($row = mysqli_fetch_row($result)) {
-                $totalRedes[$i] = $row;
-            }
-        } catch (Exception $e) {
-            $e->getMessage();
-        }
-        return $totalRedes;
-    }
-
-    public function contarTotalInfraestructuraxAnio()
-    {
-        try {
-            $link = parent::conexionBD();
-            $sql = "SELECT count(*), a.nombre from tareas t, areas a 
-                    where t.codigoArea3 = a.codigo and a.codigo = '2' 
-                    and year(t.fechaCreada) = (select max(year(t2.fechaCreada)) from tareas t2)";
-            $result = mysqli_query($link, $sql);
-            $totalInfraestructura = [];
-            $i = 0;
-            while ($row = mysqli_fetch_row($result)) {
-                $totalInfraestructura[$i] = $row;
-            }
-        } catch (Exception $e) {
-            $e->getMessage();
-        }
-        return $totalInfraestructura;
-    }
-
-    public function contarTotalSTecnicoxAnio()
-    {
-        try {
-            $link = parent::conexionBD();
-            $sql = "SELECT count(*), a.nombre from tareas t, areas a 
-                    where t.codigoArea3 = a.codigo and a.codigo = '3' 
-                    and year(t.fechaCreada) = (select max(year(t2.fechaCreada)) from tareas t2)";
-            $result = mysqli_query($link, $sql);
-            $totalSTecnico = [];
-            $i = 0;
-            while ($row = mysqli_fetch_row($result)) {
-                $totalSTecnico[$i] = $row;
-            }
-        } catch (Exception $e) {
-            $e->getMessage();
-        }
-        return $totalSTecnico;
-    }
-
-    public function contarTotalRequerimientosxAnio()
-    {
-        try {
-            $link = parent::conexionBD();
-            $sql = "SELECT count(*), a.nombre from tareas t, areas a 
-                    where t.codigoArea3 = a.codigo and a.codigo = '4' 
-                    and year(t.fechaCreada) = (select max(year(t2.fechaCreada)) from tareas t2)";
-            $result = mysqli_query($link, $sql);
-            $totalRequerimientos = [];
-            $i = 0;
-            while ($row = mysqli_fetch_row($result)) {
-                $totalRequerimientos[$i] = $row;
-            }
-        } catch (Exception $e) {
-            $e->getMessage();
-        }
-        return $totalRequerimientos;
-    }
-
-    public function contarTotalFDigitalxAnio()
-    {
-        try {
-            $link = parent::conexionBD();
-            $sql = "SELECT count(*), a.nombre from tareas t, areas a 
-                    where t.codigoArea3 = a.codigo and a.codigo = '5' 
-                    and year(t.fechaCreada) = (select max(year(t2.fechaCreada)) from tareas t2)";
-            $result = mysqli_query($link, $sql);
-            $totalFDigital = [];
-            $i = 0;
-            while ($row = mysqli_fetch_row($result)) {
-                $totalFDigital[$i] = $row;
-            }
-        } catch (Exception $e) {
-            $e->getMessage();
-        }
-        return $totalFDigital;
-    }
-
-    public function contarTotalPDigitalxAnio()
-    {
-        try {
-            $link = parent::conexionBD();
-            $sql = "SELECT count(*), a.nombre from tareas t, areas a 
-                    where t.codigoArea3 = a.codigo and a.codigo = '6' 
-                    and year(t.fechaCreada) = (select max(year(t2.fechaCreada)) from tareas t2)";
-            $result = mysqli_query($link, $sql);
-            $totalPDigital = [];
-            $i = 0;
-            while ($row = mysqli_fetch_row($result)) {
-                $totalPDigital[$i] = $row;
-            }
-        } catch (Exception $e) {
-            $e->getMessage();
-        }
-        return $totalPDigital;
-    }
-
-    public function contarTotalCCTVxAnio()
-    {
-        try {
-            $link = parent::conexionBD();
-            $sql = "SELECT count(*), a.nombre from tareas t, areas a 
-                    where t.codigoArea3 = a.codigo and a.codigo = '7' 
-                    and year(t.fechaCreada) = (select max(year(t2.fechaCreada)) from tareas t2)";
-            $result = mysqli_query($link, $sql);
-            $totalCCTV = [];
-            $i = 0;
-            while ($row = mysqli_fetch_row($result)) {
-                $totalCCTV[$i] = $row;
-            }
-        } catch (Exception $e) {
-            $e->getMessage();
-        }
-        return $totalCCTV;
     }
 
 
-    //TOTAL-------------------------------------------------------------------------------------
-
+    // TOTALES
     public function contarTareasTotal()
     {
         try {
             $link = parent::conexionBD();
-            $sql = "SELECT COUNT(*) FROM tareas t";
+            $sql = "SELECT COUNT(*) FROM tareas";
             $result = mysqli_query($link, $sql);
             while ($row = mysqli_fetch_row($result)) {
                 $cantTareas = $row[0];
             }
+            return $cantTareas;
         } catch (Exception $e) {
             $e->getMessage();
         }
-        return $cantTareas;
     }
 
-    public function contarTotalPendientesTotal()
+    public function contarEstadoTotal($estado)
     {
         try {
             $link = parent::conexionBD();
-            $sql = "SELECT count(*), e.nombre from tareas t, estadotarea e where t.estadoTarea_id = e.id and e.nombre = 'Pendiente'";
+            $sql = "SELECT count(*) FROM tareas t, estadotarea e
+                    WHERE t.estadoTarea_id = e.id AND e.nombre = '$estado'";
             $result = mysqli_query($link, $sql);
-            $totalTareasPendientes = [];
-            $i = 0;
+            $totalTareasEstado = [];
             while ($row = mysqli_fetch_row($result)) {
-                $totalTareasPendientes[$i] = $row;
+                $totalTareasEstado = $row[0];
             }
         } catch (Exception $e) {
             $e->getMessage();
         }
-        return $totalTareasPendientes;
+        return $totalTareasEstado;
     }
 
-    public function contarTotalEnProgresoTotal()
+    public function contarAreaTotal($area)
     {
         try {
             $link = parent::conexionBD();
-            $sql = "SELECT count(*), e.nombre from tareas t, estadotarea e where t.estadoTarea_id = e.id and e.nombre = 'En progreso'";
+            $sql = "SELECT count(*) FROM tareas t, areas a
+                    WHERE t.codigoArea3 = a.codigo AND a.codigo = $area";
             $result = mysqli_query($link, $sql);
-            $totalTareasEnProgreso = [];
-            $i = 0;
+            $totalArea = [];
             while ($row = mysqli_fetch_row($result)) {
-                $totalTareasEnProgreso[$i] = $row;
+                $totalArea = $row[0];
             }
+            return $totalArea;
         } catch (Exception $e) {
             $e->getMessage();
         }
-        return $totalTareasEnProgreso;
-    }
-
-    public function contarTotalCompletasTotal()
-    {
-        try {
-            $link = parent::conexionBD();
-            $sql = "SELECT count(*), e.nombre from tareas t, estadotarea e where t.estadoTarea_id = e.id and e.nombre = 'Completo'";
-            $result = mysqli_query($link, $sql);
-            $totalTareasCompletas = [];
-            $i = 0;
-            while ($row = mysqli_fetch_row($result)) {
-                $totalTareasCompletas[$i] = $row;
-            }
-        } catch (Exception $e) {
-            $e->getMessage();
-        }
-        return $totalTareasCompletas;
-    }
-
-    public function contarTotalCanceladasTotal()
-    {
-        try {
-            $link = parent::conexionBD();
-            $sql = "SELECT count(*), e.nombre from tareas t, estadotarea e where t.estadoTarea_id = e.id and e.nombre = 'Cancelado'";
-            $result = mysqli_query($link, $sql);
-            $totalTareasCanceladas = [];
-            $i = 0;
-            while ($row = mysqli_fetch_row($result)) {
-                $totalTareasCanceladas[$i] = $row;
-            }
-        } catch (Exception $e) {
-            $e->getMessage();
-        }
-        return $totalTareasCanceladas;
-    }
-
-    public function contarTotalEliminadasTotal()
-    {
-        try {
-            $link = parent::conexionBD();
-            $sql = "SELECT count(*), e.nombre from tareas t, estadotarea e where t.estadoTarea_id = e.id and e.nombre = 'Eliminado'";
-            $result = mysqli_query($link, $sql);
-            $totalTareasEliminadas = [];
-            $i = 0;
-            while ($row = mysqli_fetch_row($result)) {
-                $totalTareasEliminadas[$i] = $row;
-            }
-        } catch (Exception $e) {
-            $e->getMessage();
-        }
-        return $totalTareasEliminadas;
-    }
-
-    //TOTAL POR AREAS------------------------------------------
-    public function contarTotalRedesTotal()
-    {
-        try {
-            $link = parent::conexionBD();
-            $sql = "SELECT count(*), a.nombre from tareas t, areas a where t.codigoArea3 = a.codigo and a.codigo = '1'";
-            $result = mysqli_query($link, $sql);
-            $totalRedes = [];
-            $i = 0;
-            while ($row = mysqli_fetch_row($result)) {
-                $totalRedes[$i] = $row;
-            }
-        } catch (Exception $e) {
-            $e->getMessage();
-        }
-        return $totalRedes;
-    }
-
-    public function contarTotalInfraestructuraTotal()
-    {
-        try {
-            $link = parent::conexionBD();
-            $sql = "SELECT count(*), a.nombre from tareas t, areas a where t.codigoArea3 = a.codigo and a.codigo = '2'";
-            $result = mysqli_query($link, $sql);
-            $totalInfraestructura = [];
-            $i = 0;
-            while ($row = mysqli_fetch_row($result)) {
-                $totalInfraestructura[$i] = $row;
-            }
-        } catch (Exception $e) {
-            $e->getMessage();
-        }
-        return $totalInfraestructura;
-    }
-
-    public function contarTotalSTecnicoTotal()
-    {
-        try {
-            $link = parent::conexionBD();
-            $sql = "SELECT count(*), a.nombre from tareas t, areas a where t.codigoArea3 = a.codigo and a.codigo = '3'";
-            $result = mysqli_query($link, $sql);
-            $totalSTecnico = [];
-            $i = 0;
-            while ($row = mysqli_fetch_row($result)) {
-                $totalSTecnico[$i] = $row;
-            }
-        } catch (Exception $e) {
-            $e->getMessage();
-        }
-        return $totalSTecnico;
-    }
-
-    public function contarTotalRequerimientosTotal()
-    {
-        try {
-            $link = parent::conexionBD();
-            $sql = "SELECT count(*), a.nombre from tareas t, areas a where t.codigoArea3 = a.codigo and a.codigo = '4'";
-            $result = mysqli_query($link, $sql);
-            $totalRequerimientos = [];
-            $i = 0;
-            while ($row = mysqli_fetch_row($result)) {
-                $totalRequerimientos[$i] = $row;
-            }
-        } catch (Exception $e) {
-            $e->getMessage();
-        }
-        return $totalRequerimientos;
-    }
-
-    public function contarTotalFDigitalTotal()
-    {
-        try {
-            $link = parent::conexionBD();
-            $sql = "SELECT count(*), a.nombre from tareas t, areas a where t.codigoArea3 = a.codigo and a.codigo = '5'";
-            $result = mysqli_query($link, $sql);
-            $totalFDigital = [];
-            $i = 0;
-            while ($row = mysqli_fetch_row($result)) {
-                $totalFDigital[$i] = $row;
-            }
-        } catch (Exception $e) {
-            $e->getMessage();
-        }
-        return $totalFDigital;
-    }
-
-    public function contarTotalPDigitalTotal()
-    {
-        try {
-            $link = parent::conexionBD();
-            $sql = "SELECT count(*), a.nombre from tareas t, areas a where t.codigoArea3 = a.codigo and a.codigo = '6'";
-            $result = mysqli_query($link, $sql);
-            $totalPDigital = [];
-            $i = 0;
-            while ($row = mysqli_fetch_row($result)) {
-                $totalPDigital[$i] = $row;
-            }
-        } catch (Exception $e) {
-            $e->getMessage();
-        }
-        return $totalPDigital;
-    }
-
-    public function contarTotalCCTVTotal()
-    {
-        try {
-            $link = parent::conexionBD();
-            $sql = "SELECT count(*), a.nombre from tareas t, areas a where t.codigoArea3 = a.codigo and a.codigo = '7'";
-            $result = mysqli_query($link, $sql);
-            $totalCCTV = [];
-            $i = 0;
-            while ($row = mysqli_fetch_row($result)) {
-                $totalCCTV[$i] = $row;
-            }
-        } catch (Exception $e) {
-            $e->getMessage();
-        }
-        return $totalCCTV;
-    }
-
-
-    //ESTADISTICAS AGENTE-----------------------------------------------------------
-    public function totalEstadoTareaAgente($legajo)
-    {
-        try {
-            $link = parent::conexionBD();
-            $sql = "SELECT count(*) from tareas t, estadotarea e, usuario u  
-                    where t.estadoTarea_id = e.id and t.usuario_legajo = u.legajo and u.legajo = '$legajo'";
-            $result = mysqli_query($link, $sql);
-            while ($row = mysqli_fetch_row($result)) {
-                $estadoTareasTotal = $row[0];
-            }
-        } catch (Exception $e) {
-            $e->getMessage();
-        }
-        return $estadoTareasTotal;
-    }
-
-    public function listarEstadoTareaAgente($legajo)
-    {
-        try {
-            $link = parent::conexionBD();
-            $sql = "SELECT count(*), e.nombre from tareas t, estadotarea e, usuario u  
-                    where t.estadoTarea_id = e.id and t.usuario_legajo = u.legajo and u.legajo = '$legajo' group by e.nombre";
-            $result = mysqli_query($link, $sql);
-            $estadoTareas = [];
-            $i = 0;
-            while ($row = mysqli_fetch_row($result)) {
-                $estadoTareas[$i] = $row;
-                $i++;
-            }
-        } catch (Exception $e) {
-            $e->getMessage();
-        }
-        return $estadoTareas;
-    }
-
-    public function totalTareasAgente($legajo)
-    {
-        try {
-            $link = parent::conexionBD();
-            $sql = "SELECT count(*) from tareas t, estadotarea e, usuario u  
-                    where t.estadoTarea_id = e.id and t.usuario_legajo = u.legajo and u.legajo = '$legajo'";
-            $result = mysqli_query($link, $sql);
-            while ($row = mysqli_fetch_row($result)) {
-                $estadoTareasTotal = $row[0];
-            }
-        } catch (Exception $e) {
-            $e->getMessage();
-        }
-        return $estadoTareasTotal;
     }
 }

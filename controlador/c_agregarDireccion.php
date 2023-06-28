@@ -1,4 +1,5 @@
 <?php
+session_start();
 require('../modelo/m_consultas.php');
 $co = new Consultas();
 
@@ -7,9 +8,7 @@ $direccion = $_POST['direccion'];
 $descripcion = $_POST['descripcion'];
 
 if ($co->agregarDireccion($codigo, $direccion, $descripcion)) {
-    session_start();
     $_SESSION['direccionOk'] = true;
-    header('location: ../vistaAgente/index.php?accion=listarDirecciones');
-} else {
-    header('location: ../vistaAgente/index.php?accion=listarDirecciones');
 }
+
+header('location: ../vistaAgente/index.php?accion=listarDirecciones');

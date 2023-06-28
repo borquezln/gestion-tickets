@@ -1,4 +1,5 @@
 <?php
+session_start();
 require('../modelo/m_consultas.php');
 $co = new Consultas();
 
@@ -12,21 +13,9 @@ $userAnterior = $_POST['userAnterior'];
 $rol = $_POST['rol'];
 
 if ($co->editarDatosUsuario($legajo, $nombre, $apellido, $correo, $user, $pass, $userAnterior)) {
-    session_start();
-    if ($rol == 2 || $rol == 3 || $rol == 4) {
-        $_SESSION['datosAct'] = true;
-        header('Location: ../vistaAgente/inicio.php');
-    } else if ($rol == 1) {
-        $_SESSION['datosAct'] = true;
-        header('Location: ../vista/inicio.php');
-    }
+    $_SESSION['datosAct'] = true;
 } else {
-    session_start();
-    if ($rol == 2 || $rol == 3 || $rol == 4) {
-        $_SESSION['datosActError'] = true;
-        header('Location: ../vistaAgente/inicio.php');
-    } else if ($rol == 1) {
-        $_SESSION['datosActError'] = true;
-        header('Location: ../vista/inicio.php');
-    }
+    $_SESSION['datosActError'] = true;
 }
+
+header('Location: ../vistaAgente/inicio.php');

@@ -19,9 +19,6 @@ if (isset($_POST['nota_electronica'])) {
 
 if ($co->agregarTarea($descripcion, $nota_electronica, $nombreApellido, $celular, $direccion, $area, $usuarioCreado)) {
     $_SESSION['tareaOK'] = true;
-    if ($rol == 3) {
-        header('location: ../vistaAgente/index.php?accion=listarTareasAdmin&lista=actual');
-    }
-} else {
-    header('location: ' . $_SERVER['HTTP_REFERER']);
 }
+
+header('location: ../vistaAgente/index.php?accion=listarTareasAdmin&lista=actual');

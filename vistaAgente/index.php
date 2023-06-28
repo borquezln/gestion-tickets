@@ -17,28 +17,8 @@ if (!(time() - $_SESSION['time'] >= 3600)) {
             $controller->verEstadisticasContr($time, $fechaInicio, $fechaFin);
             break;
 
-        case 'verEstadisticasAgente':
-            $legajo = $_GET['legajo'];
-            require('../controlador/c_admin.php');
-            $controller = new ControladorAdmin();
-            $controller->verEstadisticasAgenteContr($legajo);
-            break;
-
-        case 'listarTareas':
-            error_reporting(0);
-            $listado = $_GET['listado'];
-            require('../controlador/c_admin.php');
-            $controller = new ControladorAdmin();
-            $controller->listarTareasAdminContr($listado);
-            break;
-
         case 'listarTareasAdmin':
-            if (isset($_GET['lista'])) {
-                $lista = $_GET['lista'];
-            } else {
-                $lista = '';
-            }
-
+            $lista = $_GET['lista'];
             require('../controlador/c_admin.php');
             $controller = new ControladorAdmin();
             $controller->listarTareasAdminContr($lista);
@@ -50,43 +30,30 @@ if (!(time() - $_SESSION['time'] >= 3600)) {
             $controller->listarTareasEliminadasContr();
             break;
 
-        case 'listarAgentes':
-            require('../controlador/c_admin.php');
-            $controller = new ControladorAdmin();
-            $controller->listarAgentesContr();
-            break;
         case 'listarAreas':
             require('../controlador/c_admin.php');
             $controller = new ControladorAdmin();
             $controller->listarAreasContr();
             break;
 
-        case 'listarTareaAgente':
-            $legajo = $_GET['agente'];
-            require('../controlador/c_admin.php');
-            $controller = new ControladorAdmin();
-            $controller->listarTareaAgenteContr($legajo);
-            break;
         case 'listarDirecciones':
             require('../controlador/c_admin.php');
             $controller = new ControladorAdmin();
             $controller->listarDireccionesContr();
             break;
-        case 'cambioRoles':
-            require('../controlador/c_admin.php');
-            $controller = new ControladorAdmin();
-            $controller->listarUsuariosContr();
-            break;
+
         case 'listarBajas':
             require('../controlador/c_admin.php');
             $controller = new ControladorAdmin();
             $controller->listarUsuariosBajaContr();
             break;
+
         case 'listarUsuarios':
             require('../controlador/c_admin.php');
             $controller = new ControladorAdmin();
             $controller->listarUsuariosCargadosContr();
             break;
+
         case 'blanqueoPass':
             require('../controlador/c_admin.php');
             $controller = new ControladorAdmin();

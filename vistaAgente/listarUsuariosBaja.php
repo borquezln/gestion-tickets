@@ -13,20 +13,8 @@ if (!(time() - $_SESSION['time'] >= 3600)) {
             <meta http-equiv="X-UA-Compatible" content="IE=edge">
             <meta name="viewport" content="width=device-width, initial-scale=1.0">
             <title>Document</title>
-            <style>
-                section {
-                    padding: 15px;
-                }
 
-                table td {
-                    vertical-align: middle;
-                }
-
-                table #accion {
-                    text-align: center;
-                }
-            </style>
-
+            <link rel="stylesheet" href="../styles/styles.css">
             <script>
                 function bajaAgente() {
                     var nombre = $('.nombre').val();

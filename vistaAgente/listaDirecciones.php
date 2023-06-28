@@ -2,7 +2,6 @@
 error_reporting(E_ALL ^ E_NOTICE);
 if (!(time() - $_SESSION['time'] >= 3600)) {
     $_SESSION['time'] = time();
-    if ($_SESSION['rol'] == 2 || $_SESSION['rol'] == 3 || $_SESSION['rol'] == 4) {
 ?>
         <!DOCTYPE html>
         <html lang="en">
@@ -13,25 +12,8 @@ if (!(time() - $_SESSION['time'] >= 3600)) {
             <meta http-equiv="X-UA-Compatible" content="IE=edge">
             <meta name="viewport" content="width=device-width, initial-scale=1.0">
             <title>Document</title>
-            <style>
-                section {
-                    padding: 15px;
-                }
 
-                table {
-                    width: 75% !important;
-                    margin: 0 auto;
-                }
-
-                table td {
-                    vertical-align: middle;
-                }
-
-                table #accion {
-                    text-align: center;
-                }
-            </style>
-
+            <link rel="stylesheet" href="../styles/styles.css">
             <script>
                 function comprobarCodigo(codigo) {
                     $.ajax({
@@ -229,7 +211,6 @@ if (!(time() - $_SESSION['time'] >= 3600)) {
 
         </html>
 <?php
-    }
 } else {
     require "destroySession.php";
 }

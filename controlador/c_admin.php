@@ -6,68 +6,68 @@ class ControladorAdmin
     {
         echo ('<title>Estadísticas</title>');
         require('../modelo/m_estadisticas.php');
-        $co = new ConsultasEstadisticas();
+        $est = new ConsultasEstadisticas();
+        require "../modelo/m_consultas.php";
+        $co = new Consultas;
+
+        $areas = $co->listarAreas();
 
         if ($time == 'now') {
-            $totalTareas = $co->contarTareasActual();
-            $totalPendientes = $co->contarTotalPendientesActual();
-            $totalEnProgreso = $co->contarTotalEnProgresoActual();
-            $totalCompletas = $co->contarTotalCompletasActual();
-            $totalCanceladas = $co->contarTotalCanceladasActual();
-            $totalEliminadas = $co->contarTotalEliminadasActual();
+            $periodo = "de hoy";
+            $totalTareas = $est->contarTareasHoy();
 
-            $totalRedes = $co->contarTotalRedesActual();
-            $totalInfraestrucutra = $co->contarTotalInfraestructuraActual();
-            $totalSTecnico = $co->contarTotalSTecnicoActual();
-            $totalRequerimientos = $co->contarTotalRequerimientosActual();
-            $totalFDigital = $co->contarTotalFDigitalActual();
-            $totalPDigital = $co->contarTotalPDigitalActual();
-            $totalCctv = $co->contarTotalCCTVActual();
+            $totalPendientes = $est->contarEstadoHoy('Pendiente');
+            $totalEnProgreso = $est->contarEstadoHoy('En Progreso');
+            $totalCompletas = $est->contarEstadoHoy('Completo');
+            $totalCanceladas = $est->contarEstadoHoy('Cancelado');
+            $totalEliminadas = $est->contarEstadoHoy('Eliminado');
+
+            $totalAreas = [];
+            foreach ($areas as $area) {
+                $totalAreas[$area[1]] = $est->contarAreaHoy($area[0]);
+            }
         } else if ($time == 'month') {
-            $totalTareas = $co->contarTareasxFechas($fechaInicio, $fechaFin);
-            $totalPendientes = $co->contarTotalPendientesxFechas($fechaInicio, $fechaFin);
-            $totalEnProgreso = $co->contarTotalEnProgresoxFechas($fechaInicio, $fechaFin);
-            $totalCompletas = $co->contarTotalCompletasxFechas($fechaInicio, $fechaFin);
-            $totalCanceladas = $co->contarTotalCanceladasxFechas($fechaInicio, $fechaFin);
-            $totalEliminadas = $co->contarTotalEliminadasxFechas($fechaInicio, $fechaFin);
+            $periodo = "del " . $fechaInicio . " al " . $fechaFin;
+            $totalTareas = $est->contarTareasxFechas($fechaInicio, $fechaFin);
 
-            $totalRedes = $co->contarTotalRedesxFechas($fechaInicio, $fechaFin);
-            $totalInfraestrucutra = $co->contarTotalInfraestructuraxFechas($fechaInicio, $fechaFin);
-            $totalSTecnico = $co->contarTotalSTecnicoxFechas($fechaInicio, $fechaFin);
-            $totalRequerimientos = $co->contarTotalRequerimientosxFechas($fechaInicio, $fechaFin);
-            $totalFDigital = $co->contarTotalFDigitalxFechas($fechaInicio, $fechaFin);
-            $totalPDigital = $co->contarTotalPDigitalxFechas($fechaInicio, $fechaFin);
-            $totalCctv = $co->contarTotalCCTVxFechas($fechaInicio, $fechaFin);
+            $totalPendientes = $est->contarEstadoxFechas('Pendiente', $fechaInicio, $fechaFin);
+            $totalEnProgreso = $est->contarEstadoxFechas('En Progreso', $fechaInicio, $fechaFin);
+            $totalCompletas = $est->contarEstadoxFechas('Completo', $fechaInicio, $fechaFin);
+            $totalCanceladas = $est->contarEstadoxFechas('Cancelado', $fechaInicio, $fechaFin);
+            $totalEliminadas = $est->contarEstadoxFechas('Eliminado', $fechaInicio, $fechaFin);
+
+            $totalAreas = [];
+            foreach ($areas as $area) {
+                $totalAreas[$area[1]] = $est->contarAreaxFechas($area[0], $fechaInicio, $fechaFin);
+            }
         } else if ($time == 'year') {
-            $totalTareas = $co->contarTareasxAnio();
-            $totalPendientes = $co->contarTotalPendientesxAnio();
-            $totalEnProgreso = $co->contarTotalEnProgresoxAnio();
-            $totalCompletas = $co->contarTotalCompletasxAnio();
-            $totalCanceladas = $co->contarTotalCanceladasxAnio();
-            $totalEliminadas = $co->contarTotalEliminadasxAnio();
+            $periodo = "del año";
+            $totalTareas = $est->contarTareasxAnio();
 
-            $totalRedes = $co->contarTotalRedesxAnio();
-            $totalInfraestrucutra = $co->contarTotalInfraestructuraxAnio();
-            $totalSTecnico = $co->contarTotalSTecnicoxAnio();
-            $totalRequerimientos = $co->contarTotalRequerimientosxAnio();
-            $totalFDigital = $co->contarTotalFDigitalxAnio();
-            $totalPDigital = $co->contarTotalPDigitalxAnio();
-            $totalCctv = $co->contarTotalCCTVxAnio();
+            $totalPendientes = $est->contarEstadoxAnio('Pendiente');
+            $totalEnProgreso = $est->contarEstadoxAnio('En Progreso');
+            $totalCompletas = $est->contarEstadoxAnio('Completo');
+            $totalCanceladas = $est->contarEstadoxAnio('Cancelado');
+            $totalEliminadas = $est->contarEstadoxAnio('Eliminado');
+
+            $totalAreas = [];
+            foreach ($areas as $area) {
+                $totalAreas[$area[1]] = $est->contarAreaxAnio($area[0]);
+            }
         } else if ($time == 'all') {
-            $totalTareas = $co->contarTareasTotal();
-            $totalPendientes = $co->contarTotalPendientesTotal();
-            $totalEnProgreso = $co->contarTotalEnProgresoTotal();
-            $totalCompletas = $co->contarTotalCompletasTotal();
-            $totalCanceladas = $co->contarTotalCanceladasTotal();
-            $totalEliminadas = $co->contarTotalEliminadasTotal();
+            $periodo = "totales";
+            $totalTareas = $est->contarTareasTotal();
 
-            $totalRedes = $co->contarTotalRedesTotal();
-            $totalInfraestrucutra = $co->contarTotalInfraestructuraTotal();
-            $totalSTecnico = $co->contarTotalSTecnicoTotal();
-            $totalRequerimientos = $co->contarTotalRequerimientosTotal();
-            $totalFDigital = $co->contarTotalFDigitalTotal();
-            $totalPDigital = $co->contarTotalPDigitalTotal();
-            $totalCctv = $co->contarTotalCCTVTotal();
+            $totalPendientes = $est->contarEstadoTotal('Pendiente');
+            $totalEnProgreso = $est->contarEstadoTotal('En Progreso');
+            $totalCompletas = $est->contarEstadoTotal('Completo');
+            $totalCanceladas = $est->contarEstadoTotal('Cancelado');
+            $totalEliminadas = $est->contarEstadoTotal('Eliminado');
+
+            $totalAreas = [];
+            foreach ($areas as $area) {
+                $totalAreas[$area[1]] = $est->contarAreaTotal($area[0]);
+            }
         }
 
         require('libreriaEstilos.php');
@@ -75,55 +75,11 @@ class ControladorAdmin
         require('estadisticas.php');
     }
 
-    public function verEstadisticasAgenteContr($legajo)
-    {
-        echo ('<title>Estadísticas - Gestión de tareas</title>');
-        require('../modelo/m_estadisticas.php');
-        require('../modelo/m_consultas.php');
-        $estadistica = new ConsultasEstadisticas();
-        $co = new Consultas();
-        $listAgente = $co->listarUserActual($legajo);
-        $areaAgente = $co->listarNombreAreaUsuario($legajo);
-        $totalEstadoTareas = $estadistica->totalEstadoTareaAgente($legajo);
-        $listEstadosTareas = $estadistica->listarEstadoTareaAgente($legajo);
-        require('libreriaEstilos.php');
-        require('headerNav.php');
-        require('estadisticasAgente.php');
-    }
-
-    public function listarTareasEncargadoContr($listado)
-    {
-        echo ('<title>Listado de Tareas - Gestión de tareas</title>');
-        require('../modelo/m_consultas.php');
-        $co = new Consultas();
-        $listAreas = $co->listarAreas();
-        $listTareasEncargados = $co->listarTareasEncargados($listado);
-
-        if ($listado == 'completadas') {
-            $tareasEncargadosCompletasActual = $co->listarTareasEncargadosCompletosActual();
-        }
-
-        $listDirecciones = $co->listarDirecciones();
-
-        if ($listado == 'actual') {
-            $estado = 'Pendientes y En Progreso';
-        } else if ($listado == 'completadas') {
-            $estado = 'Completadas';
-        } else if ($listado == 'canceladas') {
-            $estado = 'Canceladas';
-        }
-        require('libreriaEstilos.php');
-        require('headerNav.php');
-        require('listaTareas.php');
-    }
-
     public function listarTareasAdminContr($lista)
     {
         echo ('<title>Listado de Tareas - Gestión Requerimientos</title>');
         require('../modelo/m_consultas.php');
         $co = new Consultas();
-        $listDatosAgentes = $co->listarAgentes();
-
         if ($lista == 'actual') {
             $estado = "Pendientes y en Progreso";
             $listTareasAgentes = $co->listarTareasAdmin($lista);
@@ -139,7 +95,6 @@ class ControladorAdmin
         }
 
         $listDirecciones = $co->listarDirecciones();
-        $listAgentes = $co->listarAgentes();
         $listAreas = $co->listarAreas();
         require('libreriaEstilos.php');
         require('headerNav.php');
@@ -157,18 +112,6 @@ class ControladorAdmin
         require('listaTareasEliminadas.php');
     }
 
-    public function listarAgentesContr()
-    {
-        echo ('<title>Listado de Agentes - Gestión de tareas</title>');
-        require('../modelo/m_consultas.php');
-        $co = new Consultas();
-        $listEncAgentes = $co->listarEncargadosAgentes();
-        $listAreas = $co->listarAreas();
-        require('libreriaEstilos.php');
-        require('headerNav.php');
-        require('listaAgentes.php');
-    }
-
     public function listarAreasContr()
     {
         echo ('<title>Listado de Agentes - Gestión de tareas</title>');
@@ -180,20 +123,6 @@ class ControladorAdmin
         require('listaAreas.php');
     }
 
-    public function listarTareaAgenteContr($legajo)
-    {
-        echo ('<title>Tareas de Agente - Gestión de tareas</title>');
-        require('../modelo/m_consultas.php');
-        $co = new Consultas();
-        $listTareaAgente = $co->listarTareaAgente($legajo);
-        $listEstados = $co->listarEstadoTarea();
-        $agente = $co->listarUserActual($legajo);
-        $areaUsuario = $co->listarNombreAreaUsuario($legajo);
-        require('libreriaEstilos.php');
-        require('headerNav.php');
-        require('listarTareaAgente.php');
-    }
-
     public function listarDireccionesContr()
     {
         echo ('<title>Listado de Direcciones - Gestión de tareas</title>');
@@ -203,20 +132,6 @@ class ControladorAdmin
         require('libreriaEstilos.php');
         require('headerNav.php');
         require('listaDirecciones.php');
-    }
-
-
-    public function listarUsuariosContr()
-    {
-        echo ('<title>Lista de Usuarios - Gestión de tareas</title>');
-        require('../modelo/m_consultas.php');
-        $co = new Consultas();
-        $listUsuarios = $co->listarUsuarios();
-        $listRoles = $co->listarRoles();
-        $listAreas = $co->listarAreas();
-        require('libreriaEstilos.php');
-        require('headerNav.php');
-        require('cambioRoles.php');
     }
 
     public function listarUsuariosBajaContr()

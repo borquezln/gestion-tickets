@@ -11,5 +11,6 @@ $cantAreas = $_SESSION['cantAreas'];
 
 if ($co->terminarTarea($solucion, $comprobante, $nroArreglo)) {
     $_SESSION['tareaTerminada'] = true;
-    header('Location: ' . $_SERVER['HTTP_REFERER']);
 }
+
+header('Location: ' . $_SERVER['HTTP_REFERER']);

@@ -7,5 +7,6 @@ $nroArreglo = $_GET['id'];
 
 if ($co->iniciarTarea($nroArreglo)) {
     $_SESSION['tareaAsignada'] = true;
-    header('Location: ' . $_SERVER['HTTP_REFERER']);
 }
+
+header('Location: ' . $_SERVER['HTTP_REFERER']);

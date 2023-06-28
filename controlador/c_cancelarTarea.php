@@ -8,5 +8,6 @@ $nroArreglo = $_POST['id'];
 
 if ($co->cancelarTarea($motivoCancelacion, $nroArreglo)) {
     $_SESSION['tareaCancelada'] = true;
-    header('location: ' . $_SERVER['HTTP_REFERER']);
 }
+
+header('location: ' . $_SERVER['HTTP_REFERER']);

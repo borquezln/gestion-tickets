@@ -3,24 +3,156 @@ require_once('m_conexion.php');
 
 class Consultas extends Conexion
 {
-
+    // AUTENTICACION
     public function autenticarUsuario($usuario, $pass)
     {
         try {
-            $contador = 0;
             $link = parent::conexionBD();
-            $sql = "SELECT * from usuario where usuario = '$usuario' or correo = '$usuario'";
+            $sql = "SELECT * FROM usuario WHERE usuario = '$usuario' OR correo = '$usuario'";
             $result = mysqli_query($link, $sql);
             while ($registro = mysqli_fetch_row($result)) {
-                if (password_verify($pass, $registro[5])) {
-                    $contador++;
-                }
+                return password_verify($pass, $registro[5]);
             }
-            if ($contador > 0) {
-                return true;
-            } else {
-                return false;
+        } catch (Exception $e) {
+            $e->getMessage();
+        }
+    }
+
+    public function verificarTipoUsuario($usuario)
+    {
+        try {
+            $link = parent::conexionBD();
+            $sql = "SELECT * FROM tipousuario WHERE idrol IN
+                        (SELECT idRol2 FROM usuario WHERE usuario = '$usuario' OR correo = '$usuario')";
+            $result = mysqli_query($link, $sql);
+            while ($row = mysqli_fetch_row($result)) {
+                $id = $row[0];
             }
+            return $id;
+        } catch (Exception $e) {
+            $e->getMessage();
+        }
+    }
+
+
+    // USUARIOS
+    public function listarUsuarios()
+    {
+        try {
+            $link = parent::conexionBD();
+            $sql = "SELECT u.legajo, u.nombre, u.apellido, u.correo, u.usuario, tu.nombre
+                        FROM usuario AS u, tipousuario AS tu
+                        WHERE u.idRol2 = tu.idRol ORDER BY tu.nombre";
+            $result = mysqli_query($link, $sql);
+            $listUsuarios = [];
+            $i = 0;
+            while ($row = mysqli_fetch_row($result)) {
+                $listUsuarios[$i] = $row;
+                $i++;
+            }
+            return $listUsuarios;
+        } catch (Exception $e) {
+            die('Error ' . $e->getMessage());
+        }
+    }
+
+    public function listarUsuariosCargados()
+    {
+        try {
+            $link = parent::conexionBD();
+            $sql = "SELECT u.legajo, u.nombre, u.apellido, u.correo, u.usuario, t.nombre, u.ultimoAcceso
+                        FROM usuario u, tipousuario t
+                        WHERE u.idRol2 = t.idrol";
+            $result = mysqli_query($link, $sql);
+            $listUsuarios = [];
+            $i = 0;
+            while ($row = mysqli_fetch_row($result)) {
+                $listUsuarios[$i] = $row;
+                $i++;
+            }
+            return $listUsuarios;
+        } catch (Exception $e) {
+            die('Error ' . $e->getMessage());
+        }
+    }
+
+    public function listarRoles()
+    {
+        try {
+            $link = parent::conexionBD();
+            $sql = "SELECT * FROM tipousuario";
+            $result = mysqli_query($link, $sql);
+            $listRoles = [];
+            $i = 0;
+            while ($row = mysqli_fetch_row($result)) {
+                $listRoles[$i] = $row;
+                $i++;
+            }
+            return $listRoles;
+        } catch (Exception $e) {
+            die('Error ' . $e->getMessage());
+        }
+    }
+
+    public function listarBajasUsuarios()
+    {
+        try {
+            $link = parent::conexionBD();
+            $sql = "SELECT u.legajo, u.nombre, u.apellido, u.correo, u.motivoBaja FROM usuario u WHERE u.idRol2 IS NULL AND u.legajo != 0";
+            $result = mysqli_query($link, $sql);
+            $listBajas = [];
+            $i = 0;
+            while ($row = mysqli_fetch_row($result)) {
+                $listBajas[$i] = $row;
+                $i++;
+            }
+            return $listBajas;
+        } catch (Exception $e) {
+            die('Error ' . $e->getMessage());
+        }
+    }
+
+    public function agregarUsuario($tipoUsuario, $legajo, $nombre, $apellido, $correo, $user, $pass)
+    {
+        try {
+            $passFuerte = password_hash($pass, PASSWORD_DEFAULT);
+            $link = parent::conexionBD();
+            $sql = "INSERT INTO usuario(legajo, nombre, apellido, correo, usuario, contraseña, idRol2)
+                        values ('$legajo', '$nombre', '$apellido', '$correo', '$user', '$passFuerte', '$tipoUsuario')";
+            $result = mysqli_query($link, $sql);
+            return $result;
+        } catch (Exception $e) {
+            die('Error ' . $e->getMessage());
+        }
+    }
+
+
+    // GESTIONAR USUARIO
+    public function listarlegajoUserActual($user)
+    {
+        try {
+            $link = parent::conexionBD();
+            $sql = "SELECT u.legajo FROM usuario u WHERE u.usuario = '$user'";
+            $result = mysqli_query($link, $sql);
+            while ($row = mysqli_fetch_row($result)) {
+                $legajo = $row[0];
+            }
+            return $legajo;
+        } catch (Exception $e) {
+            $e->getMessage();
+        }
+    }
+
+    public function listarUserActual($legajo)
+    {
+        try {
+            $link = parent::conexionBD();
+            $sql = "SELECT concat(u.nombre, ' ', u.apellido) FROM usuario u WHERE u.legajo = '$legajo'";
+            $result = mysqli_query($link, $sql);
+            while ($row = mysqli_fetch_row($result)) {
+                $userActual = $row[0];
+            }
+            return $userActual;
         } catch (Exception $e) {
             $e->getMessage();
         }
@@ -30,112 +162,30 @@ class Consultas extends Conexion
     {
         try {
             $link = parent::conexionBD();
-            $sql = "UPDATE usuario set ultimoAcceso = now() where usuario = '$usuario'";
+            $sql = "UPDATE usuario SET ultimoAcceso = now() WHERE usuario = '$usuario'";
             $result = mysqli_query($link, $sql);
-            if ($result) {
-                return true;
-            } else {
-                return false;
-            }
+            return $result;
         } catch (Exception $e) {
             $e->getMessage();
         }
     }
 
-    public function listarlegajoUserActual($user)
+    public function listarDatosPersonales($usuario)
     {
         try {
             $link = parent::conexionBD();
-            $sql = "select u.legajo from usuario u where u.usuario = '$user'";
+            $sql = "SELECT * FROM usuario WHERE usuario = '$usuario' OR correo = '$usuario'";
             $result = mysqli_query($link, $sql);
+            $i = 0;
             while ($row = mysqli_fetch_row($result)) {
-                $legajo = $row[0];
+                $datosPersonales[$i] = $row;
+                $i++;
             }
+            return $datosPersonales;
         } catch (Exception $e) {
             $e->getMessage();
         }
-        return $legajo;
     }
-
-    public function listarUserActual($legajo)
-    {
-        try {
-            $link = parent::conexionBD();
-            $sql = "SELECT concat(u.nombre, ' ', u.apellido) from usuario u where u.legajo = '$legajo'";
-            $result = mysqli_query($link, $sql);
-            while ($row = mysqli_fetch_row($result)) {
-                $userActual = $row[0];
-            }
-        } catch (Exception $e) {
-            $e->getMessage();
-        }
-        return $userActual;
-    }
-
-    public function verificarTipoUsuario($usuario)
-    {
-        try {
-            $link = parent::conexionBD();
-            $sql = "SELECT * FROM tipousuario WHERE idrol IN (SELECT idRol2 FROM usuario WHERE usuario = '$usuario' OR correo = '$usuario')";
-            $result = mysqli_query($link, $sql);
-            while ($row = mysqli_fetch_row($result)) {
-                $id = $row[0];
-            }
-        } catch (Exception $e) {
-            $e->getMessage();
-        }
-        return $id;
-    }
-
-    public function verificarTotalAreasAgente($usuario)
-    {
-        try {
-            $link = parent::conexionBD();
-            $sql = "SELECT count(*) from areas a, usuario_area ua, usuario u
-                    where a.codigo = ua.codigo_area2 and ua.usuario_legajo2 = u.legajo and u.usuario = '$usuario'";
-            $result = mysqli_query($link, $sql);
-            while ($row = mysqli_fetch_row($result)) {
-                $totalAreasAgente = $row[0];
-            }
-        } catch (Exception $e) {
-            $e->getMessage();
-        }
-        return $totalAreasAgente;
-    }
-
-    //Con legajo
-    public function verificarTotalAreasAgentelegajo($legajo)
-    {
-        try {
-            $link = parent::conexionBD();
-            $sql = "SELECT count(*) from areas a, usuario_area ua, usuario u
-                    where a.codigo = ua.codigo_area2 and ua.usuario_legajo2 = u.legajo and u.legajo = '$legajo'";
-            $result = mysqli_query($link, $sql);
-            while ($row = mysqli_fetch_row($result)) {
-                $totalAreasAgente = $row[0];
-            }
-        } catch (Exception $e) {
-            $e->getMessage();
-        }
-        return $totalAreasAgente;
-    }
-
-    public function verificarNombreAreaUsuario($usuario)
-    {
-        try {
-            $link = parent::conexionBD();
-            $sql = "SELECT a.nombre from areas a where a.codigo in (select ua.codigo_area2 from usuario_area ua where ua.usuario_legajo2
-                    in (select u.legajo from usuario u where u.usuario = '$usuario'))";
-            $result = mysqli_query($link, $sql);
-            while ($row = mysqli_fetch_row($result)) {
-                $areaUsuario = $row[0];
-            }
-        } catch (Exception $e) {
-            $e->getMessage();
-        }
-        return $areaUsuario;
-    }
-
 
     public function mostrarDatosUsuario($usuario)
     {
@@ -148,124 +198,87 @@ class Consultas extends Conexion
                 $nombreApellido = $row[0];
                 $i++;
             }
+            return $nombreApellido;
         } catch (Exception $e) {
             $e->getMessage();
         }
-        return $nombreApellido;
-    }
-
-    //Gestionar Usuario
-    public function listarDatosPersonales($usuario)
-    {
-        try {
-            $link = parent::conexionBD();
-            $sql = "SELECT * FROM usuario WHERE usuario = '$usuario' OR correo = '$usuario'";
-            $result = mysqli_query($link, $sql);
-            $i = 0;
-            while ($row = mysqli_fetch_row($result)) {
-                $datosPersonales[$i] = $row;
-                $i++;
-            }
-        } catch (Exception $e) {
-            $e->getMessage();
-        }
-        return $datosPersonales;
     }
 
     public function editarDatosUsuario($legajo, $nombre, $apellido, $correo, $user, $pass, $userAnterior)
     {
         try {
-            if ($pass == null || $pass == '') {
+            if ($pass == NULL || $pass == '') {
                 $sql = "UPDATE usuario SET legajo = '$legajo', nombre = '$nombre', apellido = '$apellido', correo = '$correo', usuario = '$user'
-                        WHERE usuario = '$userAnterior'";
+                                WHERE usuario = '$userAnterior'";
             } else {
                 $passFuerte = password_hash($pass, PASSWORD_DEFAULT);
                 $sql = "UPDATE usuario SET legajo = '$legajo', nombre = '$nombre', apellido = '$apellido', correo = '$correo', usuario = '$user', contraseña = '$passFuerte'
-                        WHERE usuario = '$userAnterior'";
+                                WHERE usuario = '$userAnterior'";
             }
             $link = parent::conexionBD();
             $result = mysqli_query($link, $sql);
-            if ($result == true) {
-                return true;
-            } else {
-                return false;
-            }
+            return $result;
         } catch (Exception $e) {
             die('Error: ' . $e->getMessage());
         }
     }
 
-    public function listarTareasEncargados($estado)
+    public function asignarRolUsuario($idRol, $legajo)
     {
         try {
             $link = parent::conexionBD();
-
-            if ($estado == 'actual') {
-                $sql = "SELECT t.nroArreglo, t.descripcion, t.nota_electronica, t.nombreApellidoAfectado, t.celular, t.solucion, t.estadoTarea_id, e.nombre, t.motivoCancelacion,
-                        t.fechaProblema, t.fechaSolucion, t.direccion_codigo, d.nombre, a.codigo, a.nombre, concat(u.nombre, ' ', u.apellido), t.usuarioCreado
-                        from tareas t, estadotarea e, direcciones d, areas a, usuario u
-                        where t.estadoTarea_id = e.id and t.direccion_codigo = d.codigo
-                        and t.codigoArea3 = a.codigo
-                        and t.estadoTarea_id != 3 and t.estadoTarea_id != 4 and t.estadoTarea_id != 5";
-            } else if ($estado == 'completadas') {
-                $sql = "SELECT t.nroArreglo, t.descripcion, t.nota_electronica, t.nombreApellidoAfectado, t.celular, t.solucion, t.estadoTarea_id, e.nombre, t.motivoCancelacion,
-                        t.fechaProblema, t.fechaSolucion, t.direccion_codigo, d.nombre, a.codigo, a.nombre, concat(u.nombre, ' ', u.apellido), t.usuarioCreado
-                        from tareas t, estadotarea e, direcciones d, areas a, usuario u
-                        where t.estadoTarea_id = e.id and t.direccion_codigo = d.codigo
-                        and t.codigoArea3 = a.codigo
-                        and t.estadoTarea_id != 1 and t.estadoTarea_id != 2 and t.estadoTarea_id != 4 and t.estadoTarea_id != 5";
-            } else if ($estado == 'canceladas') {
-                $sql = "SELECT t.nroArreglo, t.descripcion, t.nota_electronica, t.nombreApellidoAfectado, t.celular, t.solucion, t.estadoTarea_id, e.nombre, t.motivoCancelacion,
-                        t.fechaProblema, t.fechaSolucion, t.direccion_codigo, d.nombre, a.codigo, a.nombre, concat(u.nombre, ' ', u.apellido), t.usuarioCreado
-                        from tareas t, estadotarea e, direcciones d, areas a, usuario u
-                        where t.estadoTarea_id = e.id and t.direccion_codigo = d.codigo
-                        and t.codigoArea3 = a.codigo
-                        and t.estadoTarea_id = 4";
-            }
-
+            $sql = "UPDATE usuario SET idRol2 = '$idRol' WHERE legajo = '$legajo'";
             $result = mysqli_query($link, $sql);
-            $listTareasEncargados = [];
-            $i = 0;
-            while ($row = mysqli_fetch_row($result)) {
-                $listTareasEncargados[$i] = $row;
-                $i++;
-            }
+            return $result;
+        } catch (Exception $e) {
+            die('Error ' . $e->getMessage());
+        }
+    }
+
+    public function blanquearPass($legajo, $pass)
+    {
+        try {
+            $passFuerte = password_hash($pass, PASSWORD_DEFAULT);
+            $link = parent::conexionBD();
+            $sql = "UPDATE usuario SET contraseña = '$passFuerte' WHERE legajo = '$legajo'";
+            $result = mysqli_query($link, $sql);
+            return $result;
+        } catch (Exception $e) {
+            die('Error: ' . $e->getMessage());
+        }
+    }
+
+    public function bajaUsuario($legajo, $motivoBaja)
+    {
+        try {
+            $link = parent::conexionBD();
+            $sql = "UPDATE usuario SET idRol2 = NULL, motivoBaja = '$motivoBaja' WHERE legajo = '$legajo'";
+            $result = mysqli_query($link, $sql);
+            return $result;
         } catch (Exception $e) {
             $e->getMessage();
         }
-        return $listTareasEncargados;
     }
 
-    public function listarTareasEncargadosCompletosActual()
+    public function altaUsuario($idRol, $legajo)
     {
         try {
             $link = parent::conexionBD();
-            $sql = "SELECT t.nroArreglo, t.descripcion, t.nota_electronica, t.nombreApellidoAfectado, t.celular, t.solucion, t.estadoTarea_id, e.nombre, t.motivoCancelacion,
-                    t.fechaProblema, t.fechaSolucion, t.direccion_codigo, d.nombre, a.codigo, a.nombre, concat(u.nombre, ' ', u.apellido), t.usuarioCreado
-                    from tareas t, estadotarea e, direcciones d, areas a, usuario u
-                    where t.estadoTarea_id = e.id and t.direccion_codigo = d.codigo
-                    and t.codigoArea3 = a.codigo
-                    and t.estadoTarea_id = 3 and date(t.fechaSolucion) = curdate()";
-
+            $sql = "UPDATE usuario SET idRol2 = '$idRol', motivoBaja = NULL WHERE legajo = '$legajo'";
             $result = mysqli_query($link, $sql);
-            $tareasEncargadosCompletosActual = [];
-            $i = 0;
-
-            while ($row = mysqli_fetch_row($result)) {
-                $tareasEncargadosCompletosActual[$i] = $row;
-                $i++;
-            }
+            return $result;
         } catch (Exception $e) {
-            die('Error: ' . $e->getMessage());
+            die('Error ' . $e->getMessage());
         }
-        return $tareasEncargadosCompletosActual;
     }
 
+
+    // LISTADOS
     public function listarAreas()
     {
         try {
             $link = parent::conexionBD();
-            $sql = "SELECT * from areas a";
+            $sql = "SELECT * FROM areas a";
             $result = mysqli_query($link, $sql);
             $listAreas = [];
             $i = 0;
@@ -273,61 +286,12 @@ class Consultas extends Conexion
                 $listAreas[$i] = $row;
                 $i++;
             }
+            return $listAreas;
         } catch (Exception $e) {
             $e->getMessage();
         }
-        return $listAreas;
     }
 
-    public function agregarTareaEncargado($descripcion, $nota_electronica, $nombreApellido, $cel, $direccion, $selectArea, $usuarioCreado)
-    {
-        try {
-            $link = parent::conexionBD();
-            $sql = "INSERT into tareas(descripcion, nota_electronica, nombreApellidoAfectado, celular, estadoTarea_id, fechaProblema, direccion_codigo, codigoArea3, fechaCreada, usuarioCreado)
-                    values('$descripcion', '$nota_electronica', '$nombreApellido', '$cel', '1', NOW(), '$direccion', '$selectArea', curdate(), '$usuarioCreado')";
-            $result = mysqli_query($link, $sql);
-            if ($result == true) {
-                return true;
-            } else {
-                return false;
-            }
-        } catch (Exception $e) {
-            die('Error:' . $e->getMessage());
-        }
-    }
-
-    public function editarTareaEncargado($descripcion, $nota_electronica, $nombreApellido, $cel, $codDireccion, $motivoCancelacion, $solucion, $selectArea, $nroArreglo)
-    {
-        try {
-
-            if ($motivoCancelacion != '' && $solucion == '') {
-                $sql = "UPDATE tareas set descripcion = '$descripcion', nota_electronica = '$nota_electronica',
-                        nombreApellidoAfectado = '$nombreApellido', celular = '$cel', estadoTarea_id = '4',
-                        direccion_codigo = '$codDireccion', motivoCancelacion = '$motivoCancelacion', codigoArea3 = '$selectArea' where nroArreglo = '$nroArreglo'";
-            } else if ($solucion != '' && $motivoCancelacion == '') {
-                $sql = "UPDATE tareas set descripcion = '$descripcion', nota_electronica = '$nota_electronica',
-                        nombreApellidoAfectado = '$nombreApellido', celular = '$cel', estadoTarea_id = '3', solucion = '$solucion',
-                        direccion_codigo = '$codDireccion', codigoArea3 = '$selectArea' where nroArreglo = '$nroArreglo'";
-            } else {
-                $sql = "UPDATE tareas set descripcion = '$descripcion', nota_electronica = '$nota_electronica',
-                        nombreApellidoAfectado = '$nombreApellido', celular = '$cel',
-                        direccion_codigo = '$codDireccion', codigoArea3 = '$selectArea' where nroArreglo = '$nroArreglo'";
-            }
-
-            $link = parent::conexionBD();
-            $result = mysqli_query($link, $sql);
-            if ($result == true) {
-                return true;
-            } else {
-                return false;
-            }
-        } catch (Exception $e) {
-            die('Error:' . $e->getMessage());
-        }
-    }
-
-
-    //AGENTES
     public function listarEstadoTarea()
     {
         try {
@@ -340,34 +304,153 @@ class Consultas extends Conexion
                 $listEstado[$i] = $row;
                 $i++;
             }
+            return $listEstado;
         } catch (Exception $e) {
             $e->getMessage();
         }
-        return $listEstado;
     }
 
-    public function editarTarea($descripcion, $nota_electronica, $nombreApellido, $celular, $codDireccion, $motivoCancelacion, $solucion, $selectArea, $nroArreglo)
+
+    // TAREAS
+    public function listarTareasAdmin($estado)
     {
         try {
-
-            if ($motivoCancelacion != '' && $solucion == '') {
-                $sql = "UPDATE tareas set nombreApellidoAfectado = '$nombreApellido', celular = '$celular', descripcion = '$descripcion', nota_electronica = '$nota_electronica',
-                        estadoTarea_id = '4', direccion_codigo = '$codDireccion', motivoCancelacion = '$motivoCancelacion', codigoArea3 = '$selectArea' where nroArreglo = '$nroArreglo'";
-            } else if ($solucion != '' && $motivoCancelacion == '') {
-                $sql = "UPDATE tareas set nombreApellidoAfectado = '$nombreApellido', celular = '$celular', descripcion = '$descripcion', nota_electronica = '$nota_electronica',
-                        estadoTarea_id = '3', solucion = '$solucion', direccion_codigo = '$codDireccion', codigoArea3 = '$selectArea' where nroArreglo = '$nroArreglo'";
-            } else {
-                $sql = "UPDATE tareas set nombreApellidoAfectado = '$nombreApellido', celular = '$celular', descripcion = '$descripcion', nota_electronica = '$nota_electronica',
-                        direccion_codigo = '$codDireccion', codigoArea3 = '$selectArea' where nroArreglo = '$nroArreglo'";
+            $link = parent::conexionBD();
+            if ($estado == 'actual') {
+                $sql = "SELECT t.nroArreglo, t.descripcion, t.nota_electronica, t.nombreApellidoAfectado, t.celular, t.solucion, e.id, e.nombre, t.motivoCancelacion,
+                            t.fechaProblema, t.fechaSolucion, d.codigo, d.nombre, u.legajo, concat(u.nombre, ' ', u.apellido) AS nombre_apellido, a.codigo, a.nombre, t.usuarioCreado
+                            FROM tareas t, estadotarea e, direcciones d, usuario u, areas a
+                            WHERE t.estadoTarea_id = e.id AND t.direccion_codigo = d.codigo
+                            AND t.codigoArea3 = a.codigo AND (t.estadoTarea_id = 1 OR t.estadoTarea_id = 2)";
+            } else if ($estado == 'completas') {
+                $sql = "SELECT t.nroArreglo, t.descripcion, t.nota_electronica, t.nombreApellidoAfectado, t.celular, t.solucion, e.id, e.nombre, t.motivoCancelacion,
+                            t.fechaProblema, t.fechaSolucion, d.codigo, d.nombre, u.legajo, concat(u.nombre, ' ', u.apellido) AS nombre_apellido, a.codigo, a.nombre, t.usuarioCreado, t.comprobante
+                            FROM tareas t, estadotarea e, direcciones d, usuario u, areas a
+                            WHERE t.estadoTarea_id = e.id AND t.direccion_codigo = d.codigo
+                            AND t.codigoArea3 = a.codigo AND t.estadoTarea_id = 3";
+            } else if ($estado == 'canceladas') {
+                $sql = "SELECT t.nroArreglo, t.descripcion, t.nota_electronica, t.nombreApellidoAfectado, t.celular, t.solucion, e.id, e.nombre, t.motivoCancelacion,
+                            t.fechaProblema, t.fechaSolucion, d.codigo, d.nombre, u.legajo, concat(u.nombre, ' ', u.apellido) AS nombre_apellido, a.codigo, a.nombre, t.usuarioCreado
+                            FROM tareas t, estadotarea e, direcciones d, usuario u, areas a
+                            WHERE t.estadoTarea_id = e.id AND t.direccion_codigo = d.codigo
+                            AND t.codigoArea3 = a.codigo AND t.estadoTarea_id = 4";
             }
 
+            $result = mysqli_query($link, $sql);
+            $listTareas = [];
+            $i = 0;
+            while ($row = mysqli_fetch_row($result)) {
+                $listTareas[$i] = $row;
+                $i++;
+            }
+            return $listTareas;
+        } catch (Exception $e) {
+            die('Error: ' . $e->getMessage());
+        }
+    }
+
+    public function listarTareasCompletasActual()
+    {
+        try {
+            $link = parent::conexionBD();
+            $sql = "SELECT t.nroArreglo, t.descripcion, t.nota_electronica, t.nombreApellidoAfectado, t.celular, t.solucion, e.id, e.nombre, t.motivoCancelacion,
+                        t.fechaProblema, t.fechaSolucion, d.codigo, d.nombre, u.legajo, concat(u.nombre, ' ', u.apellido) AS nombre_apellido, a.codigo, a.nombre, t.usuarioCreado, t.comprobante
+                        FROM tareas t, estadotarea e, direcciones d, usuario u, areas a
+                        WHERE t.estadoTarea_id = e.id AND t.direccion_codigo = d.codigo
+                        AND t.codigoArea3 = a.codigo AND t.estadoTarea_id = 3 AND date(t.fechaSolucion) = curdate()";
+            $result = mysqli_query($link, $sql);
+            $listTareasCompletas = [];
+            $i = 0;
+            while ($row = mysqli_fetch_row($result)) {
+                $listTareasCompletas[$i] = $row;
+                $i++;
+            }
+            return $listTareasCompletas;
+        } catch (Exception $e) {
+            die('Error: ' . $e->getMessage());
+        }
+    }
+
+    public function listarTareasEliminadas()
+    {
+        try {
+            $link = parent::conexionBD();
+            $sql = "SELECT t.nroArreglo, t.descripcion, t.nota_electronica, t.nombreApellidoAfectado, t.celular, t.solucion, e.nombre, t.motivoCancelacion,
+                        t.fechaProblema, t.fechaSolucion, d.nombre, concat(u.nombre, ' ', u.apellido) AS nombreApellido, t.motivoEliminacion, t.fechaEliminado
+                        FROM tareas t, estadotarea e, direcciones d, usuario u
+                        WHERE t.estadoTarea_id = e.id AND t.direccion_codigo = d.codigo AND t.estadoTarea_id = 5";
+            $result = mysqli_query($link, $sql);
+            $listTareasEliminadas = [];
+            $i = 0;
+            while ($row = mysqli_fetch_row($result)) {
+                $listTareasEliminadas[$i] = $row;
+                $i++;
+            }
+            return $listTareasEliminadas;
+        } catch (Exception $e) {
+            die('Error: ' . $e->getMessage());
+        }
+    }
+
+    public function agregarTarea($descripcion, $nota_electronica, $nombreApellido, $celular, $direccion, $area, $usuarioCreado)
+    {
+        try {
+            $link = parent::conexionBD();
+            $sql = "INSERT INTO tareas(descripcion, nota_electronica, nombreApellidoAfectado, celular, estadoTarea_id, fechaProblema, direccion_codigo, codigoArea3, fechaCreada, usuarioCreado)
+                        values('$descripcion', '$nota_electronica', '$nombreApellido', '$celular', '1', NOW(), '$direccion', '$area', curdate(), '$usuarioCreado')";
+            $result = mysqli_query($link, $sql);
+            return $result;
+        } catch (Exception $e) {
+            die('Error:' . $e->getMessage());
+        }
+    }
+
+    public function editarTarea($descripcion, $nota_electronica, $nombreApellido, $celular, $codDireccion, $selectArea, $nroArreglo)
+    {
+        try {
+            $sql = "UPDATE tareas SET nombreApellidoAfectado = '$nombreApellido', celular = '$celular', descripcion = '$descripcion',
+                    nota_electronica = '$nota_electronica', direccion_codigo = '$codDireccion', codigoArea3 = '$selectArea'
+                    WHERE nroArreglo = '$nroArreglo'";
             $link = parent::conexionBD();
             $result = mysqli_query($link, $sql);
-            if ($result == true) {
-                return true;
-            } else {
-                return false;
-            }
+            return $result;
+        } catch (Exception $e) {
+            $e->getMessage();
+        }
+    }
+
+    public function iniciarTarea($nroArreglo)
+    {
+        try {
+            $link = parent::conexionBD();
+            $sql = "UPDATE tareas SET estadoTarea_id = '2' WHERE nroArreglo = '$nroArreglo'";
+            $result = mysqli_query($link, $sql);
+            return $result;
+        } catch (Exception $e) {
+            $e->getMessage();
+        }
+    }
+
+    public function terminarTarea($solucion, $comprobante, $nroArreglo)
+    {
+        try {
+            $link = parent::conexionBD();
+            $sql = "UPDATE tareas SET solucion = '$solucion', comprobante = '$comprobante', fechaSolucion = now(), estadoTarea_id = 3
+                    WHERE nroArreglo = '$nroArreglo'";
+            $result = mysqli_query($link, $sql);
+            return $result;
+        } catch (Exception $e) {
+            $e->getMessage();
+        }
+    }
+
+    public function cancelarTarea($motivoCancelacion, $nroArreglo)
+    {
+        try {
+            $link = parent::conexionBD();
+            $sql = "UPDATE tareas SET motivoCancelacion = '$motivoCancelacion', estadoTarea_id = 4 WHERE nroArreglo = '$nroArreglo'";
+            $result = mysqli_query($link, $sql);
+            return $result;
         } catch (Exception $e) {
             $e->getMessage();
         }
@@ -377,69 +460,23 @@ class Consultas extends Conexion
     {
         try {
             $link = parent::conexionBD();
-            $sql = "UPDATE tareas set estadoTarea_id = 5, motivoEliminacion = '$motivoEliminacion', fechaEliminado = NOW() where nroArreglo = '$nroArreglo'";
+            $sql = "UPDATE tareas SET estadoTarea_id = 5, motivoEliminacion = '$motivoEliminacion', fechaEliminado = NOW() WHERE nroArreglo = '$nroArreglo'";
             $result = mysqli_query($link, $sql);
-            if ($result == true) {
-                return true;
-            } else {
-                return false;
-            }
+            return $result;
         } catch (Exception $e) {
             $e->getMessage();
         }
     }
 
 
-    //AGENTE
-    public function agregarAgente($legajo, $nombre, $apellido, $correo, $user, $pass)
-    {
-        try {
-            $passFuerte = password_hash($pass, PASSWORD_DEFAULT);
-            $link = parent::conexionBD();
-            $sql = "INSERT INTO usuario VALUES ('$legajo', '$nombre', '$apellido', '$correo', '$user', '$passFuerte', '1')";
-            $result = mysqli_query($link, $sql);
-            if ($result == true) {
-                return true;
-            } else {
-                return false;
-            }
-        } catch (Exception $e) {
-            $e->getMessage();
-        }
-    }
-
-
-    //PAGE ADMIN
-    public function listarAgentes()
-    {
-        try {
-            $link = parent::conexionBD();
-            $sql = "SELECT u.legajo, concat(u.nombre, ' ', u.apellido) as nombre_apellido
-                    from usuario u, tipousuario t where u.idRol2 = 2 and u.idRol2 = t.idrol order by t.nombre";
-            $result = mysqli_query($link, $sql);
-            $listEmpleados = [];
-            $i = 0;
-            while ($row = mysqli_fetch_row($result)) {
-                $listEmpleados[$i] = $row;
-                $i++;
-            }
-        } catch (Exception $e) {
-            $e->getMessage();
-        }
-        return $listEmpleados;
-    }
-
+    // AREAS
     public function agregarNuevoArea($area, $descripcion)
     {
         try {
             $link = parent::conexionBD();
-            $sql = "INSERT into areas(nombre, descripcion) values ('$area', '$descripcion')";
+            $sql = "INSERT INTO areas(nombre, descripcion) values ('$area', '$descripcion')";
             $result = mysqli_query($link, $sql);
-            if ($result) {
-                return true;
-            } else {
-                return false;
-            }
+            return $result;
         } catch (Exception $e) {
             $e->getMessage();
         }
@@ -449,341 +486,21 @@ class Consultas extends Conexion
     {
         try {
             $link = parent::conexionBD();
-            $sql = "UPDATE areas set nombre = '$area', descripcion = '$descripcion' where codigo = $id";
+            $sql = "UPDATE areas SET nombre = '$area', descripcion = '$descripcion' WHERE codigo = $id";
             $result = mysqli_query($link, $sql);
-            if ($result) {
-                return true;
-            } else {
-                return false;
-            }
-        } catch (Exception $e) {
-            $e->getMessage();
-        }
-    }
-
-    public function listarTareaAgente($legajo)
-    {
-        try {
-            $link = parent::conexionBD();
-            $sql = "SELECT t.nroArreglo, t.descripcion, t.nota_electronica, t.nombreApellidoAfectado, t.celular, t.solucion, e.nombre, t.motivoCancelacion,
-                    t.fechaProblema, t.fechaSolucion, d.nombre, concat(u.nombre, ' ', u.apellido) as nombreApellido, t.motivoEliminacion
-                    from tareas t, estadotarea e, direcciones d, usuario u
-                    where t.estadoTarea_id = e.id and t.direccion_codigo = d.codigo and u.legajo = '$legajo' and t.estadoTarea_id < 5";
-            $result = mysqli_query($link, $sql);
-            $listTareaAgente = [];
-            $i = 0;
-            while ($row = mysqli_fetch_row($result)) {
-                $listTareaAgente[$i] = $row;
-                $i++;
-            }
-        } catch (Exception $e) {
-            $e->getMessage();
-        }
-        return $listTareaAgente;
-    }
-
-    //Verificar nombre del área donde se desempeña el agente
-    public function listarNombreAreaUsuario($legajo)
-    {
-        try {
-            $link = parent::conexionBD();
-            $sql = "SELECT a.codigo, a.nombre from areas a where a.codigo in (select ua.codigo_area2 from usuario_area ua where ua.usuario_legajo2 in
-                    (select u.legajo from usuario u where u.legajo = '$legajo'))";
-            $result = mysqli_query($link, $sql);
-            $areaActual = [];
-            $i = 0;
-            while ($row = mysqli_fetch_row($result)) {
-                $areaActual[$i] = $row;
-                $i++;
-            }
-        } catch (Exception $e) {
-            $e->getMessage();
-        }
-        return $areaActual;
-    }
-
-
-
-    //INICIO
-    public function contarDirecciones()
-    {
-        try {
-            $link = parent::conexionBD();
-            $sql = "SELECT COUNT(*) FROM direcciones";
-            $result = mysqli_query($link, $sql);
-            while ($row = mysqli_fetch_row($result)) {
-                $cantDirecciones = $row[0];
-            }
-        } catch (Exception $e) {
-            $e->getMessage();
-        }
-        return $cantDirecciones;
-    }
-
-
-    //PAGE ListarTareasAgente
-    public function listarTareasAgentesCompletosActual($areaUsuario, $areaUsuario2, $areaUsuario3)
-    {
-        try {
-            $link = parent::conexionBD();
-            $sql = "SELECT t.nroArreglo, t.descripcion, t.nota_electronica, t.nombreApellidoAfectado, t.celular, t.solucion, e.id, e.nombre, t.motivoCancelacion,
-                    t.fechaProblema, t.fechaSolucion, d.codigo, d.nombre, u.legajo, concat(u.nombre, ' ', u.apellido) as nombre_apellido, a.codigo, a.nombre, t.usuarioCreado
-                    from tareas t, estadotarea e, direcciones d, usuario u, areas a
-                    where t.estadoTarea_id = e.id and t.direccion_codigo = d.codigo
-                    and t.codigoArea3 = a.codigo and t.estadoTarea_id != 5 and t.codigoArea3
-                    in (select a2.codigo from areas a2 where a.codigo = '$areaUsuario' or a.codigo = '$areaUsuario2' or a.codigo = '$areaUsuario3')
-                    and date(t.fechaSolucion) = curdate()";
-
-            $result = mysqli_query($link, $sql);
-            $listTareas = [];
-            $i = 0;
-            while ($row = mysqli_fetch_row($result)) {
-                $listTareas[$i] = $row;
-                $i++;
-            }
-        } catch (Exception $e) {
-            die('Error: ' . $e->getMessage());
-        }
-        return $listTareas;
-    }
-
-
-    //LISTADO DE TAREAS ADMIN/SUPERVISOR
-
-    public function listarTareasAdmin($estado)
-    {
-        try {
-            $link = parent::conexionBD();
-            if ($estado == 'actual') {
-                $sql = "SELECT t.nroArreglo, t.descripcion, t.nota_electronica, t.nombreApellidoAfectado, t.celular, t.solucion, e.id, e.nombre, t.motivoCancelacion,
-                        t.fechaProblema, t.fechaSolucion, d.codigo, d.nombre, u.legajo, concat(u.nombre, ' ', u.apellido) as nombre_apellido, a.codigo, a.nombre, t.usuarioCreado
-                        from tareas t, estadotarea e, direcciones d, usuario u, areas a
-                        where t.estadoTarea_id = e.id and t.direccion_codigo = d.codigo
-                        and t.codigoArea3 = a.codigo and (t.estadoTarea_id = 1 or t.estadoTarea_id = 2)";
-            } else if ($estado == 'completas') {
-                $sql = "SELECT t.nroArreglo, t.descripcion, t.nota_electronica, t.nombreApellidoAfectado, t.celular, t.solucion, e.id, e.nombre, t.motivoCancelacion,
-                        t.fechaProblema, t.fechaSolucion, d.codigo, d.nombre, u.legajo, concat(u.nombre, ' ', u.apellido) as nombre_apellido, a.codigo, a.nombre, t.usuarioCreado, t.comprobante
-                        from tareas t, estadotarea e, direcciones d, usuario u, areas a
-                        where t.estadoTarea_id = e.id and t.direccion_codigo = d.codigo
-                        and t.codigoArea3 = a.codigo and t.estadoTarea_id = 3";
-            } else if ($estado == 'canceladas') {
-                $sql = "SELECT t.nroArreglo, t.descripcion, t.nota_electronica, t.nombreApellidoAfectado, t.celular, t.solucion, e.id, e.nombre, t.motivoCancelacion,
-                        t.fechaProblema, t.fechaSolucion, d.codigo, d.nombre, u.legajo, concat(u.nombre, ' ', u.apellido) as nombre_apellido, a.codigo, a.nombre, t.usuarioCreado
-                        from tareas t, estadotarea e, direcciones d, usuario u, areas a
-                        where t.estadoTarea_id = e.id and t.direccion_codigo = d.codigo
-                        and t.codigoArea3 = a.codigo and t.estadoTarea_id = 4";
-            }
-
-            $result = mysqli_query($link, $sql);
-            $listTareas = [];
-            $i = 0;
-            while ($row = mysqli_fetch_row($result)) {
-                $listTareas[$i] = $row;
-                $i++;
-            }
-        } catch (Exception $e) {
-            die('Error: ' . $e->getMessage());
-        }
-        return $listTareas;
-    }
-
-    public function listarTareasCompletasActual()
-    {
-        try {
-            $link = parent::conexionBD();
-            $sql = "SELECT t.nroArreglo, t.descripcion, t.nota_electronica, t.nombreApellidoAfectado, t.celular, t.solucion, e.id, e.nombre, t.motivoCancelacion,
-                    t.fechaProblema, t.fechaSolucion, d.codigo, d.nombre, u.legajo, concat(u.nombre, ' ', u.apellido) as nombre_apellido, a.codigo, a.nombre, t.usuarioCreado, t.comprobante
-                    from tareas t, estadotarea e, direcciones d, usuario u, areas a
-                    where t.estadoTarea_id = e.id and t.direccion_codigo = d.codigo
-                    and t.codigoArea3 = a.codigo and t.estadoTarea_id = 3 and date(t.fechaSolucion) = curdate()";
-            $result = mysqli_query($link, $sql);
-            $listTareasCompletas = [];
-            $i = 0;
-            while ($row = mysqli_fetch_row($result)) {
-                $listTareasCompletas[$i] = $row;
-                $i++;
-            }
-        } catch (Exception $e) {
-            die('Error: ' . $e->getMessage());
-        }
-        return $listTareasCompletas;
-    }
-
-
-
-    //PAGE ADMIN: LISTAR TAREAS ELIMINADAS
-
-    public function listarTareasEliminadas()
-    {
-        try {
-            $link = parent::conexionBD();
-            $sql = "SELECT t.nroArreglo, t.descripcion, t.nota_electronica, t.nombreApellidoAfectado, t.celular, t.solucion, e.nombre, t.motivoCancelacion,
-                    t.fechaProblema, t.fechaSolucion, d.nombre, concat(u.nombre, ' ', u.apellido) as nombreApellido, t.motivoEliminacion, t.fechaEliminado
-                    from tareas t, estadotarea e, direcciones d, usuario u
-                    where t.estadoTarea_id = e.id and t.direccion_codigo = d.codigo and t.estadoTarea_id = 5";
-            $result = mysqli_query($link, $sql);
-            $listTareasEliminadas = [];
-            $i = 0;
-            while ($row = mysqli_fetch_row($result)) {
-                $listTareasEliminadas[$i] = $row;
-                $i++;
-            }
-        } catch (Exception $e) {
-            die('Error: ' . $e->getMessage());
-        }
-        return $listTareasEliminadas;
-    }
-
-    // INICIAR TAREA
-    public function iniciarTarea($nroArreglo)
-    {
-        try {
-            $link = parent::conexionBD();
-            $sql = "UPDATE tareas set estadoTarea_id = '2' where nroArreglo = '$nroArreglo'";
-            $result = mysqli_query($link, $sql);
-            if ($result == true) {
-                return true;
-            } else {
-                return false;
-            }
-        } catch (Exception $e) {
-            $e->getMessage();
-        }
-    }
-
-    //QUITAR ASIGNADO A UNA TAREA
-    public function quitarAgenteAsignado($nroArreglo)
-    {
-        try {
-            $link = parent::conexionBD();
-            $sql = "UPDATE tareas set usuario_legajo = '0', estadoTarea_id = '1' where nroArreglo = '$nroArreglo'";
-            $result = mysqli_query($link, $sql);
-            if ($result == true) {
-                return true;
-            } else {
-                return false;
-            }
-        } catch (Exception $e) {
-            $e->getMessage();
-        }
-    }
-
-    //TERMINAR TAREA
-    public function terminarTarea($solucion, $comprobante, $nroArreglo)
-    {
-        try {
-            $link = parent::conexionBD();
-            $sql = "UPDATE tareas set solucion = '$solucion', comprobante = '$comprobante', fechaSolucion = now(), estadoTarea_id = 3
-                    where nroArreglo = '$nroArreglo'";
-            $result = mysqli_query($link, $sql);
-            if ($result == true) {
-                return true;
-            } else {
-                return false;
-            }
-        } catch (Exception $e) {
-            $e->getMessage();
-        }
-    }
-
-    //CANCELAR TAREA
-    public function cancelarTarea($motivoCancelacion, $nroArreglo)
-    {
-        try {
-            $link = parent::conexionBD();
-            $sql = "UPDATE tareas set motivoCancelacion = '$motivoCancelacion', estadoTarea_id = 4 where nroArreglo = '$nroArreglo'";
-            $result = mysqli_query($link, $sql);
-            if ($result == true) {
-                return true;
-            } else {
-                return false;
-            }
-        } catch (Exception $e) {
-            $e->getMessage();
-        }
-    }
-
-    //AGREGAR NUEVA TAREA
-    public function agregarTarea($descripcion, $nota_electronica, $nombreApellido, $celular, $direccion, $area, $usuarioCreado)
-    {
-        try {
-            $link = parent::conexionBD();
-            $sql = "INSERT into tareas(descripcion, nota_electronica, nombreApellidoAfectado, celular, estadoTarea_id, fechaProblema, direccion_codigo, codigoArea3, fechaCreada, usuarioCreado)
-                    values('$descripcion', '$nota_electronica', '$nombreApellido', '$celular', '1', NOW(), '$direccion', '$area', curdate(), '$usuarioCreado')";
-            $result = mysqli_query($link, $sql);
-
-
-            if ($result == true) {
-                return true;
-            } else {
-                return false;
-            }
-        } catch (Exception $e) {
-            die('Error:' . $e->getMessage());
-        }
-    }
-
-
-    public function listarEncargadosAgentes()
-    {
-        try {
-            $link = parent::conexionBD();
-            $sql = "SELECT u.legajo, u.nombre, u.apellido, u.correo, u.usuario, t.nombre, a.nombre, a.codigo
-                    from usuario u, tipousuario t, areas a, usuario_area ua
-                    where u.idRol2 = t.idrol and t.idrol != 1 and t.idrol != 3 and u.legajo = ua.usuario_legajo2 and ua.codigo_area2 = a.codigo";
-            $result = mysqli_query($link, $sql);
-            $listEncAgentes = [];
-            $i = 0;
-            while ($row = mysqli_fetch_row($result)) {
-                $listEncAgentes[$i] = $row;
-                $i++;
-            }
-        } catch (Exception $e) {
-            $e->getMessage();
-        }
-        return $listEncAgentes;
-    }
-
-
-    public function editarAgente($legajo, $nombre, $apellido, $correo, $user, $legajoAnterior)
-    {
-        try {
-            $link = parent::conexionBD();
-            $sql = "UPDATE usuario SET legajo = '$legajo', nombre = '$nombre', apellido = '$apellido', correo = '$correo', usuario = '$user' WHERE legajo = '$legajoAnterior'";
-            $result = mysqli_query($link, $sql);
-            if ($result == true) {
-                return true;
-            } else {
-                return false;
-            }
-        } catch (Exception $e) {
-            $e->getMessage();
-        }
-    }
-
-    public function bajaAgente($legajo, $motivoBaja)
-    {
-        try {
-            $link = parent::conexionBD();
-            $sql = "UPDATE usuario set idRol2 = null, motivoBaja = '$motivoBaja' where legajo = '$legajo'";
-            $result = mysqli_query($link, $sql);
-            if ($result == true) {
-                return true;
-            } else {
-                return false;
-            }
+            return $result;
         } catch (Exception $e) {
             $e->getMessage();
         }
     }
 
 
-    //Departemento
+    // DIRECCIONES
     public function listarDirecciones()
     {
         try {
             $link = parent::conexionBD();
-            $sql = "SELECT * FROM direcciones d order by d.nombre asc";
+            $sql = "SELECT * FROM direcciones d ORDER BY d.nombre asc";
             $result = mysqli_query($link, $sql);
             $listDirecciones = [];
             $i = 0;
@@ -791,25 +508,9 @@ class Consultas extends Conexion
                 $listDirecciones[$i] = $row;
                 $i++;
             }
+            return $listDirecciones;
         } catch (Exception $e) {
             $e->getMessage();
-        }
-        return $listDirecciones;
-    }
-
-    public function agregarDireccion($codigo, $nombre, $descripcion)
-    {
-        try {
-            $link = parent::conexionBD();
-            $sql = "INSERT INTO direcciones VALUES ('$codigo', '$nombre', '$descripcion')";
-            $result = mysqli_query($link, $sql);
-            if ($result == true) {
-                return true;
-            } else {
-                return false;
-            }
-        } catch (Exception $e) {
-            die('Error ' . $e->getMessage());
         }
     }
 
@@ -825,10 +526,22 @@ class Consultas extends Conexion
                 $listDirecciones[$i] = $row;
                 $i++;
             }
+            return $listDirecciones;
         } catch (Exception $e) {
             die('Error ' . $e->getMessage());
         }
-        return $listDirecciones;
+    }
+
+    public function agregarDireccion($codigo, $nombre, $descripcion)
+    {
+        try {
+            $link = parent::conexionBD();
+            $sql = "INSERT INTO direcciones VALUES ('$codigo', '$nombre', '$descripcion')";
+            $result = mysqli_query($link, $sql);
+            return $result;
+        } catch (Exception $e) {
+            die('Error ' . $e->getMessage());
+        }
     }
 
     public function editarDireccion($codigo, $direccion, $descripcion, $codigoDireccionAnterior)
@@ -837,11 +550,7 @@ class Consultas extends Conexion
             $link = parent::conexionBD();
             $sql = "UPDATE direcciones SET codigo = '$codigo', nombre = '$direccion', descripcion = '$descripcion' WHERE codigo = '$codigoDireccionAnterior'";
             $result = mysqli_query($link, $sql);
-            if ($result == true) {
-                return true;
-            } else {
-                return false;
-            }
+            return $result;
         } catch (Exception $e) {
             die('Error ' . $e->getMessage());
         }
@@ -853,482 +562,72 @@ class Consultas extends Conexion
             $link = parent::conexionBD();
             $sql = "DELETE FROM direcciones WHERE codigo = '$codigo'";
             $result = mysqli_query($link, $sql);
-            if ($result == true) {
-                return true;
-            } else {
-                return false;
-            }
-        } catch (Exception $e) {
-            die('Error ' . $e->getMessage());
-        }
-    }
-
-    //USUARIO
-    public function listarUsuarios()
-    {
-        try {
-            $link = parent::conexionBD();
-            $sql = "SELECT u.legajo, u.nombre, u.apellido, u.correo, u.usuario, tu.nombre
-                    FROM usuario AS u, tipousuario AS tu
-                    WHERE u.idRol2 = tu.idRol order by tu.nombre";
-            $result = mysqli_query($link, $sql);
-            $listUsuarios = [];
-            $i = 0;
-            while ($row = mysqli_fetch_row($result)) {
-                $listUsuarios[$i] = $row;
-                $i++;
-            }
-        } catch (Exception $e) {
-            die('Error ' . $e->getMessage());
-        }
-        return $listUsuarios;
-    }
-
-    public function listarRoles()
-    {
-        try {
-            $link = parent::conexionBD();
-            $sql = "SELECT * FROM tipousuario";
-            $result = mysqli_query($link, $sql);
-            $listRoles = [];
-            $i = 0;
-            while ($row = mysqli_fetch_row($result)) {
-                $listRoles[$i] = $row;
-                $i++;
-            }
-        } catch (Exception $e) {
-            die('Error ' . $e->getMessage());
-        }
-        return $listRoles;
-    }
-
-    public function listarBajasUsuarios()
-    {
-        try {
-            $link = parent::conexionBD();
-            $sql = "SELECT u.legajo, u.nombre, u.apellido, u.correo, u.motivoBaja from usuario u where u.idRol2 is null and u.legajo != 0";
-            $result = mysqli_query($link, $sql);
-            $listBajas = [];
-            $i = 0;
-            while ($row = mysqli_fetch_row($result)) {
-                $listBajas[$i] = $row;
-                $i++;
-            }
-        } catch (Exception $e) {
-            die('Error ' . $e->getMessage());
-        }
-        return $listBajas;
-    }
-
-    public function listarUsuariosCargados()
-    {
-        try {
-            $link = parent::conexionBD();
-            $sql = "SELECT u.legajo, u.nombre, u.apellido, u.correo, u.usuario, t.nombre, u.ultimoAcceso
-                    from usuario u, tipousuario t
-                    where u.idRol2 = t.idrol";
-            $result = mysqli_query($link, $sql);
-            $listUsuarios = [];
-            $i = 0;
-            while ($row = mysqli_fetch_row($result)) {
-                $listUsuarios[$i] = $row;
-                $i++;
-            }
-        } catch (Exception $e) {
-            die('Error ' . $e->getMessage());
-        }
-        return $listUsuarios;
-    }
-
-    public function altaUsuario($idRol, $legajo)
-    {
-        try {
-            $link = parent::conexionBD();
-            $sql = "UPDATE usuario set idRol2 = '$idRol', motivoBaja = null where legajo = '$legajo'";
-            $result = mysqli_query($link, $sql);
-            if ($result == true) {
-                return true;
-            } else {
-                return false;
-            }
-        } catch (Exception $e) {
-            die('Error ' . $e->getMessage());
-        }
-    }
-
-    public function agregarUsuario($tipoUsuario, $legajo, $nombre, $apellido, $correo, $user, $pass)
-    {
-        try {
-            $passFuerte = password_hash($pass, PASSWORD_DEFAULT);
-            $link = parent::conexionBD();
-
-            $sql = "INSERT into usuario(legajo, nombre, apellido, correo, usuario, contraseña, idRol2)
-                    values ('$legajo', '$nombre', '$apellido', '$correo', '$user', '$passFuerte', '$tipoUsuario')";
-
-            $result = mysqli_query($link, $sql);
-            if ($result == true) {
-                return true;
-            } else {
-                return false;
-            }
-        } catch (Exception $e) {
-            die('Error ' . $e->getMessage());
-        }
-    }
-
-    public function agregarUsuarioAreas($legajo, $codArea)
-    {
-        try {
-
-            $link = parent::conexionBD();
-
-            $sql = "INSERT INTO usuario_area(usuario_legajo2, codigo_area2) VALUES ('$legajo', '$codArea')";
-
-            $result = mysqli_query($link, $sql);
-
-            if ($result) {
-                return true;
-            } else {
-                return false;
-            }
-        } catch (Exception $e) {
-            die('Error ' . $e->getMessage());
-        }
-    }
-
-    public function eliminarAreaUsuario($legajo, $codArea)
-    {
-        try {
-
-            $link = parent::conexionBD();
-
-            $sql = "DELETE from usuario_area where usuario_legajo2 = '$legajo' and codigo_area2 = '$codArea'";
-
-            $result = mysqli_query($link, $sql);
-
-            if ($result) {
-                return true;
-            } else {
-                return false;
-            }
-        } catch (Exception $e) {
-            die('Error ' . $e->getMessage());
-        }
-    }
-
-    public function asignarRolUsuario($idRol, $legajo)
-    {
-        try {
-            $link = parent::conexionBD();
-            $sql = "UPDATE usuario SET idRol2 = '$idRol' WHERE legajo = '$legajo'";
-            $result = mysqli_query($link, $sql);
-            if ($result == true) {
-                return true;
-            } else {
-                return false;
-            }
-        } catch (Exception $e) {
-            die('Error ' . $e->getMessage());
-        }
-    }
-
-    public function quitarTareaAdmin($legajo)
-    {
-        try {
-            $link = parent::conexionBD();
-
-            $sql = "UPDATE tareas SET usuario_legajo = '0' WHERE usuario_legajo = '$legajo' AND estadoTarea_id = 1 OR estadoTarea_id = 2";
-
-            $result = mysqli_query($link, $sql);
-            if ($result == true) {
-                return true;
-            } else {
-                return false;
-            }
+            return $result;
         } catch (Exception $e) {
             die('Error ' . $e->getMessage());
         }
     }
 
 
-    public function blanquearPass($legajo, $pass)
-    {
-        try {
-            $passFuerte = password_hash($pass, PASSWORD_DEFAULT);
-            $link = parent::conexionBD();
-
-            $sql = "UPDATE usuario set contraseña = '$passFuerte' where legajo = '$legajo'";
-
-            $result = mysqli_query($link, $sql);
-            if ($result == true) {
-                return true;
-            } else {
-                return false;
-            }
-        } catch (Exception $e) {
-            die('Error: ' . $e->getMessage());
-        }
-    }
-
-
-
-    //QUERY INICIO.PHP
-
-    public function contarTareasCompletasUser($user)
+    // QUERYS inicio.php
+    public function contarTareasEstado($estado)
     {
         try {
             $link = parent::conexionBD();
-            $sql = "SELECT count(*) from tareas t
-                    where estadoTarea_id in (SELECT id from estadotarea e where nombre = 'Completo')
-                    and usuario_legajo in (SELECT legajo from usuario u where usuario = '$user' OR correo = '$user')";
+            $sql = "SELECT count(*) FROM tareas WHERE estadoTarea_id IN (SELECT id FROM estadotarea e WHERE nombre = '$estado')";
             $result = mysqli_query($link, $sql);
             while ($row = mysqli_fetch_row($result)) {
                 $nroCompletas = $row[0];
             }
+            return $nroCompletas;
         } catch (Exception $e) {
             die('Error: ' . $e->getMessage());
         }
-        return $nroCompletas;
     }
 
-    public function contarTotalTareasAreas($areaUsuario, $areaUsuario2, $areaUsuario3)
+    public function contarDirecciones()
     {
         try {
             $link = parent::conexionBD();
-
-            $sql = "SELECT count(*) from tareas t where t.codigoArea3
-                    in (select a.codigo from areas a where a.codigo = '$areaUsuario' || a.codigo = '$areaUsuario2' || a.codigo = '$areaUsuario3')";
-
-
+            $sql = "SELECT COUNT(*) FROM direcciones";
             $result = mysqli_query($link, $sql);
             while ($row = mysqli_fetch_row($result)) {
-                $nroTotal = $row[0];
+                $cantDirecciones = $row[0];
             }
+            return $cantDirecciones;
         } catch (Exception $e) {
-            die('Error: ' . $e->getMessage());
+            $e->getMessage();
         }
-        return $nroTotal;
     }
 
-    public function contarTareasPendientesArea($areaUsuario, $areaUsuario2, $areaUsuario3)
-    {
-        try {
-            $link = parent::conexionBD();
-            $sql = "SELECT count(*) from tareas t where estadoTarea_id in (select id from estadotarea e where nombre = 'Pendiente')
-                    and t.codigoArea3 in (select a.codigo from areas a where a.codigo = '$areaUsuario'
-                    or a.codigo = '$areaUsuario2' or a.codigo = '$areaUsuario3')";
-            $result = mysqli_query($link, $sql);
-            while ($row = mysqli_fetch_row($result)) {
-                $nroCompletas = $row[0];
-            }
-        } catch (Exception $e) {
-            die('Error: ' . $e->getMessage());
-        }
-        return $nroCompletas;
-    }
-
-    public function contarTareasCompletasArea($areaUsuario, $areaUsuario2, $areaUsuario3)
-    {
-        try {
-            $link = parent::conexionBD();
-            $sql = "SELECT count(*) from tareas t where estadoTarea_id in (select id from estadotarea e where nombre = 'Completo')
-                    and t.codigoArea3 in (select a.codigo from areas a where a.codigo = '$areaUsuario'
-                    or a.codigo = '$areaUsuario2' or a.codigo = '$areaUsuario3')";
-            $result = mysqli_query($link, $sql);
-            while ($row = mysqli_fetch_row($result)) {
-                $nroCompletas = $row[0];
-            }
-        } catch (Exception $e) {
-            die('Error: ' . $e->getMessage());
-        }
-        return $nroCompletas;
-    }
-
-    public function contarTareasEnProgresoArea($areaUsuario, $areaUsuario2, $areaUsuario3)
-    {
-        try {
-            $link = parent::conexionBD();
-            $sql = "SELECT count(*) from tareas t where estadoTarea_id in (select id from estadotarea e where nombre = 'En Progreso')
-                    and t.codigoArea3 in (select a.codigo from areas a where a.codigo = '$areaUsuario'
-                    or a.codigo = '$areaUsuario2' or a.codigo = '$areaUsuario3')";
-            $result = mysqli_query($link, $sql);
-            while ($row = mysqli_fetch_row($result)) {
-                $nroCompletas = $row[0];
-            }
-        } catch (Exception $e) {
-            die('Error: ' . $e->getMessage());
-        }
-        return $nroCompletas;
-    }
-
-    public function contarTareasCanceladasArea($areaUsuario, $areaUsuario2, $areaUsuario3)
-    {
-        try {
-            $link = parent::conexionBD();
-            $sql = "SELECT count(*) from tareas t where estadoTarea_id in (select id from estadotarea e where nombre = 'Cancelado')
-                    and t.codigoArea3 in (select a.codigo from areas a where a.codigo = '$areaUsuario'
-                    or a.codigo = '$areaUsuario2' or a.codigo = '$areaUsuario3')";
-            $result = mysqli_query($link, $sql);
-            while ($row = mysqli_fetch_row($result)) {
-                $nroCanceladas = $row[0];
-            }
-        } catch (Exception $e) {
-            die('Error: ' . $e->getMessage());
-        }
-        return $nroCanceladas;
-    }
-
-    //Tareas en General
-    public function contarTareasPendientes()
-    {
-        try {
-            $link = parent::conexionBD();
-            $sql = "SELECT count(*) from tareas where estadoTarea_id in (select id from estadotarea e where nombre = 'Pendiente')";
-            $result = mysqli_query($link, $sql);
-            while ($row = mysqli_fetch_row($result)) {
-                $nroCompletas = $row[0];
-            }
-        } catch (Exception $e) {
-            die('Error: ' . $e->getMessage());
-        }
-        return $nroCompletas;
-    }
-
-    public function contarTareasEnProgreso()
-    {
-        try {
-            $link = parent::conexionBD();
-            $sql = "SELECT count(*) from tareas where estadoTarea_id in (select id from estadotarea e where nombre = 'En Progreso')";
-            $result = mysqli_query($link, $sql);
-            while ($row = mysqli_fetch_row($result)) {
-                $nroCompletas = $row[0];
-            }
-        } catch (Exception $e) {
-            die('Error: ' . $e->getMessage());
-        }
-        return $nroCompletas;
-    }
-
-    public function contarTareasCompletas()
-    {
-        try {
-            $link = parent::conexionBD();
-            $sql = "SELECT count(*) from tareas where estadoTarea_id in (select id from estadotarea e where nombre = 'Completo')";
-            $result = mysqli_query($link, $sql);
-            while ($row = mysqli_fetch_row($result)) {
-                $nroCompletas = $row[0];
-            }
-        } catch (Exception $e) {
-            die('Error: ' . $e->getMessage());
-        }
-        return $nroCompletas;
-    }
-
-    public function contarTareasCanceladas()
-    {
-        try {
-            $link = parent::conexionBD();
-            $sql = "SELECT count(*) from tareas where estadoTarea_id in (select id from estadotarea e where nombre = 'Cancelado')";
-            $result = mysqli_query($link, $sql);
-            while ($row = mysqli_fetch_row($result)) {
-                $nroCanceladas = $row[0];
-            }
-        } catch (Exception $e) {
-            die('Error: ' . $e->getMessage());
-        }
-        return $nroCanceladas;
-    }
-
-    public function contarTareasEliminadas()
-    {
-        try {
-            $link = parent::conexionBD();
-            $sql = "SELECT count(*) from tareas where estadoTarea_id in (select id from estadotarea e where nombre = 'Eliminado')";
-            $result = mysqli_query($link, $sql);
-            while ($row = mysqli_fetch_row($result)) {
-                $nroEliminadas = $row[0];
-            }
-        } catch (Exception $e) {
-            die('Error: ' . $e->getMessage());
-        }
-        return $nroEliminadas;
-    }
-
-
-    //Contar Usuarios
     public function contarTotalUsuarios()
     {
         try {
             $link = parent::conexionBD();
-            $sql = "SELECT count(*) from usuario u where u.legajo != 0";
+            $sql = "SELECT count(*) FROM usuario u WHERE u.legajo != 0";
             $result = mysqli_query($link, $sql);
             while ($row = mysqli_fetch_row($result)) {
                 $totalUsuarios = $row[0];
             }
+            return $totalUsuarios;
         } catch (Exception $e) {
             die('Error: ' . $e->getMessage());
         }
-        return $totalUsuarios;
     }
 
-    public function contarAdmin()
+    public function contarUsuariosRol($rol)
     {
         try {
             $link = parent::conexionBD();
-            $sql = "SELECT count(*) from usuario u where u.idRol2 = 3";
+            $sql = "SELECT count(*) FROM usuario u WHERE u.idRol2 = $rol";
             $result = mysqli_query($link, $sql);
             while ($row = mysqli_fetch_row($result)) {
                 $totalAdmin = $row[0];
             }
+            return $totalAdmin;
         } catch (Exception $e) {
             die('Error: ' . $e->getMessage());
         }
-        return $totalAdmin;
-    }
-
-    public function contarSupervisores()
-    {
-        try {
-            $link = parent::conexionBD();
-            $sql = "SELECT count(*) from usuario u where u.idRol2 in (select t.idrol from tipousuario t where t.nombre = 'Supervisor')";
-            $result = mysqli_query($link, $sql);
-            while ($row = mysqli_fetch_row($result)) {
-                $totalSuperv = $row[0];
-            }
-        } catch (Exception $e) {
-            die('Error: ' . $e->getMessage());
-        }
-        return $totalSuperv;
-    }
-
-    public function contarAgentes()
-    {
-        try {
-            $link = parent::conexionBD();
-            $sql = "SELECT count(*) from usuario u where u.idRol2 = 2";
-            $result = mysqli_query($link, $sql);
-            while ($row = mysqli_fetch_row($result)) {
-                $totalAgentes = $row[0];
-            }
-        } catch (Exception $e) {
-            die('Error: ' . $e->getMessage());
-        }
-        return $totalAgentes;
-    }
-
-    public function contarEncargados()
-    {
-        try {
-            $link = parent::conexionBD();
-            $sql = "SELECT count(*) from usuario u where u.idRol2 = 1";
-            $result = mysqli_query($link, $sql);
-            while ($row = mysqli_fetch_row($result)) {
-                $totalEncargados = $row[0];
-            }
-        } catch (Exception $e) {
-            die('Error: ' . $e->getMessage());
-        }
-        return $totalEncargados;
     }
 
     public function fechaActual()
@@ -1340,9 +639,9 @@ class Consultas extends Conexion
             while ($row = mysqli_fetch_row($result)) {
                 $fechaActual = $row[0];
             }
+            return $fechaActual;
         } catch (Exception $e) {
             die('Error: ' . $e->getMessage());
         }
-        return $fechaActual;
     }
 }

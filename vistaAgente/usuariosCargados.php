@@ -16,18 +16,29 @@ if (!(time() - $_SESSION['time'] >= 3600)) {
             <title>Document</title>
         </head>
 
-        <style>
-            section {
-                padding: 15px;
-            }
-
-            td,
-            th {
-                vertical-align: middle;
-            }
-        </style>
-
+        <link rel="stylesheet" href="../styles/styles.css">
         <script>
+            function bajaUsuario() {
+                var nombre = $('.nombre').val();
+                var apellido = $('.apellido').val();
+                event.preventDefault();
+                Swal.fire({
+                    title: 'Aviso',
+                    text: "Dar de baja a " + nombre + ' ' + apellido + '?',
+                    icon: 'warning',
+                    showCancelButton: true,
+                    confirmButtonColor: '#3085d6',
+                    cancelButtonColor: '#d33',
+                    confirmButtonText: 'Confirmar',
+                    cancelButtonText: 'Cancelar'
+                }).then((result) => {
+                    if (result.isConfirmed) {
+                        return true;
+                    }
+                    return false;
+                })
+            }
+
             $(document).ready(function() {
                 $('#tablaDinamicaLoad').DataTable({
                     aLengthMenu: [50, 100, 200],
@@ -43,7 +54,7 @@ if (!(time() - $_SESSION['time'] >= 3600)) {
 
         <body>
             <?php
-            error_reporting(0);
+            // error_reporting(0);
             require "../scripts/alerta.php";
 
             if (isset($_SESSION['usuarioAgregado'])) {
@@ -71,6 +82,7 @@ if (!(time() - $_SESSION['time'] >= 3600)) {
                                 <th scope="col">Nombre de usuario</th>
                                 <th scope="col">Rol</th>
                                 <th scope="col">Último acceso</th>
+                                <th scope="col">Acción</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -93,9 +105,52 @@ if (!(time() - $_SESSION['time'] >= 3600)) {
                                         } else {
                                             echo $usuario[6];
                                         }
-
                                         ?>
                                     </td>
+                                    <td id="accion">
+                                        <div class="btn-group" role="group">
+                                            <button id="btnGroupDrop1" type="button" class="btn btn-outline-primary dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">
+                                                Acción
+                                            </button>
+                                            <ul class="dropdown-menu" aria-labelledby="btnGroupDrop1">
+                                                <li>
+                                                    <a type="button" class="dropdown-item" data-bs-toggle="modal" data-bs-target="#modalMotivoCancelacion<?= $usuario[0]; ?>">
+                                                        Dar de Baja
+                                                    </a>
+                                                </li>
+                                            </ul>
+                                        </div>
+                                    </td>
+
+                                    <!-- Modal Dar de baja-->
+                                    <div class="modal fade" id="modalMotivoCancelacion<?= $usuario[0]; ?>" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+                                        <div class="modal-dialog">
+                                            <div class="modal-content">
+                                                <div class="modal-header">
+                                                    <h5 class="modal-title" id="staticBackdropLabel">Dar de baja: <?= $usuario[1] . ' ' . $usuario[2]; ?></h5>
+                                                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                                </div>
+                                                <form action="../controlador/c_bajaUsuario.php" method="post" style="display: none;">
+                                                    <div class="modal-body">
+
+                                                        <p class="fs-6">Para continuar, debe escribir el motivo de la baja</p>
+
+                                                        <input type="hidden" name="legajo" value="<?= $usuario[0]; ?>">
+
+                                                        <div class="form-floating mb-3">
+                                                            <textarea class="form-control" name="motivoBaja" placeholder="Leave a comment" id="floatingTextarea" style="height: 100px" required></textarea>
+                                                            <label for="floatingTextarea">Motivo</label>
+                                                        </div>
+
+                                                    </div>
+                                                    <div class="modal-footer">
+                                                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
+                                                        <button type="submit" class="btn btn-danger">Dar de baja</button>
+                                                    </div>
+                                                </form>
+                                            </div>
+                                        </div>
+                                    </div>
                                 </tr>
                             <?php
                             }

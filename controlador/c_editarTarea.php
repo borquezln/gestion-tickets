@@ -21,19 +21,8 @@ if (isset($_POST['cel'])) {
     $cel = NULL;
 }
 
-if (isset($_POST['motivoCancelacion'])) {
-    $motivoCancelacion = $_POST['motivoCancelacion'];
-} else {
-    $motivoCancelacion = NULL;
-}
-
-if (isset($_POST['solucion'])) {
-    $solucion = $_POST['solucion'];
-} else {
-    $solucion = NULL;
-}
-
-if ($co->editarTarea($descripcion, $nota_electronica, $nombre_apellido, $cel, $selectDireccion, $motivoCancelacion, $solucion, $selectArea, $nroArreglo)) {
+if ($co->editarTarea($descripcion, $nota_electronica, $nombre_apellido, $cel, $selectDireccion, $selectArea, $nroArreglo)) {
     $_SESSION['tareaEditada'] = true;
-    header('location: ' . $_SERVER['HTTP_REFERER']);
 }
+
+header('location: ' . $_SERVER['HTTP_REFERER']);

@@ -2,7 +2,6 @@
 error_reporting(E_ALL ^ E_NOTICE);
 if (!(time() - $_SESSION['time'] >= 3600)) {
     $_SESSION['time'] = time();
-    if ($_SESSION['rol'] == 3) {
 ?>
 
         <!DOCTYPE html>
@@ -15,26 +14,7 @@ if (!(time() - $_SESSION['time'] >= 3600)) {
             <meta name="viewport" content="width=device-width, initial-scale=1.0">
             <title>Document</title>
 
-            <style>
-                section {
-                    padding: 15px;
-                }
-
-                th,
-                td {
-                    vertical-align: middle;
-                    font-size: 15px;
-                }
-
-                table #nroArreglo {
-                    text-align: center;
-                }
-
-                table #accion {
-                    text-align: center;
-                }
-            </style>
-
+            <link rel="stylesheet" href="../styles/styles.css">
             <script>
                 $(document).ready(function() {
                     $('#tablaDinamicaLoad').DataTable({
@@ -85,7 +65,7 @@ if (!(time() - $_SESSION['time'] >= 3600)) {
                             foreach ($listTareasEliminadas as $tarea) {
                             ?>
                                 <tr>
-                                    <td id="nroArreglo"><?= $tarea[0]; ?></td>
+                                    <td style="text-align: center;"><?= $tarea[0]; ?></td>
                                     <td><?= $tarea[1]; ?></td>
                                     <td><?= $tarea[3]; ?></td>
                                     <td>
@@ -257,7 +237,6 @@ if (!(time() - $_SESSION['time'] >= 3600)) {
 
         </html>
 <?php
-    }
 } else {
     require "destroySession.php";
 }

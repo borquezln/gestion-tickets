@@ -13,35 +13,21 @@ if (!(time() - $_SESSION['time'] >= 3600)) {
             <meta http-equiv="X-UA-Compatible" content="IE=edge">
             <meta name="viewport" content="width=device-width, initial-scale=1.0">
             <title>Document</title>
-        </head>
 
-        <style>
-            section {
-                padding: 15px;
-            }
-
-            #seccionCampos {
-                width: 750px;
-            }
-
-            #btn {
-                display: flex;
-                justify-content: flex-end;
-            }
-        </style>
-
-        <script>
-            function verificarPassIguales(confirmarPass) {
-                var pass = $('input[name=nuevaPass]').val();
-                if (pass != confirmarPass.value) {
-                    $('#msjError').show();
-                    $('#btnEnviar').prop('disabled', true);
-                } else if (pass === confirmarPass.value) {
-                    $('#msjError').hide();
-                    $('#btnEnviar').prop('disabled', false);
+            <link rel="stylesheet" href="../styles/styles.css">
+            <script>
+                function verificarPassIguales(confirmarPass) {
+                    var pass = $('input[name=nuevaPass]').val();
+                    if (pass != confirmarPass.value) {
+                        $('#msjError').show();
+                        $('#btnEnviar').prop('disabled', true);
+                    } else if (pass === confirmarPass.value) {
+                        $('#msjError').hide();
+                        $('#btnEnviar').prop('disabled', false);
+                    }
                 }
-            }
-        </script>
+            </script>
+        </head>
 
         <body>
             <?php
@@ -61,7 +47,6 @@ if (!(time() - $_SESSION['time'] >= 3600)) {
                 </p>
 
                 <div id="seccionCampos">
-
                     <form action="../controlador/c_cambiarPass.php" method="post">
                         <div class="form-floating mb-3">
                             <select class="form-select" name="legajo" id="floatingSelect" aria-label="example" required>

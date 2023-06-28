@@ -3,7 +3,6 @@ error_reporting(E_ALL ^ E_NOTICE);
 
 if (!(time() - $_SESSION['time'] >= 3600)) {
     $_SESSION['time'] = time();
-    if ($_SESSION['rol'] == 3 || $_SESSION['rol'] == 4) {
 ?>
         <!DOCTYPE html>
         <html lang="en">
@@ -15,35 +14,7 @@ if (!(time() - $_SESSION['time'] >= 3600)) {
             <meta name="viewport" content="width=device-width, initial-scale=1.0">
             <title>Document</title>
 
-            <style>
-                section {
-                    padding: 15px;
-                }
-
-
-                section #btnTarea {
-                    display: flex;
-                    justify-content: space-between;
-                    align-items: center;
-                    margin-top: 5px;
-                    margin-bottom: 5px;
-                }
-
-                .dataTables_length {
-                    margin-bottom: 10px;
-                }
-
-                section th,
-                td {
-                    vertical-align: middle;
-                    font-size: 15px;
-                }
-
-                section table #accion {
-                    text-align: center;
-                }
-            </style>
-
+            <link rel="stylesheet" href="../styles/styles.css">
             <script>
                 //DATATABLE
                 $(document).ready(function() {
@@ -929,7 +900,6 @@ if (!(time() - $_SESSION['time'] >= 3600)) {
 
         </html>
 <?php
-    }
 } else {
     require "destroySession.php";
 }
