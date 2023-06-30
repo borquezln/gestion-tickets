@@ -4,12 +4,14 @@ require('../modelo/m_consultas.php');
 $co = new Consultas();
 
 $solucion = $_POST['solucion'];
-$comprobante = $_POST['comprobante'];
 $nroArreglo = $_POST['id'];
+$comprobante = $_FILES["comprobante"];
 
-$cantAreas = $_SESSION['cantAreas'];
+$fichero = "../comprobantes/";
+$ruta = $fichero . basename($comprobante["name"]);
+move_uploaded_file($comprobante["tmp_name"], $ruta);
 
-if ($co->terminarTarea($solucion, $comprobante, $nroArreglo)) {
+if ($co->terminarTarea($solucion, $ruta, $nroArreglo)) {
     $_SESSION['tareaTerminada'] = true;
 }
 

@@ -23,6 +23,7 @@ USE `mantenimiento`;
 CREATE TABLE IF NOT EXISTS `areas` (
   `codigo` int(11) NOT NULL AUTO_INCREMENT,
   `nombre` varchar(100) DEFAULT NULL,
+  `descripcion` varchar(255) DEFAULT NULL,
   PRIMARY KEY (`codigo`)
 ) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
@@ -53,22 +54,9 @@ INSERT INTO `estadotarea` (`id`, `nombre`) VALUES
 	(4, 'Cancelado'),
 	(5, 'Eliminado');
 
--- Volcando estructura para tabla mantenimiento.motivos
-CREATE TABLE IF NOT EXISTS `motivos` (
-  `id` int(11) NOT NULL AUTO_INCREMENT,
-  `motivos` varchar(250) DEFAULT NULL,
-  `codigoArea` int(11) DEFAULT NULL,
-  PRIMARY KEY (`id`),
-  KEY `codigoArea` (`codigoArea`),
-  CONSTRAINT `codigoArea` FOREIGN KEY (`codigoArea`) REFERENCES `areas` (`codigo`)
-) ENGINE=InnoDB AUTO_INCREMENT=7026 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
-
--- Volcando datos para la tabla mantenimiento.motivos: ~0 rows (aproximadamente)
-
 -- Volcando estructura para tabla mantenimiento.tareas
 CREATE TABLE IF NOT EXISTS `tareas` (
   `nroArreglo` int(11) NOT NULL AUTO_INCREMENT,
-  `id_motivos` int(11) DEFAULT NULL,
   `descripcion` varchar(1000) DEFAULT NULL,
   `nota_electronica` varchar(45) DEFAULT NULL,
   `nombreApellidoAfectado` varchar(100) DEFAULT NULL,
@@ -83,20 +71,16 @@ CREATE TABLE IF NOT EXISTS `tareas` (
   `fechaEliminado` datetime DEFAULT NULL,
   `codigoArea3` int(11) DEFAULT NULL,
   `fechaCreada` date DEFAULT NULL,
-  `usuarioCreado` varchar(55) DEFAULT NULL,
+  `usuarioCreado` varchar(100) DEFAULT NULL,
   `comprobante` varchar(255) DEFAULT NULL,
   PRIMARY KEY (`nroArreglo`),
   KEY `fk_tareas_estadoTarea1_idx` (`estadoTarea_id`),
-  KEY `fk_id_motivos` (`id_motivos`),
   KEY `fk_tareas_area1_idx` (`direccion_codigo`),
   KEY `fk_codigoArea3` (`codigoArea3`),
-  KEY `fk_usuario_dni` (`usuario_legajo`) USING BTREE,
   CONSTRAINT `fk_codigoArea3` FOREIGN KEY (`codigoArea3`) REFERENCES `areas` (`codigo`),
-  CONSTRAINT `fk_id_motivos` FOREIGN KEY (`id_motivos`) REFERENCES `motivos` (`id`),
   CONSTRAINT `fk_tareas_direccion` FOREIGN KEY (`direccion_codigo`) REFERENCES `direcciones` (`codigo`),
-  CONSTRAINT `fk_tareas_estadoTarea1` FOREIGN KEY (`estadoTarea_id`) REFERENCES `estadotarea` (`id`),
-  CONSTRAINT `fk_usuarioCreado` FOREIGN KEY (`usuarioCreado`) REFERENCES `usuario` (`legajo`)
-) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
+  CONSTRAINT `fk_tareas_estadoTarea1` FOREIGN KEY (`estadoTarea_id`) REFERENCES `estadotarea` (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
 
 -- Volcando datos para la tabla mantenimiento.tareas: ~0 rows (aproximadamente)
 
@@ -107,12 +91,10 @@ CREATE TABLE IF NOT EXISTS `tipousuario` (
   PRIMARY KEY (`idrol`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
 
--- Volcando datos para la tabla mantenimiento.tipousuario: ~4 rows (aproximadamente)
+-- Volcando datos para la tabla mantenimiento.tipousuario: ~2 rows (aproximadamente)
 INSERT INTO `tipousuario` (`idrol`, `nombre`) VALUES
-	(1, 'Encargado'),
-	(2, 'Agente'),
-	(3, 'Admin'),
-	(4, 'Supervisor');
+	(3, 'Administrador'),
+	(4, 'Administrativo');
 
 -- Volcando estructura para tabla mantenimiento.usuario
 CREATE TABLE IF NOT EXISTS `usuario` (
@@ -131,20 +113,6 @@ CREATE TABLE IF NOT EXISTS `usuario` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
 
 -- Volcando datos para la tabla mantenimiento.usuario: ~0 rows (aproximadamente)
-
--- Volcando estructura para tabla mantenimiento.usuario_area
-CREATE TABLE IF NOT EXISTS `usuario_area` (
-  `id` int(11) NOT NULL AUTO_INCREMENT,
-  `usuario_legajo2` int(11) DEFAULT NULL,
-  `codigo_area2` int(11) DEFAULT NULL,
-  PRIMARY KEY (`id`),
-  KEY `fk_codigo_area2` (`codigo_area2`),
-  KEY `fk_usuario_dni2` (`usuario_legajo2`) USING BTREE,
-  CONSTRAINT `fk_codigo_area2` FOREIGN KEY (`codigo_area2`) REFERENCES `areas` (`codigo`),
-  CONSTRAINT `fk_usuario_legajo2` FOREIGN KEY (`usuario_legajo2`) REFERENCES `usuario` (`legajo`) ON DELETE NO ACTION ON UPDATE NO ACTION
-) ENGINE=InnoDB AUTO_INCREMENT=33 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
-
--- Volcando datos para la tabla mantenimiento.usuario_area: ~0 rows (aproximadamente)
 
 /*!40103 SET TIME_ZONE=IFNULL(@OLD_TIME_ZONE, 'system') */;
 /*!40101 SET SQL_MODE=IFNULL(@OLD_SQL_MODE, '') */;

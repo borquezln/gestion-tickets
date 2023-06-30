@@ -240,7 +240,7 @@ if (isset($_SESSION['rol'])) {
                 <?php
                 } else {
                 ?>
-                    <span class="fs-5 titlePage">Supervisor</span>
+                    <span class="fs-5 titlePage">Administrativo</span>
                 <?php
                 }
                 ?>

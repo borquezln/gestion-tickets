@@ -367,9 +367,8 @@ if (!(time() - $_SESSION['time'] >= 3600)) {
                                                             <label for="floatingTextarea">Materiales utilizados</label>
                                                         </div>
 
-                                                        <div class="form-floating mb-3">
-                                                            <textarea class="form-control" name="comprobante" placeholder="Leave a comment here" id="floatingTextarea" style="height: 100px" disabled><?= $completas[18]; ?></textarea>
-                                                            <label for="floatingTextarea">Comprobante</label>
+                                                        <div class="form-control mb-3 bg-light">
+                                                            <a href="<?= $completas[18]; ?>" download="comprobante-arreglo-<?= $completas[0]; ?>">Descargar comprobante</a>
                                                         </div>
 
                                                         <?php
@@ -404,7 +403,6 @@ if (!(time() - $_SESSION['time'] >= 3600)) {
                                                             <input type="text" name="area" value="<?= $completas[17]; ?>" class="form-control" id="floatingInput" placeholder="..." disabled>
                                                             <label for="floatingInput">Creado por</label>
                                                         </div>
-
                                                     </div>
                                                     <div class="modal-footer">
                                                         <button type="button" class="btn btn-secondary btnCerrarModalEditar" data-bs-dismiss="modal">Cerrar</button>
@@ -850,8 +848,44 @@ if (!(time() - $_SESSION['time'] >= 3600)) {
                                         </div>
                                     </div>
 
-                                    <!-- Modal Tarea Terminada -->
-                                    <!--  -->
+                                    <!-- Modal Terminar Tarea -->
+                                    <div class="modal fade" id="modalTareaCompletada<?= $listTarea[0]; ?>" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+                                        <div class="modal-dialog">
+                                            <div class="modal-content">
+                                                <div class="modal-header">
+                                                    <h5 class="modal-title" id="staticBackdropLabel">Terminar tarea</h5>
+                                                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                                </div>
+
+                                                <form enctype="multipart/form-data" action="../controlador/c_terminarTarea.php" method="post" style="display: none;">
+
+                                                    <div class="modal-body">
+
+                                                        <p class="fs-6">Para terminar la tarea debe completar lo siguiente</p>
+
+                                                        <input type="hidden" name="id" value="<?= $listTarea[0]; ?>">
+
+                                                        <div class="form-floating mb-3">
+                                                            <textarea class="form-control" onchange="buscarComillaSimple(this)" oninput="validarComillas(this);" name="solucion" placeholder="Leave a comment" id="floatingTextarea" style="height: 100px" required></textarea>
+                                                            <label for="floatingTextarea">Materiales utilizados</label>
+                                                        </div>
+
+                                                        <label for="floatingInputfile">Comprobante</label>
+                                                        <div class="form-floating">
+                                                            <input type="hidden" name="MAX_FILE_SIZE" value="1048576" />
+                                                            <input class="form-control" id="floatingInputfile" type="file" name="comprobante" accept=".pdf" required>
+                                                        </div>
+
+                                                    </div>
+                                                    <div class="modal-footer">
+                                                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
+                                                        <button type="submit" class="btn btn-success">Terminar tarea</button>
+                                                    </div>
+
+                                                </form>
+                                            </div>
+                                        </div>
+                                    </div>
 
                                     <!-- Modal Eliminar Tarea -->
                                     <div class="modal fade" id="modalEliminarTarea<?= $listTarea[0]; ?>" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">

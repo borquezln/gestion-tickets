@@ -320,19 +320,19 @@ class Consultas extends Conexion
                 $sql = "SELECT t.nroArreglo, t.descripcion, t.nota_electronica, t.nombreApellidoAfectado, t.celular, t.solucion, e.id, e.nombre, t.motivoCancelacion,
                             t.fechaProblema, t.fechaSolucion, d.codigo, d.nombre, u.legajo, concat(u.nombre, ' ', u.apellido) AS nombre_apellido, a.codigo, a.nombre, t.usuarioCreado
                             FROM tareas t, estadotarea e, direcciones d, usuario u, areas a
-                            WHERE t.estadoTarea_id = e.id AND t.direccion_codigo = d.codigo
+                            WHERE t.estadoTarea_id = e.id AND t.direccion_codigo = d.codigo AND t.usuarioCreado = concat(u.nombre, ' ', u.apellido)
                             AND t.codigoArea3 = a.codigo AND (t.estadoTarea_id = 1 OR t.estadoTarea_id = 2)";
             } else if ($estado == 'completas') {
                 $sql = "SELECT t.nroArreglo, t.descripcion, t.nota_electronica, t.nombreApellidoAfectado, t.celular, t.solucion, e.id, e.nombre, t.motivoCancelacion,
                             t.fechaProblema, t.fechaSolucion, d.codigo, d.nombre, u.legajo, concat(u.nombre, ' ', u.apellido) AS nombre_apellido, a.codigo, a.nombre, t.usuarioCreado, t.comprobante
                             FROM tareas t, estadotarea e, direcciones d, usuario u, areas a
-                            WHERE t.estadoTarea_id = e.id AND t.direccion_codigo = d.codigo
+                            WHERE t.estadoTarea_id = e.id AND t.direccion_codigo = d.codigo AND t.usuarioCreado = concat(u.nombre, ' ', u.apellido)
                             AND t.codigoArea3 = a.codigo AND t.estadoTarea_id = 3";
             } else if ($estado == 'canceladas') {
                 $sql = "SELECT t.nroArreglo, t.descripcion, t.nota_electronica, t.nombreApellidoAfectado, t.celular, t.solucion, e.id, e.nombre, t.motivoCancelacion,
                             t.fechaProblema, t.fechaSolucion, d.codigo, d.nombre, u.legajo, concat(u.nombre, ' ', u.apellido) AS nombre_apellido, a.codigo, a.nombre, t.usuarioCreado
                             FROM tareas t, estadotarea e, direcciones d, usuario u, areas a
-                            WHERE t.estadoTarea_id = e.id AND t.direccion_codigo = d.codigo
+                            WHERE t.estadoTarea_id = e.id AND t.direccion_codigo = d.codigo AND t.usuarioCreado = concat(u.nombre, ' ', u.apellido)
                             AND t.codigoArea3 = a.codigo AND t.estadoTarea_id = 4";
             }
 
@@ -356,7 +356,7 @@ class Consultas extends Conexion
             $sql = "SELECT t.nroArreglo, t.descripcion, t.nota_electronica, t.nombreApellidoAfectado, t.celular, t.solucion, e.id, e.nombre, t.motivoCancelacion,
                         t.fechaProblema, t.fechaSolucion, d.codigo, d.nombre, u.legajo, concat(u.nombre, ' ', u.apellido) AS nombre_apellido, a.codigo, a.nombre, t.usuarioCreado, t.comprobante
                         FROM tareas t, estadotarea e, direcciones d, usuario u, areas a
-                        WHERE t.estadoTarea_id = e.id AND t.direccion_codigo = d.codigo
+                        WHERE t.estadoTarea_id = e.id AND t.direccion_codigo = d.codigo AND t.usuarioCreado = concat(u.nombre, ' ', u.apellido)
                         AND t.codigoArea3 = a.codigo AND t.estadoTarea_id = 3 AND date(t.fechaSolucion) = curdate()";
             $result = mysqli_query($link, $sql);
             $listTareasCompletas = [];
@@ -378,7 +378,8 @@ class Consultas extends Conexion
             $sql = "SELECT t.nroArreglo, t.descripcion, t.nota_electronica, t.nombreApellidoAfectado, t.celular, t.solucion, e.nombre, t.motivoCancelacion,
                         t.fechaProblema, t.fechaSolucion, d.nombre, concat(u.nombre, ' ', u.apellido) AS nombreApellido, t.motivoEliminacion, t.fechaEliminado
                         FROM tareas t, estadotarea e, direcciones d, usuario u
-                        WHERE t.estadoTarea_id = e.id AND t.direccion_codigo = d.codigo AND t.estadoTarea_id = 5";
+                        WHERE t.estadoTarea_id = e.id AND t.usuarioCreado = concat(u.nombre, ' ', u.apellido)
+                        AND t.direccion_codigo = d.codigo AND t.estadoTarea_id = 5";
             $result = mysqli_query($link, $sql);
             $listTareasEliminadas = [];
             $i = 0;
@@ -397,7 +398,7 @@ class Consultas extends Conexion
         try {
             $link = parent::conexionBD();
             $sql = "INSERT INTO tareas(descripcion, nota_electronica, nombreApellidoAfectado, celular, estadoTarea_id, fechaProblema, direccion_codigo, codigoArea3, fechaCreada, usuarioCreado)
-                        values('$descripcion', '$nota_electronica', '$nombreApellido', '$celular', '1', NOW(), '$direccion', '$area', curdate(), '$usuarioCreado')";
+                    VALUES('$descripcion', '$nota_electronica', '$nombreApellido', '$celular', '1', NOW(), '$direccion', '$area', curdate(), '$usuarioCreado')";
             $result = mysqli_query($link, $sql);
             return $result;
         } catch (Exception $e) {

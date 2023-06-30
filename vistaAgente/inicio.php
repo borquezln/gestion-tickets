@@ -144,7 +144,7 @@ if (!(time() - $_SESSION['time'] >= 3600)) {
                             <div class="card-body text-info d-flex flex-column align-items-center">
                                 <i class="bi bi-person-lines-fill" style="font-size: 40px;"></i>
                                 <h1 class="card-title"><?= $totalSuperv; ?></h1>
-                                <p class="card-text">Supervisores</p>
+                                <p class="card-text">Administrativos</p>
                             </div>
                         </div>
                     </div>
